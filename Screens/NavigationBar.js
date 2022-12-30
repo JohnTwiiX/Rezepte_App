@@ -49,8 +49,18 @@ export default function NavigationBar() {
                             // headerShown: false,
                             tabBarShowLabel: false
                         }}>
-                            <HomeStack.Screen name="Home" component={HomeScreen} />
-                            <HomeStack.Screen name="AddRecept" component={AddReceptScreen} />
+                            <HomeStack.Screen
+                                name="Home"
+                                component={HomeScreen}
+                                options={{
+                                    title: 'Awesome app',
+                                }} />
+                            <HomeStack.Screen
+                                name="AddRecept"
+                                component={AddReceptScreen}
+                                options={{
+                                    headerShown: false,
+                                }} />
                         </HomeStack.Navigator>
                     )}
                 </Tab.Screen>
