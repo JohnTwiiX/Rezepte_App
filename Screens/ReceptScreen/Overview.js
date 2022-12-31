@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { TextInput, Select } from 'react-native-paper';
 
 export default function Overview({ navigation }) {
+    const [text, setText] = React.useState("");
     return (
         <View style={styles.container}>
             <TouchableOpacity
@@ -10,16 +12,25 @@ export default function Overview({ navigation }) {
                 onPress={() => navigation.goBack()}>
                 <Icon name="chevron-back-outline" size={20} color="#fff" />
             </TouchableOpacity>
-            <Text>Rezepterstellung!</Text>
+            <TextInput
+                label="Title"
+                value={text}
+                onChangeText={text => setText(text)}
+            />
+            <TextInput
+                label="Rezeptart"
+                value={text}
+                onChangeText={text => setText(text)}
+            />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        // flex: 1,
+        // alignItems: 'center',
+        // justifyContent: 'center',
     },
     button: {
         position: 'absolute',

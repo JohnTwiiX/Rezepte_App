@@ -18,7 +18,7 @@ export default function NavigationBar() {
     return (
         <NavigationContainer>
             <Tab.Navigator
-                initialRouteName='Home'
+                initialRouteName='HomeTab'
                 screenOptions={{
                     headerShown: false,
                     tabBarShowLabel: false,
@@ -36,7 +36,7 @@ export default function NavigationBar() {
                         )
                     }} />
                 <Tab.Screen
-                    name="Home"
+                    name="HomeTab"
                     // component={HomeScreen}
                     options={{
                         tabBarIcon: ({ tintColor }) => (
