@@ -53,14 +53,15 @@ export default function NavigationBar() {
                                 name="Home"
                                 component={HomeScreen}
                                 options={{
-                                    title: 'Awesome app',
+                                    title: "Sandra's Awesome App",
                                 }} />
                             <HomeStack.Screen
                                 name="AddRecept"
                                 component={AddReceptScreen}
                                 options={{
                                     headerShown: false,
-                                }} />
+                                }} >
+                            </HomeStack.Screen>
                         </HomeStack.Navigator>
                     )}
                 </Tab.Screen>
