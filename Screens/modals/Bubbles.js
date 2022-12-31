@@ -1,34 +1,53 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from 'react-native';
 
-function CircleButton({ size, onPress }) {
+const receptTypes = ["Fisch", "Fleisch", "Kuchen", "Dessert", "Festtage", "", ""];
+const sizes = [130, 160, 200];
+
+function CircleButton({ descr, size, onPress }) {
     return (
         <TouchableOpacity onPress={onPress} style={[styles.button, { width: size, height: size, borderRadius: size / 2 }]}>
-            {/* Hier könnten Sie den Button-Inhalt platzieren, wie zum Beispiel ein Icon oder Text */}
+            <View style={styles.innerView}>
+                <Text style={styles.text}>{descr}</Text>
+            </View>
         </TouchableOpacity>
     );
 }
 
+
 export default function CircleButtons() {
     return (
-        <View style={styles.container}>
-            <CircleButton size={160} onPress={() => console.log('Button 1 gedrückt')} />
-            <CircleButton size={200} onPress={() => console.log('Button 2 gedrückt')} />
-            <CircleButton size={130} onPress={() => console.log('Button 3 gedrückt')} />
-        </View>
+        <ScrollView >
+            <View style={styles.container}>
+                {receptTypes.map((bubble, index) =>
+                    <CircleButton
+                        key={index}
+                        descr={bubble}
+                        size={sizes[index % sizes.length]}
+                        onPress={() => console.log(`Button ${index + 1} ${bubble} gedrückt`)} />)}
+            </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap',
     },
     button: {
         backgroundColor: '#0066cc',
-        alignItems: 'center',
-        justifyContent: 'center',
+        margin: 8
     },
+    innerView: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    text: {
+        textAlign: 'center',
+        fontSize: 20
+    }
 });
 
