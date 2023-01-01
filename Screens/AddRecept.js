@@ -12,7 +12,7 @@ const TabRecept = createMaterialTopTabNavigator();
 
 export default function AddReceptScreen() {
     return (
-        <TabRecept.Navigator>
+        <TabRecept.Navigator style={{ paddingTop: 24 }}>
             <TabRecept.Screen
                 name='Overview'
                 component={Overview}

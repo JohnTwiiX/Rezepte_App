@@ -1,36 +1,69 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { TextInput, Select } from 'react-native-paper';
+import { TextInput, Divider } from 'react-native-paper';
+import ReceptTypeChips from '../modals/OverviewChips';
+import CategoryChips from '../modals/OverviewCategory';
+import CollectionChips from '../modals/OverviewCollection';
 
 export default function Overview({ navigation }) {
-    const [text, setText] = React.useState("");
+    const [title, setTitle] = React.useState("");
+    const [potionSize, setPotionSize] = React.useState("");
+    const [workTime, setWorkTime] = React.useState("");
+    const [cookingTime, setCookingTime] = React.useState("");
     return (
-        <View style={styles.container}>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.goBack()}>
-                <Icon name="chevron-back-outline" size={20} color="#fff" />
-            </TouchableOpacity>
-            <TextInput
-                label="Title"
-                value={text}
-                onChangeText={text => setText(text)}
-            />
-            <TextInput
-                label="Rezeptart"
-                value={text}
-                onChangeText={text => setText(text)}
-            />
-        </View>
+        <ScrollView>
+            <View style={styles.container}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.goBack()}>
+                    <Icon name="chevron-back-outline" size={20} color="#fff" />
+                </TouchableOpacity>
+                <TextInput
+                    style={styles.input}
+                    label="Titel"
+                    value={title}
+                    onChangeText={title => setTitle(title)}
+                />
+                <View style={styles.chipContainer} >
+                    <Text>Rezeptart:</Text>
+                    <ReceptTypeChips />
+                    <Divider />
+                </View>
+                <View style={styles.chipContainer}>
+                    <Text>Kategorie:</Text>
+                    <CategoryChips />
+                </View>
+                <View style={styles.chipContainer}>
+                    <Text>Sammlungen:</Text>
+                    <CollectionChips />
+                </View>
+                <TextInput
+                    style={styles.input}
+                    label="Portionsgröße"
+                    value={potionSize}
+                    onChangeText={potionSize => setPotionSize(potionSize)}
+                />
+                <TextInput
+                    style={styles.input}
+                    label="Vorbereitungszeit"
+                    value={workTime}
+                    onChangeText={workTime => setWorkTime(workTime)}
+                />
+                <TextInput
+                    style={styles.input}
+                    label="Kochzeit"
+                    value={cookingTime}
+                    onChangeText={cookingTime => setCookingTime(cookingTime)}
+                />
+            </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        // alignItems: 'center',
-        // justifyContent: 'center',
+        padding: 8
     },
     button: {
         position: 'absolute',
@@ -47,4 +80,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginLeft: 10,
     },
+    chipContainer: {
+        padding: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: 'black',
+    },
+    input: {
+        marginTop: 8,
+        marginBottom: 8
+    }
 });
