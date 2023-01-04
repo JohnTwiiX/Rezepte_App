@@ -30,7 +30,7 @@ let sections = [
 ]
 
 let ingredArray = [];
-let sectionArray = [];
+export let sectionArray = [];
 
 function addSection(title) {
     sections.push({
