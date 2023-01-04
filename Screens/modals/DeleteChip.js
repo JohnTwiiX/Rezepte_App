@@ -7,12 +7,12 @@ import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
 
 
 
-function addToArray(setArray, variable, title) {
-    setArray([...variable, title]);
+function deleteItem(setArray, variable, title) {
+    setArray(variable.filter(item => item !== title));
+
 }
 
-export default function AddChip({ setArray, variable, title }) {
-    const [modalVisible, setModalVisible] = React.useState(false);
+export default function DeleteChip({ setArray, variable, selected, setModal, variableModal }) {
     const [inputValue, setInputValue] = React.useState('');
     return (
         <View>
@@ -20,40 +20,23 @@ export default function AddChip({ setArray, variable, title }) {
                 animationType="slide"
                 transparent={true}
                 // onDismiss={setModalVisible(false)}
-                visible={modalVisible}
+                visible={variableModal}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
+                    setModal(!variableModal);
                 }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Füge eine {title} hinzu:</Text>
-                        <TextInput
-                            style={{ marginTop: 16 }}
-                            placeholder={title + ' ...'}
-                            onChangeText={text => setInputValue(text)}
-                        />
+                        <Text style={styles.modalText}>Bist du sicher, dass "{selected}" gelöscht werden soll?</Text>
                         <View style={{ flexDirection: "row", marginTop: 20 }}>
-                            <Button onPress={() => { addToArray(setArray, variable, inputValue), setModalVisible(false), setInputValue('') }}>Speichern</Button>
-                            <Button onPress={() => { setModalVisible(false), setInputValue('') }}>Abbrechen</Button>
+                            <Button onPress={() => { deleteItem(setArray, variable, selected), setModal(false) }}>Löschen</Button>
+                            <Button onPress={() => { setModal(false) }}>Abbrechen</Button>
                         </View>
 
                     </View>
                 </View>
             </Modal>
-            <Chip
-                mode="outlined"
-                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, { backgroundColor: 'rgb(232,225,237)' }]}
-                selected={false}
-            // onPress={() => { }}
-            >
-                <TouchableOpacity
-                    style={{}}
-                    onPress={() => { setModalVisible(true) }}>
-                    <Icon name="add" size={20} color="black" />
-                </TouchableOpacity>
-            </Chip>
         </View>
     );
 
