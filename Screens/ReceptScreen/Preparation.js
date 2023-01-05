@@ -4,17 +4,17 @@ import { List } from 'react-native-paper';
 import { sectionArray } from './Ingredients';
 
 export default function PreparationsScreen({ navigation }) {
+    const [sections, setSections] = React.useState([]);
+    const [actuel, setActuel] = React.useState(false)
     React.useEffect(() => {
-        function updateView() {
-            console.log('---- Aktualisiert')
-        }
-
-        updateView();
-    }, [sectionArray]);
+        setSections(sectionArray);
+        setActuel(false)
+    }, [actuel]);
     return (
         <View style={{ flex: 1, margin: 8 }}>
+            <Button title='Aktualisieren' onPress={() => setActuel(true)} />
             <List.Section style={{}}>
-                {sectionArray.map((item, index) =>
+                {sections.map((item, index) =>
                     <List.Accordion
                         key={index}
                         title={item.title}
