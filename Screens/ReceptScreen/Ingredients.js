@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
+import * as SQLite from 'expo-sqlite';
 let sections = [
     {
         title: "Fleisch",
@@ -28,6 +27,47 @@ let sections = [
     },
 
 ]
+
+const createTable = () => {
+    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
+    db.transaction(tx => {
+        tx.executeSql(
+            'CREATE TABLE IF NOT EXISTS my_sections (id INTEGER PRIMARY KEY AUTOINCREMENT, section_title TEXT, item TEXT);'
+        );
+    });
+};
+
+const insertDataIntoTable = (sections) => {
+    // Verbindung zur Datenbank herstellen
+    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
+
+    // Einfügen der Werte in die Tabelle
+    db.transaction(tx => {
+        sections.forEach((section) => {
+            const { title, items } = section;
+            items.forEach((item) => {
+                tx.executeSql(`INSERT INTO my_sections (section_title, item) VALUES (?, ?)`, [title, item]);
+            });
+        });
+    });
+};
+
+const addItemToTable = (title, item) => {
+    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
+    db.transaction(tx => {
+        tx.executeSql(`INSERT INTO my_sections (section_title, item) VALUES (?, ?)`, [title, item]);
+    });
+}
+
+const deleteItemFromTable = (title, item) => {
+    const db = SQLite.openDatabase({ name: 'mydatabase' });
+
+    db.transaction(tx => {
+        tx.executeSql(`DELETE FROM my_sections WHERE item = ? AND section_title = ?`, [item, title]);
+    });
+};
+
+
 
 let ingredArray = [];
 export let sectionArray = [];
@@ -97,6 +137,12 @@ export default function IngredientsScreen({ navigation }) {
     const [selectedItem, setSelectedItem] = React.useState('');
     const [sectionIndex, setSectionIndex] = React.useState('');
     const [ingredIndex, setIngredIndex] = React.useState('');
+
+    React.useEffect(() => {
+        createTable();
+        insertDataIntoTable(sections);
+    }, []);
+
 
 
     return (

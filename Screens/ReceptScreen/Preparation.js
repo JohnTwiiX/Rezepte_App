@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, TextInput, View } from 'react-native';
+import { Button, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { List } from 'react-native-paper';
 import { sectionArray } from './Ingredients';
 
@@ -31,6 +31,22 @@ export default function PreparationsScreen({ navigation }) {
                     </List.Accordion>
                 )}
             </List.Section>
+            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                <TouchableOpacity
+                    style={{ backgroundColor: 'blue' }}
+                    onPress={() => {
+                        // Hier kannst du den Navigation-Stack auf den HomeScreen zurücksetzen:
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Home' }],
+                        });
+                        // Hier könntest du die Werte in den useStates zurücksetzen:
+                        setSections([]);
+                        setActuel(false);
+                    }}>
+                    <Text style={{ color: 'white', textAlign: 'center' }}>Rezept abspeichern</Text>
+                </TouchableOpacity>
+            </View>
 
         </View>
     );
