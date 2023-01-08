@@ -28,6 +28,22 @@ let sections = [
 
 ]
 
+const initializeSections = () => {
+    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
+    db.transaction(tx => {
+        tx.executeSql(`SELECT COUNT(*) as count FROM my_sections`, [], (_, { rows }) => {
+            const count = rows.item(0).count;
+            if (count === 0) {
+                // Tabelle ist leer, füge Werte aus sections in die Tabelle ein
+                insertDataIntoTable(sections);
+            } else {
+                // Tabelle enthält Werte, lese Werte in sections ein
+                readDataFromTable();
+            }
+        });
+    });
+};
+
 const createTable = () => {
     const db = SQLite.openDatabase({ name: 'mydatabase.db' });
     db.transaction(tx => {
@@ -35,6 +51,30 @@ const createTable = () => {
             'CREATE TABLE IF NOT EXISTS my_sections (id INTEGER PRIMARY KEY AUTOINCREMENT, section_title TEXT, item TEXT);'
         );
     });
+};
+
+
+const readDataFromTable = () => {
+    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
+    db.transaction(tx => {
+        tx.executeSql(`SELECT * FROM my_sections`, [], (_, { rows }) => {
+            sections = []; // Leere das Array sections
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows.item(i);
+                const title = row.section_title;
+                const item = row.item;
+                // Prüfe, ob es bereits ein Objekt im Array sections mit dem gleichen Titel gibt
+                const existingSection = sections.find(section => section.title === title);
+                if (existingSection) {
+                    // Wenn ja, füge das Item dem bestehenden Objekt hinzu
+                    existingSection.items.push(item);
+                } else {
+                    // Wenn nein, füge ein neues Objekt mit dem Titel und dem Item hinzu
+                    sections.push({ title, items: [item] });
+                }
+            }
+        });
+    })
 };
 
 const insertDataIntoTable = (sections) => {
@@ -59,6 +99,13 @@ const addItemToTable = (title, item) => {
     });
 }
 
+const deleteSectionFromTable = (title) => {
+    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
+    db.transaction(tx => {
+        tx.executeSql(`DELETE FROM my_sections WHERE section_title = ?`, [title]);
+    });
+}
+
 const deleteItemFromTable = (title, item) => {
     const db = SQLite.openDatabase({ name: 'mydatabase' });
 
@@ -79,11 +126,13 @@ function addSection(title) {
     });
 }
 
-function deleteItem(indexS, indexI) {
+function deleteItem(indexS, indexI, sectionTitle, selectedItem) {
     if (sectionTack) {
         sections.splice(indexS, 1);
+        deleteSectionFromTable(sectionTitle);
     } else {
         sections[indexS].items.splice(indexI, 1);
+        deleteItemFromTable(sectionTitle, selectedItem);
     }
 
 }
@@ -137,10 +186,11 @@ export default function IngredientsScreen({ navigation }) {
     const [selectedItem, setSelectedItem] = React.useState('');
     const [sectionIndex, setSectionIndex] = React.useState('');
     const [ingredIndex, setIngredIndex] = React.useState('');
+    const [sectionTitle, setSectionsTitle] = React.useState('');
 
     React.useEffect(() => {
         createTable();
-        insertDataIntoTable(sections);
+        initializeSections();
     }, []);
 
 
@@ -157,22 +207,41 @@ export default function IngredientsScreen({ navigation }) {
                             title={accordionTitle}
                         // left={}
                         >
-                            {sections.map((item, i) =>
+                            {sections.map((section, i) =>
                                 <List.Accordion
                                     key={i}
                                     expanded={openAccordion === i}
                                     onPress={() => setOpenAccordion(i)}
-                                    onLongPress={() => { sectionTack = true; setSectionIndex(i); setSelectedItem(item.title), setVisibleDialogM(true) }}
+                                    onLongPress={() => {
+                                        sectionTack = true;
+                                        setSectionIndex(i);
+                                        setSelectedItem(section);
+                                        setSectionsTitle(section)
+                                        setVisibleDialogM(true)
+                                    }}
                                     style={styles.pLeft}
-                                    title={item.title}
+                                    title={section.title}
                                     left={props => <List.Icon {...props}
                                     />}>
-                                    {item.items.map((item, index) =>
+                                    {section.items.map((item, index) =>
                                         <List.Item
                                             key={index}
                                             title={item}
-                                            onLongPress={() => { setSectionIndex(i); setIngredIndex(index); setSelectedItem(item), setVisibleDialogM(true) }}
-                                            onPress={() => { setItemArray(true); setSectionIndex(i); setIngredIndex(index); setSelectedItem(item); setInputValue(''); setVisibleDialogItem(true) }}
+                                            onLongPress={() => {
+                                                setSectionsTitle(section);
+                                                setSectionIndex(i);
+                                                setIngredIndex(index);
+                                                setSelectedItem(item);
+                                                setVisibleDialogM(true)
+                                            }}
+                                            onPress={() => {
+                                                setItemArray(true);
+                                                setSectionIndex(i);
+                                                setIngredIndex(index);
+                                                setSelectedItem(item);
+                                                setInputValue('');
+                                                setVisibleDialogItem(true)
+                                            }}
                                             left={() => (
                                                 <Checkbox
                                                     status='unchecked'
@@ -183,7 +252,7 @@ export default function IngredientsScreen({ navigation }) {
                                         style={{}}
                                         // titleStyle={{ textAlign: 'center' }}
                                         title='Zutat hinzufügen'
-                                        onPress={() => { setInputValue(''); setSectionIndex(i); setVisibleDialogZ(true); }}
+                                        onPress={() => { setInputValue(''); setSectionsTitle(item); setSectionIndex(i); setVisibleDialogZ(true); }}
                                         sectionIndex={i}
                                     />
                                 </List.Accordion>
@@ -237,7 +306,7 @@ export default function IngredientsScreen({ navigation }) {
                     <Text style={{ fontSize: 22 }}>Bist du sicher, dass "{selectedItem}" gelöscht werden soll?</Text>
                 </Dialog.Content>
                 <Dialog.Actions>
-                    <Button onPress={() => { deleteItem(sectionIndex, ingredIndex); sectionTack = false; setVisibleDialogM(false) }}>Löschen</Button>
+                    <Button onPress={() => { deleteItem(sectionIndex, ingredIndex, sectionTitle, selectedItem); sectionTack = false; setVisibleDialogM(false) }}>Löschen</Button>
                     <Button onPress={() => { sectionTack = false; setVisibleDialogM(false) }}>Abbrechen</Button>
                 </Dialog.Actions>
             </Dialog>
@@ -271,7 +340,7 @@ export default function IngredientsScreen({ navigation }) {
                 <Dialog.Actions>
                     <Button
                         disabled={inputValue.length > 0 ? false : true}
-                        onPress={() => { addIngredient(inputValue, sectionIndex); setVisibleDialogZ(false); }}>Speichern</Button>
+                        onPress={() => { addIngredient(inputValue, sectionIndex); addItemToTable(sectionTitle, inputValue); setVisibleDialogZ(false); }}>Speichern</Button>
                     <Button onPress={() => setVisibleDialogZ(false)}>Done</Button>
                 </Dialog.Actions>
             </Dialog>
