@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import * as SQLite from 'expo-sqlite';
+// import * as SQLite from 'expo-sqlite';
 let sections = [
     {
         title: "Fleisch",
@@ -129,10 +129,10 @@ function addSection(title) {
 function deleteItem(indexS, indexI, sectionTitle, selectedItem) {
     if (sectionTack) {
         sections.splice(indexS, 1);
-        deleteSectionFromTable(sectionTitle);
+        // deleteSectionFromTable(sectionTitle);
     } else {
         sections[indexS].items.splice(indexI, 1);
-        deleteItemFromTable(sectionTitle, selectedItem);
+        // deleteItemFromTable(sectionTitle, selectedItem);
     }
 
 }
@@ -188,10 +188,10 @@ export default function IngredientsScreen({ navigation }) {
     const [ingredIndex, setIngredIndex] = React.useState('');
     const [sectionTitle, setSectionsTitle] = React.useState('');
 
-    React.useEffect(() => {
-        createTable();
-        initializeSections();
-    }, []);
+    // React.useEffect(() => {
+    //     createTable();
+    //     initializeSections();
+    // }, []);
 
 
 
@@ -340,7 +340,11 @@ export default function IngredientsScreen({ navigation }) {
                 <Dialog.Actions>
                     <Button
                         disabled={inputValue.length > 0 ? false : true}
-                        onPress={() => { addIngredient(inputValue, sectionIndex); addItemToTable(sectionTitle, inputValue); setVisibleDialogZ(false); }}>Speichern</Button>
+                        onPress={() => {
+                            addIngredient(inputValue, sectionIndex);
+                            //  addItemToTable(sectionTitle, inputValue); 
+                            setVisibleDialogZ(false);
+                        }}>Speichern</Button>
                     <Button onPress={() => setVisibleDialogZ(false)}>Done</Button>
                 </Dialog.Actions>
             </Dialog>

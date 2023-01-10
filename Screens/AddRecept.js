@@ -12,8 +12,8 @@ const TabRecept = createMaterialTopTabNavigator();
 
 export default function AddReceptScreen() {
     return (
-        <SafeAreaView style={{ height: '100%', paddingTop: 16 }}>
-            <TabRecept.Navigator style={{ paddingTop: 24 }}>
+        <SafeAreaView style={{ height: '100%' }}>
+            <TabRecept.Navigator style={{}}>
                 <TabRecept.Screen
                     name='Overview'
                     component={Overview}
