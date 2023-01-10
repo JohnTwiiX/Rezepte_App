@@ -21,7 +21,7 @@ export default function CollectionChips() {
                     mode="outlined"
                     style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChips.includes(type) ? { backgroundColor: '#64ffda' } : { backgroundColor: 'rgb(232,225,237)' }]}
                     selected={false}
-                    onLongPress={() => { setSelectedChips(type), setModalVisible(true) }}
+                    onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                     onPress={() => {
                         if (selectedChips.includes(type)) {
                             setSelectedChips(selectedChips.filter((item) => item !== type));

@@ -21,7 +21,7 @@ export default function ReceptTypeChips() {
                     mode='outlined'
                     selected={false}
                     style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChip.includes(type) ? { backgroundColor: '#64ffda' } : { backgroundColor: 'rgb(232,225,237)' }]}
-                    onLongPress={() => { setSelectedChip(type), setModalVisible(true) }}
+                    onLongPress={() => { setSelectedChip([type]), setModalVisible(true) }}
                     onPress={() => {
                         if (selectedChip.includes(type)) {
                             setSelectedChip([]);

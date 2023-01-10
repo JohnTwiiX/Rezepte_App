@@ -21,7 +21,7 @@ export default function CategoryChips() {
                     key={index}
                     mode="outlined"
                     style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChips.includes(type) ? { backgroundColor: '#64ffda' } : { backgroundColor: 'rgb(232,225,237)' }]}
-                    onLongPress={() => { setSelectedChips(type), setModalVisible(true) }}
+                    onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                     selected={false}
                     onPress={() => {
                         if (selectedChips.includes(type)) {
