@@ -7,84 +7,80 @@ import CategoryChips from '../modals/OverviewCategory';
 import CollectionChips from '../modals/OverviewCollection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-getAllKeys = async () => {
-    let keys = []
+// getAllKeys = async () => {
+//     let keys = []
+//     try {
+//         keys = await AsyncStorage.getAllKeys()
+//     } catch (e) {
+//         // read key error
+//     }
+
+//     console.log(keys)
+//     // example console.log result:
+//     // ['@MyApp_user', '@MyApp_key']
+// }
+
+// removeFew = async () => {
+//     const keys = ['Eissorten', 'sgfg', 'sh']
+//     try {
+//         await AsyncStorage.multiRemove(keys)
+//     } catch (e) {
+//         // remove error
+//     }
+
+//     console.log('Done')
+// }
+
+// getMultiple = async () => {
+
+//     let values
+//     try {
+//         values = await AsyncStorage.multiGet(['Kategorie', 'Sammlung', 'Rezeptart'])
+//     } catch (e) {
+//         // read error
+//     }
+//     console.log(values)
+
+//     // example console.log output:
+//     // [ ['@MyApp_user', 'myUserValue'], ['@MyApp_key', 'myKeyValue'] ]
+// }
+
+export const saveInStorage = async (title, value) => {
     try {
-        keys = await AsyncStorage.getAllKeys()
-    } catch (e) {
-        // read key error
-    }
-
-    console.log(keys)
-    // example console.log result:
-    // ['@MyApp_user', '@MyApp_key']
-}
-
-removeFew = async () => {
-    const keys = ['Eissorten', 'sgfg', 'sh']
-    try {
-        await AsyncStorage.multiRemove(keys)
-    } catch (e) {
-        // remove error
-    }
-
-    console.log('Done')
-}
-
-getMultiple = async () => {
-
-    let values
-    try {
-        values = await AsyncStorage.multiGet(['Kategorie', 'Sammlung', 'Rezeptart'])
-    } catch (e) {
-        // read error
-    }
-    console.log(values)
-
-    // example console.log output:
-    // [ ['@MyApp_user', 'myUserValue'], ['@MyApp_key', 'myKeyValue'] ]
-}
-
-export const saveInStorage = async (title, array) => {
-    try {
-        const arrayInString = JSON.stringify(array);
-        await AsyncStorage.setItem(title, arrayInString);
+        await AsyncStorage.setItem(title, value);
     } catch (error) {
         console.log(`Error saving ${title}: ${error}`);
     }
 }
 
-export const getStorage = async (title) => {
-    try {
-        const arrayInString = await AsyncStorage.getItem(title);
-        if (arrayInString != null) {
-            return JSON.parse(arrayInString);
-        }
-        return null;
-    } catch (error) {
-        console.log(`Error retrieving ${title}: ${error}`);
-    }
-}
+// export const getStorage = async (title) => {
+//     try {
+//         const arrayInString = await AsyncStorage.getItem(title);
+//         if (arrayInString != null) {
+//             return JSON.parse(arrayInString);
+//         }
+//         return null;
+//     } catch (error) {
+//         console.log(`Error retrieving ${title}: ${error}`);
+//     }
+// }
 
 export default function Overview({ navigation }) {
     const [title, setTitle] = React.useState("");
     const [potionSize, setPotionSize] = React.useState("");
     const [workTime, setWorkTime] = React.useState("");
     const [cookingTime, setCookingTime] = React.useState("");
+
+
     return (
         <ScrollView>
             <View style={styles.container}>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => navigation.goBack()}>
-                    <Icon name="chevron-back-outline" size={20} color="#fff" />
-                </TouchableOpacity>
                 {/* <Button title='Klick mich' onPress={() => getMultiple()} /> */}
                 <TextInput
                     style={styles.input}
                     label="Titel"
                     value={title}
-                    onChangeText={title => setTitle(title)}
+                    onChangeText={title => { setTitle(title), saveInStorage('Titel', title) }}
                 />
                 <View style={styles.chipContainer} >
                     <Text>Rezeptart:</Text>
@@ -117,6 +113,11 @@ export default function Overview({ navigation }) {
                     value={cookingTime}
                     onChangeText={cookingTime => setCookingTime(cookingTime)}
                 />
+                {/* <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Ingredients')}>
+                    <Text>Weiter</Text>
+                </TouchableOpacity> */}
             </View>
         </ScrollView>
     );
@@ -127,9 +128,9 @@ const styles = StyleSheet.create({
         padding: 8
     },
     button: {
-        position: 'absolute',
-        top: 16,
-        left: 16,
+        // position: 'absolute',
+        // top: 16,
+        // left: 16,
         alignItems: 'center',
         backgroundColor: 'blue',
         padding: 10,
