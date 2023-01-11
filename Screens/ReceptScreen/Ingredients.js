@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
-// import * as SQLite from 'expo-sqlite';
-let sections = [
+import AsyncStorage from '@react-native-async-storage/async-storage';
+let defaultSections = [
     {
         title: "Fleisch",
         items: [
@@ -28,117 +27,51 @@ let sections = [
 
 ]
 
-const initializeSections = () => {
-    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
-    db.transaction(tx => {
-        tx.executeSql(`SELECT COUNT(*) as count FROM my_sections`, [], (_, { rows }) => {
-            const count = rows.item(0).count;
-            if (count === 0) {
-                // Tabelle ist leer, füge Werte aus sections in die Tabelle ein
-                insertDataIntoTable(sections);
-            } else {
-                // Tabelle enthält Werte, lese Werte in sections ein
-                readDataFromTable();
-            }
-        });
-    });
-};
-
-const createTable = () => {
-    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
-    db.transaction(tx => {
-        tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS my_sections (id INTEGER PRIMARY KEY AUTOINCREMENT, section_title TEXT, item TEXT);'
-        );
-    });
-};
-
-
-const readDataFromTable = () => {
-    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
-    db.transaction(tx => {
-        tx.executeSql(`SELECT * FROM my_sections`, [], (_, { rows }) => {
-            sections = []; // Leere das Array sections
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows.item(i);
-                const title = row.section_title;
-                const item = row.item;
-                // Prüfe, ob es bereits ein Objekt im Array sections mit dem gleichen Titel gibt
-                const existingSection = sections.find(section => section.title === title);
-                if (existingSection) {
-                    // Wenn ja, füge das Item dem bestehenden Objekt hinzu
-                    existingSection.items.push(item);
-                } else {
-                    // Wenn nein, füge ein neues Objekt mit dem Titel und dem Item hinzu
-                    sections.push({ title, items: [item] });
-                }
-            }
-        });
-    })
-};
-
-const insertDataIntoTable = (sections) => {
-    // Verbindung zur Datenbank herstellen
-    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
-
-    // Einfügen der Werte in die Tabelle
-    db.transaction(tx => {
-        sections.forEach((section) => {
-            const { title, items } = section;
-            items.forEach((item) => {
-                tx.executeSql(`INSERT INTO my_sections (section_title, item) VALUES (?, ?)`, [title, item]);
-            });
-        });
-    });
-};
-
-const addItemToTable = (title, item) => {
-    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
-    db.transaction(tx => {
-        tx.executeSql(`INSERT INTO my_sections (section_title, item) VALUES (?, ?)`, [title, item]);
-    });
+const saveSections = async (sections) => {
+    try {
+        const sectionsString = JSON.stringify(sections);
+        await AsyncStorage.setItem('sections', sectionsString);
+    } catch (error) {
+        console.log(`Error saving sections: ${error}`);
+    }
 }
 
-const deleteSectionFromTable = (title) => {
-    const db = SQLite.openDatabase({ name: 'mydatabase.db' });
-    db.transaction(tx => {
-        tx.executeSql(`DELETE FROM my_sections WHERE section_title = ?`, [title]);
-    });
+const getSections = async () => {
+    try {
+        const sectionsString = await AsyncStorage.getItem('sections');
+        if (sectionsString != null) {
+            return JSON.parse(sectionsString);
+        }
+        return null;
+    } catch (error) {
+        console.log(`Error retrieving sections: ${error}`);
+    }
 }
-
-const deleteItemFromTable = (title, item) => {
-    const db = SQLite.openDatabase({ name: 'mydatabase' });
-
-    db.transaction(tx => {
-        tx.executeSql(`DELETE FROM my_sections WHERE item = ? AND section_title = ?`, [item, title]);
-    });
-};
-
 
 
 let ingredArray = [];
 export let sectionArray = [];
 
-function addSection(title) {
+function addSection(sections, title) {
     sections.push({
         title: title,
         items: []
     });
+    saveSections(sections);
 }
 
-function deleteItem(indexS, indexI, sectionTitle, selectedItem) {
+function deleteItem(indexS, indexI, sections) {
     if (sectionTack) {
         sections.splice(indexS, 1);
-        // deleteSectionFromTable(sectionTitle);
     } else {
         sections[indexS].items.splice(indexI, 1);
-        // deleteItemFromTable(sectionTitle, selectedItem);
     }
-
+    saveSections(sections);
 }
 
-function addIngredient(title, index) {
+function addIngredient(title, index, sections) {
     sections[index].items.push(title);
+    saveSections(sections);
 }
 
 function saveSectonArray(accordionTitle) {
@@ -188,12 +121,22 @@ export default function IngredientsScreen({ navigation }) {
     const [ingredIndex, setIngredIndex] = React.useState('');
     const [sectionTitle, setSectionsTitle] = React.useState('');
 
-    // React.useEffect(() => {
-    //     createTable();
-    //     initializeSections();
-    // }, []);
 
 
+    const [sections, setSections] = React.useState(defaultSections);
+
+    React.useEffect(() => {
+        const loadSections = async () => {
+            const storedSections = await getSections();
+            if (storedSections) {
+                setSections(storedSections);
+            } else {
+                setSections(defaultSections);
+                saveSections(defaultSections);
+            }
+        }
+        loadSections();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -215,8 +158,8 @@ export default function IngredientsScreen({ navigation }) {
                                     onLongPress={() => {
                                         sectionTack = true;
                                         setSectionIndex(i);
-                                        setSelectedItem(section);
-                                        setSectionsTitle(section)
+                                        setSelectedItem(section.title);
+                                        setSectionsTitle(section.title)
                                         setVisibleDialogM(true)
                                     }}
                                     style={styles.pLeft}
@@ -252,7 +195,7 @@ export default function IngredientsScreen({ navigation }) {
                                         style={{}}
                                         // titleStyle={{ textAlign: 'center' }}
                                         title='Zutat hinzufügen'
-                                        onPress={() => { setInputValue(''); setSectionsTitle(item); setSectionIndex(i); setVisibleDialogZ(true); }}
+                                        onPress={() => { setInputValue(''); setSectionsTitle(section); setSectionIndex(i); setVisibleDialogZ(true); }}
                                         sectionIndex={i}
                                     />
                                 </List.Accordion>
@@ -306,7 +249,7 @@ export default function IngredientsScreen({ navigation }) {
                     <Text style={{ fontSize: 22 }}>Bist du sicher, dass "{selectedItem}" gelöscht werden soll?</Text>
                 </Dialog.Content>
                 <Dialog.Actions>
-                    <Button onPress={() => { deleteItem(sectionIndex, ingredIndex, sectionTitle, selectedItem); sectionTack = false; setVisibleDialogM(false) }}>Löschen</Button>
+                    <Button onPress={() => { deleteItem(sectionIndex, ingredIndex, sections); sectionTack = false; setVisibleDialogM(false) }}>Löschen</Button>
                     <Button onPress={() => { sectionTack = false; setVisibleDialogM(false) }}>Abbrechen</Button>
                 </Dialog.Actions>
             </Dialog>
@@ -323,7 +266,7 @@ export default function IngredientsScreen({ navigation }) {
                 <Dialog.Actions>
                     <Button
                         disabled={inputValue.length > 0 ? false : true}
-                        onPress={() => { addSection(inputValue), setVisibleDialogK(false); }}>Speichern</Button>
+                        onPress={() => { addSection(sections, inputValue), setVisibleDialogK(false); }}>Speichern</Button>
                     <Button onPress={() => { setInputValue(''); setVisibleDialogK(false) }}>Abbrechen</Button>
                 </Dialog.Actions>
             </Dialog>
@@ -341,7 +284,7 @@ export default function IngredientsScreen({ navigation }) {
                     <Button
                         disabled={inputValue.length > 0 ? false : true}
                         onPress={() => {
-                            addIngredient(inputValue, sectionIndex);
+                            addIngredient(inputValue, sectionIndex, sections);
                             //  addItemToTable(sectionTitle, inputValue); 
                             setVisibleDialogZ(false);
                         }}>Speichern</Button>
@@ -374,10 +317,6 @@ export default function IngredientsScreen({ navigation }) {
                     />
                 </Dialog.Content>
                 <Dialog.Actions >
-                    {/* <TouchableOpacity onPress={() => { deleteItem(sectionIndex, ingredIndex), setVisibleDialogItem(false); }}>
-                        <Icon name="trash-outline" size={24} color="#000" />
-                    </TouchableOpacity> */}
-
                     <Button disabled={inputValue.length > 0 ? false : true}
                         onPress={() => { saveInArray(selectedItem, inputValue), setVisibleDialogItem(false); }}>Speichern</Button>
                     {/* <Button >Entfernen</Button> */}

@@ -8,12 +8,15 @@ import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
 
 
 function deleteItem(setArray, variable, title) {
-    setArray(variable.filter(item => item !== title));
-
+    const titleString = title.toString()
+    const index = variable.indexOf(titleString);
+    if (index > -1) {
+        variable.splice(index, 1);
+        setArray([...variable]);
+    }
 }
 
 export default function DeleteChip({ setArray, variable, selected, setModal, variableModal }) {
-    const [inputValue, setInputValue] = React.useState('');
     return (
         <View>
             <Modal
