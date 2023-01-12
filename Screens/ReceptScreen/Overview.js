@@ -7,6 +7,17 @@ import CategoryChips from '../modals/OverviewCategory';
 import CollectionChips from '../modals/OverviewCollection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const getMyObject = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('recepts')
+        return JSON.parse(jsonValue)
+    } catch (e) {
+        // read error
+    }
+
+    console.log('Done.')
+}
+
 getAllKeys = async () => {
     let keys = []
     try {
@@ -35,7 +46,7 @@ getMultiple = async () => {
 
     let values
     try {
-        values = await AsyncStorage.multiGet(['Kategorie', 'selectedRezeptart', 'selectedSammlung', 'selectedKategorie'])
+        values = await AsyncStorage.multiGet(['recepts'])
     } catch (e) {
         // read error
     }
@@ -84,7 +95,7 @@ export default function Overview({ navigation }) {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Button title='Klick mich' onPress={() => getMultiple()} />
+                <Button title='Klick mich' onPress={() => getAllKeys()} />
                 <TextInput
                     style={styles.input}
                     label="Titel"
