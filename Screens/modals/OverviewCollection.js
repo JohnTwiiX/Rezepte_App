@@ -16,6 +16,7 @@ export default function CollectionChips() {
     const title = 'Sammlung';
 
     const previousLength = React.useRef(category.length);
+    const selectedLength = React.useRef(selectedChips.length);
 
     React.useEffect(() => {
         if (category.length !== previousLength.current) {
@@ -23,6 +24,13 @@ export default function CollectionChips() {
             saveInStorage(title, category);
         }
     }, [category]);
+
+    React.useEffect(() => {
+        if (selectedChips.length !== selectedLength.current) {
+            selectedLength.current = selectedChips.length;
+            saveInStorage('selectedSammlung', selectedChips);
+        }
+    }, [selectedChips]);
 
     React.useEffect(() => {
         const loadCategory = async () => {

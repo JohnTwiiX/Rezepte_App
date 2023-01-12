@@ -35,7 +35,7 @@ getMultiple = async () => {
 
     let values
     try {
-        values = await AsyncStorage.multiGet(['Kategorie', 'Sammlung', 'Rezeptart', 'title'])
+        values = await AsyncStorage.multiGet(['Kategorie', 'selectedRezeptart', 'selectedSammlung', 'selectedKategorie'])
     } catch (e) {
         // read error
     }
@@ -84,7 +84,7 @@ export default function Overview({ navigation }) {
     return (
         <ScrollView>
             <View style={styles.container}>
-                {/* <Button title='Klick mich' onPress={() => getMultiple()} /> */}
+                <Button title='Klick mich' onPress={() => getMultiple()} />
                 <TextInput
                     style={styles.input}
                     label="Titel"

@@ -16,6 +16,7 @@ export default function ReceptTypeChips() {
     const [receptTypes, setreceptTypes] = React.useState(defaultTypes);
     const title = 'Rezeptart';
     const previousLength = React.useRef(receptTypes.length);
+    const selectedLength = React.useRef(selectedChip.length);
 
     React.useEffect(() => {
         if (receptTypes.length !== previousLength.current) {
@@ -23,6 +24,13 @@ export default function ReceptTypeChips() {
             saveInStorage(title, receptTypes);
         }
     }, [receptTypes]);
+
+    React.useEffect(() => {
+        if (selectedChip.length !== selectedLength.current) {
+            selectedLength.current = selectedChip.length;
+            saveInStorage('selectedRezeptart', selectedChip);
+        }
+    }, [selectedChip]);
 
     React.useEffect(() => {
         const loadTypes = async () => {

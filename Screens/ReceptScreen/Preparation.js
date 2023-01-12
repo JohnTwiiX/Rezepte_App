@@ -1,18 +1,29 @@
 import * as React from 'react';
 import { Button, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { List } from 'react-native-paper';
-import { sectionArray } from './Ingredients';
+// import { sectionArray } from './Ingredients';
+import { getStorage } from './Overview';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function PreparationsScreen({ navigation }) {
     const [sections, setSections] = React.useState([]);
-    const [actuel, setActuel] = React.useState(false)
-    React.useEffect(() => {
-        setSections(sectionArray);
-        setActuel(false)
-    }, [actuel]);
+    // const [actuel, setActuel] = React.useState(false);
+    useFocusEffect(
+        React.useCallback(() => {
+            async function fetchData() {
+                const data = await getStorage('receptArray');
+                if (data) {
+                    setSections(data);
+                }
+            }
+            fetchData();
+        }, []),
+    );
+
+
     return (
         <View style={{ flex: 1, margin: 8 }}>
-            <Button title='Aktualisieren' onPress={() => setActuel(true)} />
+            {/* <Button title='Aktualisieren' onPress={() => setActuel(true)} /> */}
             <List.Section style={{}}>
                 {sections.map((item, index) =>
                     <List.Accordion

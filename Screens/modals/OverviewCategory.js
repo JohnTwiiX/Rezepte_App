@@ -17,6 +17,7 @@ export default function CategoryChips() {
     const title = 'Kategorie';
 
     const previousLength = React.useRef(category.length);
+    const selectedLength = React.useRef(selectedChips.length);
 
     React.useEffect(() => {
         if (category.length !== previousLength.current) {
@@ -24,6 +25,13 @@ export default function CategoryChips() {
             saveInStorage(title, category);
         }
     }, [category]);
+
+    React.useEffect(() => {
+        if (selectedChips.length !== selectedLength.current) {
+            selectedLength.current = selectedChips.length;
+            saveInStorage('selectedKategorie', selectedChips);
+        }
+    }, [selectedChips]);
 
     React.useEffect(() => {
         const loadCategory = async () => {
