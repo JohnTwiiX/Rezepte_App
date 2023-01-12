@@ -8,6 +8,7 @@ import SettingsScreen from './Settings';
 import HomeScreen from './Home';
 import BasketScreen from './Basket';
 import AddReceptScreen from './AddRecept';
+import CategoryScreen from './Category';
 
 
 
@@ -54,13 +55,21 @@ export default function NavigationBar() {
                                 component={HomeScreen}
                                 options={{
                                     title: "Sandra's Awesome App",
-                                }} />
+                                }} >
+                            </HomeStack.Screen>
                             <HomeStack.Screen
                                 name="AddRecept"
                                 component={AddReceptScreen}
                                 options={{
                                     headerShown: false,
                                 }} >
+                            </HomeStack.Screen>
+                            <HomeStack.Screen
+                                name="Category"
+                                component={CategoryScreen}
+                                options={({ route }) => ({
+                                    title: route.params.title
+                                })}  >
                             </HomeStack.Screen>
                         </HomeStack.Navigator>
                     )}

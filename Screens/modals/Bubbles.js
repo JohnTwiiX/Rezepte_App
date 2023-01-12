@@ -1,5 +1,8 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { getStorage } from './Overview';
 
 const receptTypes = ["Fisch", "Fleisch", "Kuchen", "Dessert", "Festtage", "", ""];
 const sizes = [130, 160, 200];
@@ -16,6 +19,27 @@ function CircleButton({ descr, size, onPress }) {
 
 
 export default function CircleButtons() {
+    const [receptTypes, setReceptTypes] = React.useState([]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            async function fetchData() {
+                let values
+                try {
+                    values = await AsyncStorage.multiGet(['Kategorie', 'Sammlung', 'Rezeptart'])
+                } catch (e) {
+                    // read error
+                }
+                let data = [];
+                values.forEach(([key, value]) => {
+                    data.push(...JSON.parse(value))
+                });
+                setReceptTypes(data);
+            }
+            fetchData();
+        }, []),
+    );
+    const navigation = useNavigation();
     return (
         <ScrollView >
             <View style={styles.container}>
@@ -24,7 +48,7 @@ export default function CircleButtons() {
                         key={index}
                         descr={bubble}
                         size={sizes[index % sizes.length]}
-                        onPress={() => console.log(`Button ${index + 1} ${bubble} gedrückt`)} />)}
+                        onPress={() => navigation.navigate('Category', { title: bubble })} />)}
             </View>
         </ScrollView>
     );
