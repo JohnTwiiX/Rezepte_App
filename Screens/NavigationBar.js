@@ -67,6 +67,7 @@ export default function NavigationBar() {
                             <HomeStack.Screen
                                 name="Category"
                                 component={CategoryScreen}
+                                // initialParams={title}
                                 options={({ route }) => ({
                                     title: route.params.title
                                 })}  >

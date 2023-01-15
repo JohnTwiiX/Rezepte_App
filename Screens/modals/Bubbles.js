@@ -26,7 +26,7 @@ export default function CircleButtons() {
             async function fetchData() {
                 let values
                 try {
-                    values = await AsyncStorage.multiGet(['Kategorie', 'Sammlung', 'Rezeptart'])
+                    values = await AsyncStorage.multiGet(['Rezeptart', 'Sammlung'])
                 } catch (e) {
                     // read error
                 }
