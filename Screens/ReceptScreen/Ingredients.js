@@ -191,7 +191,7 @@ export default function IngredientsScreen({ navigation }) {
                                                     }}
                                                     left={() => (
                                                         <Checkbox
-                                                            status='unchecked'
+                                                            status={ingredArray.some(ingredientArray => ingredientArray.includes(item)) ? 'checked' : 'unchecked'}
                                                         />
                                                     )} />
                                             )}

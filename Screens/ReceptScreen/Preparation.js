@@ -14,7 +14,7 @@ async function saveRecept(recept) {
             recepts = [];
         }
         recepts.push(recept);
-        console.log(recepts)
+        // console.log(recepts)
         await AsyncStorage.setItem('recepts', JSON.stringify(recepts));
     } catch (error) {
         console.log(`Error saving recept: ${error}`);
@@ -49,7 +49,7 @@ async function removeAllExcept(keysToKeep) {
         const allKeys = await AsyncStorage.getAllKeys();
         const keysToRemove = allKeys.filter(key => !keysToKeep.includes(key));
         await AsyncStorage.multiRemove(keysToRemove);
-        console.log('Removed keys:', keysToRemove);
+        // console.log('Removed keys:', keysToRemove);
     } catch (error) {
         console.error(`Error removing keys: ${error}`);
     }
