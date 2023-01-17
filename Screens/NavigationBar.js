@@ -9,6 +9,7 @@ import HomeScreen from './Home';
 import BasketScreen from './Basket';
 import AddReceptScreen from './AddRecept';
 import CategoryScreen from './Category';
+import ReceptScreen from './Recept';
 
 
 
@@ -67,6 +68,14 @@ export default function NavigationBar() {
                             <HomeStack.Screen
                                 name="Category"
                                 component={CategoryScreen}
+                                // initialParams={title}
+                                options={({ route }) => ({
+                                    title: route.params.title
+                                })}  >
+                            </HomeStack.Screen>
+                            <HomeStack.Screen
+                                name="Recept"
+                                component={ReceptScreen}
                                 // initialParams={title}
                                 options={({ route }) => ({
                                     title: route.params.title

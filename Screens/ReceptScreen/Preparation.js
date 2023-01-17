@@ -14,7 +14,6 @@ async function saveRecept(recept) {
             recepts = [];
         }
         recepts.push(recept);
-        // console.log(recepts)
         await AsyncStorage.setItem('recepts', JSON.stringify(recepts));
     } catch (error) {
         console.log(`Error saving recept: ${error}`);
@@ -22,7 +21,7 @@ async function saveRecept(recept) {
 
 }
 
-async function saveMultiple() {
+async function saveMultiple(inputValues) {
     const values = await AsyncStorage.multiGet(['title', 'selectedRezeptart', 'selectedKategorie', 'selectedSammlung', 'potionSize', 'workTime', 'cookingTime', 'receptArray']);
     const valueObject = {};
     values.forEach(([key, value]) => {
@@ -38,10 +37,10 @@ async function saveMultiple() {
             workTime: valueObject.workTime,
             cookingTime: valueObject.cookingTime,
             receptArray: JSON.parse(valueObject.receptArray),
+            preparation: inputValues,
         },
     }
     saveRecept(recept);
-
 }
 
 async function removeAllExcept(keysToKeep) {
@@ -60,8 +59,8 @@ async function removeAllExcept(keysToKeep) {
 //     removeAllExcept(keysToKeep);
 // }
 
-async function saveAll() {
-    await saveMultiple()
+async function saveAll(inputValues) {
+    await saveMultiple(inputValues)
     const keysToKeep = ['Kategorie', 'Rezeptart', 'Sammlung', 'sections', 'recepts'];
     await removeAllExcept(keysToKeep);
 
@@ -71,6 +70,7 @@ async function saveAll() {
 
 export default function PreparationsScreen({ navigation }) {
     const [sections, setSections] = React.useState([]);
+    const [inputValues, setInputValues] = React.useState({});
     useFocusEffect(
         React.useCallback(() => {
             async function fetchData() {
@@ -84,7 +84,6 @@ export default function PreparationsScreen({ navigation }) {
     );
     return (
         <View style={{ flex: 1, margin: 8 }}>
-            {/* <Button title='Aktualisieren' onPress={() => setActuel(true)} /> */}
             <List.Section style={{}}>
                 {sections.map((item, index) =>
                     <List.Accordion
@@ -98,7 +97,8 @@ export default function PreparationsScreen({ navigation }) {
                             textAlignVertical='top'
                             style={{ height: 40, borderColor: 'gray', backgroundColor: 'white', height: '100%', overflow: 'hidden', padding: 8 }}
                             placeholder="Type something here!"
-                            onChangeText={text => console.log(text)}
+                            value={inputValues[item.title] || ""}
+                            onChangeText={text => setInputValues(prevValues => ({ ...prevValues, [item.title]: text }))}
                         />
                     </List.Accordion>
                 )}
@@ -114,7 +114,7 @@ export default function PreparationsScreen({ navigation }) {
                         });
                         // Hier könntest du die Werte in den useStates zurücksetzen:
                         setSections([]);
-                        saveAll();
+                        saveAll(inputValues);
                     }}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Rezept abspeichern</Text>
                 </TouchableOpacity>

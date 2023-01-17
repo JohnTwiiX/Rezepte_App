@@ -54,9 +54,13 @@ async function fetchChips(recepts, setCategoryChips, setWorkChips, setCookChips,
 }
 
 function RenderRecepts(props) {
+    const navigation = useNavigation();
     return props.recepts.map((recept, index) => {
         return (
-            <TouchableOpacity style={{ margin: 8 }} key={index} onPress={() => console.log('Ich bin Rezept ', recept.title)}>
+            <TouchableOpacity
+                style={{ margin: 8 }}
+                key={index}
+                onPress={() => navigation.navigate('Recept', { title: recept.title })}>
                 <Card >
                     {/* <Card.Cover source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} /> */}
                     <Card.Content>
@@ -140,9 +144,11 @@ export default function CategoryScreen({ route }) {
     useFocusEffect(
         React.useCallback(() => {
             fetchData(title, setRecepts);
-            fetchChips(recepts, setCategoryChips, setWorkChips, setCookChips, setSizeChips)
         }, []),
     );
+    React.useEffect(() => {
+        fetchChips(recepts, setCategoryChips, setWorkChips, setCookChips, setSizeChips);
+    }, [recepts]);
     React.useEffect(() => {
         setFilteredRecepts(filterRecepts(recepts, selectedChips));
     }, [selectedChips]);
