@@ -7,15 +7,26 @@ import CategoryChips from '../modals/OverviewCategory';
 import CollectionChips from '../modals/OverviewCollection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const removeValue = async () => {
+    try {
+        await AsyncStorage.removeItem('recepts')
+    } catch (e) {
+        // remove error
+    }
+
+    console.log('Done.')
+}
+
 const getMyObject = async () => {
+    let value
     try {
         const jsonValue = await AsyncStorage.getItem('recepts')
-        return JSON.parse(jsonValue)
+        value = JSON.parse(jsonValue)
     } catch (e) {
         // read error
     }
 
-    console.log('Done.')
+    console.log(value)
 }
 
 getAllKeys = async () => {

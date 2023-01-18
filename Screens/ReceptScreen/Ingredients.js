@@ -51,7 +51,7 @@ const getSections = async () => {
 
 
 let ingredArray = [];
-export let sectionArray = [];
+// export let sectionArray = [];
 
 function addSection(sections, title) {
     sections.push({
@@ -75,12 +75,15 @@ function addIngredient(title, index, sections) {
     saveSections(sections);
 }
 
-function saveSectionArray(accordionTitle) {
+function saveSectionArray(accordionTitle, setSectionArray) {
     const tempIngredArray = [...ingredArray];
-    sectionArray.push({
-        title: setTitle ? accordionTitle : '',
-        ingredients: tempIngredArray,
-    });
+    setSectionArray(sectionArray => [
+        ...sectionArray,
+        {
+            title: setTitle ? accordionTitle : '',
+            ingredients: tempIngredArray,
+        }
+    ]);
     ingredArray = [];
     return
 }
@@ -121,6 +124,7 @@ export default function IngredientsScreen({ navigation }) {
     const [sectionIndex, setSectionIndex] = React.useState('');
     const [ingredIndex, setIngredIndex] = React.useState('');
     const [sectionTitle, setSectionsTitle] = React.useState('');
+    const [sectionArray, setSectionArray] = React.useState([]);
 
 
 
@@ -138,6 +142,10 @@ export default function IngredientsScreen({ navigation }) {
         }
         loadSections();
     }, []);
+
+    React.useEffect(() => {
+        saveInStorage('receptArray', sectionArray);
+    }, [sectionArray])
 
     return (
 
@@ -217,7 +225,7 @@ export default function IngredientsScreen({ navigation }) {
                                 style={styles.button}
                                 onPress={() => {
                                     if (ingredArray.length == 0) { alert('Du hast keine Zutaten ausgewählt.') }
-                                    else { saveSectionArray(accordionTitle); saveInStorage('receptArray', sectionArray); setVisibleDialog(false); setAccordionTitle('Abschnitt ...'), setTitle = false, setItemArray(false) }
+                                    else { saveSectionArray(accordionTitle, setSectionArray); setVisibleDialog(false); setAccordionTitle('Abschnitt ...'), setTitle = false, setItemArray(false) }
                                 }}>
                                 <Text style={{ color: 'white' }}>Auswahl speichern</Text>
                                 {/* <Icon name="chevron-back-outline" size={20} color="#fff" /> */}

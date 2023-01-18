@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -78,7 +78,7 @@ export default function NavigationBar() {
                                 component={ReceptScreen}
                                 // initialParams={title}
                                 options={({ route }) => ({
-                                    title: route.params.title
+                                    title: '',
                                 })}  >
                             </HomeStack.Screen>
                         </HomeStack.Navigator>

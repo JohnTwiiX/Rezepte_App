@@ -4,12 +4,40 @@ import { List } from 'react-native-paper';
 import { getStorage } from './Overview';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { sectionArray } from './Ingredients';
 
+// async function saveRecept(recept) {
+//     try {
+//         let recepts = await AsyncStorage.getItem('recepts');
+//         if (recepts) {
+//             recepts = JSON.parse(recepts);
+//         } else {
+//             recepts = [];
+//         }
+//         let existingRecept = recepts.find(r => r.title === recept.title);
+//         if (existingRecept) {
+//             alert("Rezept with this title already exists");
+//             return;
+//         }
+//         recepts.push(recept);
+//         await AsyncStorage.setItem('recepts', JSON.stringify(recepts));
+//     } catch (error) {
+//         console.log(`Error saving recept: ${error}`);
+//     }
+
+// }
 async function saveRecept(recept) {
     try {
         let recepts = await AsyncStorage.getItem('recepts');
         if (recepts) {
             recepts = JSON.parse(recepts);
+            for (let i = 0; i < recepts.length; i++) {
+                if (recepts[i].title === recept.title) {
+                    recepts[i] = recept;
+                    await AsyncStorage.setItem('recepts', JSON.stringify(recepts));
+                    return;
+                }
+            }
         } else {
             recepts = [];
         }
@@ -18,7 +46,6 @@ async function saveRecept(recept) {
     } catch (error) {
         console.log(`Error saving recept: ${error}`);
     }
-
 }
 
 async function saveMultiple(inputValues) {
