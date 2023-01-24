@@ -20,7 +20,7 @@ const removeValue = async () => {
 const getMyObject = async () => {
     let value
     try {
-        const jsonValue = await AsyncStorage.getItem('recepts')
+        const jsonValue = await AsyncStorage.getItem('receptArray')
         value = JSON.parse(jsonValue)
     } catch (e) {
         // read error
@@ -106,7 +106,7 @@ export default function Overview({ navigation }) {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Button title='Klick mich' onPress={() => getAllKeys()} />
+                <Button title='Klick mich' onPress={() => getMyObject()} />
                 <TextInput
                     style={styles.input}
                     label="Titel"
@@ -116,7 +116,6 @@ export default function Overview({ navigation }) {
                 <View style={styles.chipContainer} >
                     <Text>Rezeptart:</Text>
                     <ReceptTypeChips />
-                    <Divider />
                 </View>
                 <View style={styles.chipContainer}>
                     <Text>Kategorie:</Text>

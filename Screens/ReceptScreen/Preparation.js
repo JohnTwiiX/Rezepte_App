@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Button, TextInput, TouchableOpacity, View, Text } from 'react-native';
-import { List } from 'react-native-paper';
+import { TextInput, TouchableOpacity, View, Text } from 'react-native';
+import { List, Dialog, Paragraph, Button } from 'react-native-paper';
 import { getStorage } from './Overview';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -98,6 +98,8 @@ async function saveAll(inputValues) {
 export default function PreparationsScreen({ navigation }) {
     const [sections, setSections] = React.useState([]);
     const [inputValues, setInputValues] = React.useState({});
+    const [missingValues, setMissingValues] = React.useState([]);
+    const [visibleDialog, setVisibleDialog] = React.useState(false)
     useFocusEffect(
         React.useCallback(() => {
             async function fetchData() {
@@ -107,6 +109,7 @@ export default function PreparationsScreen({ navigation }) {
                 }
             }
             fetchData();
+
         }, []),
     );
     return (
@@ -133,20 +136,49 @@ export default function PreparationsScreen({ navigation }) {
             <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                 <TouchableOpacity
                     style={{ backgroundColor: 'blue' }}
-                    onPress={() => {
-                        // Hier kannst du den Navigation-Stack auf den HomeScreen zurücksetzen:
-                        navigation.reset({
-                            index: 0,
-                            routes: [{ name: 'Home' }],
+                    onPress={async () => {
+                        const values = await AsyncStorage.multiGet(['title', 'selectedRezeptart', 'selectedKategorie', 'potionSize', 'workTime', 'receptArray']);
+                        const valueObject = {};
+                        values.forEach(([key, value]) => {
+                            valueObject[key] = value;
                         });
-                        // Hier könntest du die Werte in den useStates zurücksetzen:
-                        setSections([]);
-                        saveAll(inputValues);
+
+                        if (!valueObject.title || !valueObject.selectedRezeptart || !valueObject.selectedKategorie || !valueObject.potionSize || !valueObject.workTime || !valueObject.receptArray) {
+                            const missing = [];
+                            if (!valueObject.title) missing.push('Titel');
+                            if (!valueObject.selectedRezeptart) missing.push('Rezeptart');
+                            if (!valueObject.selectedKategorie) missing.push('Kategorie');
+                            if (!valueObject.potionSize) missing.push('Portionsgröße');
+                            if (!valueObject.workTime) missing.push('Vorbereitunszeit');
+                            if (!valueObject.receptArray || JSON.parse(valueObject.receptArray).length == 0) missing.push('Zutaten');
+                            // console.log(missing)
+                            setMissingValues(missing);
+                            setVisibleDialog(true);
+                            return;
+                        } else {
+                            // Hier kannst du den Navigation-Stack auf den HomeScreen zurücksetzen:
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'Home' }],
+                            });
+                            // Hier könntest du die Werte in den useStates zurücksetzen:
+                            setSections([]);
+                            saveAll(inputValues);
+                        }
                     }}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Rezept abspeichern</Text>
                 </TouchableOpacity>
             </View>
-
+            <Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(false)}>
+                <Dialog.Content>
+                    <Text style={{}}>Es fehlen "{missingValues.join(', ')}" noch zum speichern des Rezeptes!</Text>
+                    {missingValues.includes('Zutaten') && <Text>Du musst bei Zutaten auf den "speichern" - Button klicken.</Text>}
+                </Dialog.Content>
+                <Dialog.Actions>
+                    <Button onPress={() => { setVisibleDialog(false) }}>Ok</Button>
+                    {/* <Button onPress={() => { sectionTack = false; setVisibleDialogM(false) }}>Abbrechen</Button> */}
+                </Dialog.Actions>
+            </Dialog>
         </View>
     );
 }
