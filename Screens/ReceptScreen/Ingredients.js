@@ -125,10 +125,8 @@ export default function IngredientsScreen({ navigation }) {
     const [ingredIndex, setIngredIndex] = React.useState('');
     const [sectionTitle, setSectionsTitle] = React.useState('');
     const [sectionArray, setSectionArray] = React.useState([]);
-
-
-
     const [sections, setSections] = React.useState(defaultSections);
+
 
     React.useEffect(() => {
         const loadSections = async () => {
@@ -160,7 +158,6 @@ export default function IngredientsScreen({ navigation }) {
                                     expanded={true}
                                     onPress={() => setVisibleDialog(true)}
                                     title={accordionTitle}
-                                // left={}
                                 >
                                     {sections.map((section, i) =>
                                         <List.Accordion
@@ -279,6 +276,7 @@ export default function IngredientsScreen({ navigation }) {
                 <Dialog.Title>Benenne deine Kategorie</Dialog.Title>
                 <Dialog.Content>
                     <TextInput
+                        autoFocus={visibleDialogK}
                         placeholder='Kategorie ...'
                         onChangeText={text => setInputValue(text)}
                     />
@@ -296,6 +294,7 @@ export default function IngredientsScreen({ navigation }) {
                 <Dialog.Title>Wähle deine Zutat</Dialog.Title>
                 <Dialog.Content>
                     <TextInput
+                        autoFocus={visibleDialogZ}
                         placeholder='Zutat ...'
                         onChangeText={text => setInputValue(text)}
                     />
@@ -308,7 +307,7 @@ export default function IngredientsScreen({ navigation }) {
                             //  addItemToTable(sectionTitle, inputValue); 
                             setVisibleDialogZ(false);
                         }}>Speichern</Button>
-                    <Button onPress={() => setVisibleDialogZ(false)}>Done</Button>
+                    <Button onPress={() => setVisibleDialogZ(false)}>Abbrechen</Button>
                 </Dialog.Actions>
             </Dialog>
 
@@ -317,6 +316,7 @@ export default function IngredientsScreen({ navigation }) {
                 <Dialog.Title>Wähle den Titel</Dialog.Title>
                 <Dialog.Content>
                     <TextInput
+                        autoFocus={visibleDialog}
                         placeholder='Abschnitt ...'
                         onChangeText={text => { setAccordionTitle(text), setTitle = true }}
                     />
@@ -331,6 +331,7 @@ export default function IngredientsScreen({ navigation }) {
                 <Dialog.Title>Wähle die Menge von {selectedItem}</Dialog.Title>
                 <Dialog.Content>
                     <TextInput
+                        autoFocus={visibleDialogItem}
                         placeholder='Menge ...'
                         maxLength={10}
                         onChangeText={text => setInputValue(text)}
@@ -355,11 +356,9 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         flexDirection: 'row',
-        // height: '95%'
     },
     ingredContainer: {
         width: '60%',
-        // backgroundColor: 'green'
     },
     pLeft: {
         marginLeft: 32,
@@ -372,10 +371,6 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     buttonCon: {
-        // position: 'absolute',
-        // bottom: 16,
-        // left: 16,
-        // right: 16,
         flexDirection: 'row',
         justifyContent: 'space-between',
     }
