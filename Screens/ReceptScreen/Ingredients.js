@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 
 import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveInStorage } from './Overview';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 let defaultSections = [
     {
         title: "Fleisch",
@@ -230,7 +232,7 @@ export default function IngredientsScreen({ navigation }) {
                         </ScrollView>
                     </View>
 
-                    <View style={{ width: '100%' }}>
+                    <View style={{ width: '40%' }}>
                         {/* {console.log('---- S ', sectionIndex, '--- I ', ingredIndex)} */}
                         <View>
                             <Text>{accordionTitle}</Text>
@@ -245,8 +247,11 @@ export default function IngredientsScreen({ navigation }) {
                                         {item.ingredients.map((item, index) =>
                                             <Text key={index}>{item}</Text>
                                         )}
+                                        <TouchableOpacity style={{ alignItems: 'center' }}
+                                            onPress={() => setSectionArray([...sectionArray.slice(0, index), ...sectionArray.slice(index + 1)])}>
+                                            <Icon name="md-trash" size={24} color="black" />
+                                        </TouchableOpacity>
                                     </View>
-
                                 )}
                             </ScrollView>
                         </View>

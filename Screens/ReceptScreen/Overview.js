@@ -26,7 +26,7 @@ const getMyObject = async () => {
         // read error
     }
 
-    console.log(value)
+    console.log('Klick mich button', value)
 }
 
 getAllKeys = async () => {
