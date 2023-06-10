@@ -4,7 +4,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { getStorage } from './Overview';
 
-const receptTypes = ["Fisch", "Fleisch", "Kuchen", "Dessert", "Festtage", "", ""];
+// const receptTypes = ["Fisch", "Fleisch", "Kuchen", "Dessert", "Festtage", "", ""]
 const sizes = [130, 160, 200];
 
 function CircleButton({ descr, size, onPress }) {

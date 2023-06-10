@@ -95,52 +95,70 @@ const saveInStorageInput = async (title, value) => {
         console.log(`Error saving ${title}: ${error}`);
     }
 }
+export async function fetchData(recept) {
+    const data = await getStorage('recepts');
 
-export default function Overview({ navigation }) {
+    if (data) {
+        const result = data.find(r => r.title === recept);
+        return result;
+    }
+    return null;
+}
+
+export default function Overview({ route }) {
     const [title, setTitle] = React.useState("");
     const [potionSize, setPotionSize] = React.useState("");
     const [workTime, setWorkTime] = React.useState("");
     const [cookingTime, setCookingTime] = React.useState("");
+    const [fetchedRecept, setFetchedRecept] = React.useState({})
+    const { recept } = route.params;
+
+    if (recept) {
+        fetchData(recept).then((data) => {
+            setFetchedRecept(data)
+            // console.log(fetchedRecept.description.category)
+        });
+    }
 
 
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Button title='Klick mich' onPress={() => getMyObject()} />
+                <Button title='Klick mich' onPress={() => { getAllKeys(); console.log(fetchedRecept) }} />
                 <TextInput
                     style={styles.input}
                     label="Titel"
-                    value={title}
+                    value={fetchedRecept ? fetchedRecept.title : title}
                     onChangeText={title => { setTitle(title), saveInStorageInput('title', title) }}
                 />
                 <View style={styles.chipContainer} >
                     <Text>Rezeptart:</Text>
-                    <ReceptTypeChips />
+                    <ReceptTypeChips selectedChipType={fetchedRecept?.description?.receptType} />
                 </View>
                 <View style={styles.chipContainer}>
                     <Text>Kategorie:</Text>
-                    <CategoryChips />
+                    <CategoryChips selectedChipCat={fetchedRecept?.description?.category} />
                 </View>
                 <View style={styles.chipContainer}>
                     <Text>Sammlungen:</Text>
-                    <CollectionChips />
+                    <CollectionChips selectedChipCol={fetchedRecept?.description?.collection} />
                 </View>
                 <TextInput
                     style={styles.input}
                     label="Portionsgröße"
-                    value={potionSize}
+                    value={fetchedRecept ? fetchedRecept?.description?.potionSize : potionSize}
                     onChangeText={potionSize => { setPotionSize(potionSize), saveInStorageInput('potionSize', potionSize) }}
                 />
                 <TextInput
                     style={styles.input}
                     label="Vorbereitungszeit"
-                    value={workTime}
+                    value={fetchedRecept ? fetchedRecept?.description?.workTime : workTime}
                     onChangeText={workTime => { setWorkTime(workTime), saveInStorageInput('workTime', workTime) }}
                 />
                 <TextInput
                     style={styles.input}
                     label="Kochzeit"
-                    value={cookingTime}
+                    value={fetchedRecept ? fetchedRecept?.description?.cookingTime : cookingTime}
                     onChangeText={cookingTime => { setCookingTime(cookingTime), saveInStorageInput('cookingTime', cookingTime) }}
                 />
                 {/* <TouchableOpacity

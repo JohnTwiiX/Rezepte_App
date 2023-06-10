@@ -58,13 +58,19 @@ export default function ReceptScreen({ route }) {
             fetchData(title, setRecepts, setIsLoading);
         }, []),
     );
-
+    const navigation = useNavigation();
 
 
     return (
         <View style={{ flex: 1 }}>
             <View style={{}}>
                 <Text style={{ textAlign: 'center' }}>{recepts.title}</Text>
+            </View>
+            <View>
+                <TouchableOpacity style={{}}
+                    onPress={() => navigation.navigate('AddRecept', { recept: title })}>
+                    <Icon name="pencil" size={24} color="black" />
+                </TouchableOpacity>
             </View>
             <View>
                 {isLoading ?

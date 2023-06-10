@@ -10,13 +10,14 @@ import PreparationsScreen from './ReceptScreen/Preparation';
 const TabRecept = createMaterialTopTabNavigator();
 
 
-export default function AddReceptScreen() {
+export default function AddReceptScreen({ route }) {
     return (
         <SafeAreaView style={{ height: '100%' }}>
             <TabRecept.Navigator >
                 <TabRecept.Screen
                     name='Overview'
                     component={Overview}
+                    initialParams={{ recept: route.params ? route.params.recept : route.params }}
                     options={{
                         title: 'Überblick',
                     }} />

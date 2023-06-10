@@ -5,12 +5,13 @@ import { TextInput, Chip } from 'react-native-paper';
 import AddChip from './addChip';
 import DeleteChip from './DeleteChip';
 import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
+import { fetchData } from '../ReceptScreen/Overview';
 
 let defaultCategory = ["Gemüse", "Rind", "Huhn", "Fisch", "Obst"];
 
 
 
-export default function CategoryChips() {
+export default function CategoryChips({ selectedChipCat }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [selectedChips, setSelectedChips] = React.useState([]);
     const [category, setCategory] = React.useState(defaultCategory)
@@ -18,6 +19,13 @@ export default function CategoryChips() {
 
     const previousLength = React.useRef(category.length);
     const selectedLength = React.useRef(selectedChips.length);
+    React.useEffect(() => {
+        if (selectedChipCat && selectedChips !== selectedChipCat) {
+            selectedChipCat.forEach(chip => {
+                filterChips(chip);
+            });
+        }
+    }, [selectedChipCat?.length]);
 
     React.useEffect(() => {
         if (category.length !== previousLength.current) {
@@ -46,6 +54,16 @@ export default function CategoryChips() {
         loadCategory();
     }, []);
 
+    function filterChips(type) {
+        setSelectedChips(prevSelectedChips => {
+            if (prevSelectedChips.includes(type)) {
+                return prevSelectedChips.filter(item => item !== type);
+            } else {
+                return [...prevSelectedChips, type];
+            }
+        });
+    }
+
 
     return (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
@@ -57,11 +75,7 @@ export default function CategoryChips() {
                     onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                     selected={false}
                     onPress={() => {
-                        if (selectedChips.includes(type)) {
-                            setSelectedChips(selectedChips.filter((item) => item !== type));
-                        } else {
-                            setSelectedChips([...selectedChips, type]);
-                        }
+                        filterChips(type);
                     }}
                 >
                     {type}

@@ -9,7 +9,7 @@ import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
 let defaultCategory = ["Weihnachtsessen", "Geburtstag", "Festlich"];
 
 
-export default function CollectionChips() {
+export default function CollectionChips({ selectedChipCol }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [selectedChips, setSelectedChips] = React.useState([]);
     const [category, setCategory] = React.useState(defaultCategory);
@@ -17,6 +17,14 @@ export default function CollectionChips() {
 
     const previousLength = React.useRef(category.length);
     const selectedLength = React.useRef(selectedChips.length);
+
+    React.useEffect(() => {
+        if (selectedChipCol && selectedChips !== selectedChipCol) {
+            selectedChipCol.forEach(chip => {
+                filterChips(chip);
+            });
+        }
+    }, [selectedChipCol?.length]);
 
     React.useEffect(() => {
         if (category.length !== previousLength.current) {
@@ -44,6 +52,16 @@ export default function CollectionChips() {
         }
         loadCategory();
     }, []);
+
+    function filterChips(type) {
+        setSelectedChips(prevSelectedChips => {
+            if (prevSelectedChips.includes(type)) {
+                return prevSelectedChips.filter(item => item !== type);
+            } else {
+                return [...prevSelectedChips, type];
+            }
+        });
+    }
 
     return (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
