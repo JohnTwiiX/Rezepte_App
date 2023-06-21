@@ -4,6 +4,7 @@ import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveInStorage } from './Overview';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { getRecept } from './Overview';
 
 let defaultSections = [
     {
@@ -129,7 +130,6 @@ export default function IngredientsScreen({ navigation }) {
     const [sectionArray, setSectionArray] = React.useState([]);
     const [sections, setSections] = React.useState(defaultSections);
 
-
     React.useEffect(() => {
         const loadSections = async () => {
             const storedSections = await getSections();
@@ -138,14 +138,16 @@ export default function IngredientsScreen({ navigation }) {
             } else {
                 setSections(defaultSections);
                 saveSections(defaultSections);
-            }
-        }
+            };
+        };
         loadSections();
+        const recept = getRecept();
+        setSectionArray(recept.description.receptArray);
     }, []);
 
     React.useEffect(() => {
         saveInStorage('receptArray', sectionArray);
-    }, [sectionArray])
+    }, [sectionArray]);
 
     return (
 

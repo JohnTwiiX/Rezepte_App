@@ -105,6 +105,12 @@ export async function fetchData(recept) {
     return null;
 }
 
+export function getRecept() {
+    return receptForAll;
+}
+
+let receptForAll
+
 export default function Overview({ route }) {
     const [title, setTitle] = React.useState("");
     const [potionSize, setPotionSize] = React.useState("");
@@ -115,7 +121,8 @@ export default function Overview({ route }) {
 
     if (recept) {
         fetchData(recept).then((data) => {
-            setFetchedRecept(data)
+            setFetchedRecept(data);
+            receptForAll = data;
             // console.log(fetchedRecept.description.category)
         });
     }

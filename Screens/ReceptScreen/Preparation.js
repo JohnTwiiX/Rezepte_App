@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { List, Dialog, Paragraph, Button } from 'react-native-paper';
-import { getStorage } from './Overview';
+import { getRecept, getStorage } from './Overview';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sectionArray } from './Ingredients';
@@ -106,6 +106,8 @@ export default function PreparationsScreen({ navigation }) {
                 const data = await getStorage('receptArray');
                 if (data) {
                     setSections(data);
+                    const recept = getRecept();
+                    setInputValues(recept.description.preparation);
                 }
             }
             fetchData();
