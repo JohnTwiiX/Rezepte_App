@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { List, Dialog, Paragraph, Button } from 'react-native-paper';
-import { getRecept, getStorage, setFetchedReceptCompleted } from './Overview';
+import { getRecept, getStorage, isFetchedRecept, setFetchedReceptCompleted } from './Overview';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sectionArray } from './Ingredients';
@@ -99,15 +99,18 @@ export default function PreparationsScreen({ navigation }) {
     const [sections, setSections] = React.useState([]);
     const [inputValues, setInputValues] = React.useState({});
     const [missingValues, setMissingValues] = React.useState([]);
-    const [visibleDialog, setVisibleDialog] = React.useState(false)
+    const [visibleDialog, setVisibleDialog] = React.useState(false);
+    const [dialogSave, setDialogSave] = React.useState(false);
     useFocusEffect(
         React.useCallback(() => {
             async function fetchData() {
                 const data = await getStorage('receptArray');
                 if (data) {
                     setSections(data);
-                    const recept = getRecept();
-                    setInputValues(recept.description.preparation);
+                    if (isFetchedRecept === true) {
+                        const recept = getRecept();
+                        setInputValues(recept.description.preparation);
+                    }
                 }
             }
             fetchData();
@@ -158,15 +161,7 @@ export default function PreparationsScreen({ navigation }) {
                             setVisibleDialog(true);
                             return;
                         } else {
-                            // Hier kannst du den Navigation-Stack auf den HomeScreen zurücksetzen:
-                            navigation.reset({
-                                index: 0,
-                                routes: [{ name: 'Home' }],
-                            });
-                            // Hier könntest du die Werte in den useStates zurücksetzen:
-                            setSections([]);
-                            saveAll(inputValues);
-                            setFetchedReceptCompleted();
+                            setDialogSave(true);
                         }
                     }}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Rezept abspeichern</Text>
@@ -179,7 +174,26 @@ export default function PreparationsScreen({ navigation }) {
                 </Dialog.Content>
                 <Dialog.Actions>
                     <Button onPress={() => { setVisibleDialog(false) }}>Ok</Button>
-                    {/* <Button onPress={() => { sectionTack = false; setVisibleDialogM(false) }}>Abbrechen</Button> */}
+                </Dialog.Actions>
+            </Dialog>
+            <Dialog visible={dialogSave} onDismiss={() => setDialogSave(false)}>
+                <Dialog.Content>
+                    {<Text style={{}}>Möchtest du dein Rezept abspeichern?</Text>}
+                </Dialog.Content>
+                <Dialog.Actions>
+                    <Button onPress={() => {
+                        // Hier kannst du den Navigation-Stack auf den HomeScreen zurücksetzen:
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Home' }],
+                        });
+                        // Hier könntest du die Werte in den useStates zurücksetzen:
+                        setSections([]);
+                        saveAll(inputValues);
+                        setFetchedReceptCompleted();
+                        setDialogSave(false)
+                    }}>Ja</Button>
+                    <Button onPress={() => { setDialogSave(false) }}>Nein</Button>
                 </Dialog.Actions>
             </Dialog>
         </View>

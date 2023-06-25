@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { saveInStorage } from './Overview';
+import { isFetchedRecept, saveInStorage } from './Overview';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getRecept } from './Overview';
 
@@ -141,8 +141,11 @@ export default function IngredientsScreen({ navigation }) {
             };
         };
         loadSections();
-        const recept = getRecept();
-        setSectionArray(recept?.description?.receptArray);
+        if (isFetchedRecept() === true) {
+            const recept = getRecept();
+            setSectionArray(recept?.description?.receptArray);
+        }
+
     }, []);
 
     React.useEffect(() => {
@@ -243,7 +246,7 @@ export default function IngredientsScreen({ navigation }) {
 
                         <View style={{ marginTop: 24 }}>
                             <ScrollView>
-                                {sectionArray.map((item, index) =>
+                                {sectionArray?.map((item, index) =>
                                     <View style={{ marginTop: 16, borderBottomWidth: 1, borderBottomColor: 'black' }} key={index}>
                                         <Text>{item.title} </Text>
                                         {item.ingredients.map((item, index) =>

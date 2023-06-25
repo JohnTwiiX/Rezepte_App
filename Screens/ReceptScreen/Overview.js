@@ -109,6 +109,10 @@ export function getRecept() {
     return receptForAll;
 }
 
+export function isFetchedRecept() {
+    return fetchedReceptCompleted
+}
+
 export function setFetchedReceptCompleted() {
     fetchedReceptCompleted = false;
 }
