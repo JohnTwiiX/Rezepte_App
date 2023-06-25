@@ -109,7 +109,12 @@ export function getRecept() {
     return receptForAll;
 }
 
+export function setFetchedReceptCompleted() {
+    fetchedReceptCompleted = false;
+}
+
 let receptForAll
+let fetchedReceptCompleted = false;
 
 export default function Overview({ route }) {
     const [title, setTitle] = React.useState("");
@@ -119,13 +124,48 @@ export default function Overview({ route }) {
     const [fetchedRecept, setFetchedRecept] = React.useState({})
     const { recept } = route.params;
 
-    if (recept) {
+
+    if (recept && fetchedReceptCompleted === false) {
         fetchData(recept).then((data) => {
             setFetchedRecept(data);
             receptForAll = data;
-            // console.log(fetchedRecept.description.category)
+            fetchedReceptCompleted = true;
+            console.log(fetchedRecept.description)
         });
-    }
+    };
+
+    React.useEffect(() => {
+        setTitle(fetchedRecept.title);
+        setPotionSize(fetchedRecept?.description?.potionSize);
+        setWorkTime(fetchedRecept?.description?.workTime);
+        setCookingTime(fetchedRecept?.description?.cookingTime);
+    }, [fetchedRecept]);
+
+    React.useEffect(() => {
+        if (title !== undefined) {
+            console.log(title)
+            saveInStorageInput('title', title);
+        }
+    }, [title]);
+
+    React.useEffect(() => {
+        if (potionSize !== undefined) {
+            saveInStorageInput('potionSize', potionSize);
+        }
+
+    }, [potionSize]);
+
+    React.useEffect(() => {
+        if (workTime !== undefined) {
+            saveInStorageInput('workTime', workTime);
+        }
+    }, [workTime]);
+
+    React.useEffect(() => {
+        if (cookingTime !== undefined) {
+            saveInStorageInput('cookingTime', cookingTime);
+        }
+    }, [cookingTime]);
 
 
     return (

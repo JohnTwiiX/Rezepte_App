@@ -142,7 +142,7 @@ export default function IngredientsScreen({ navigation }) {
         };
         loadSections();
         const recept = getRecept();
-        setSectionArray(recept.description.receptArray);
+        setSectionArray(recept?.description?.receptArray);
     }, []);
 
     React.useEffect(() => {

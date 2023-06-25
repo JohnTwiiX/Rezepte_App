@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { List, Dialog, Paragraph, Button } from 'react-native-paper';
-import { getRecept, getStorage } from './Overview';
+import { getRecept, getStorage, setFetchedReceptCompleted } from './Overview';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sectionArray } from './Ingredients';
@@ -166,6 +166,7 @@ export default function PreparationsScreen({ navigation }) {
                             // Hier könntest du die Werte in den useStates zurücksetzen:
                             setSections([]);
                             saveAll(inputValues);
+                            setFetchedReceptCompleted();
                         }
                     }}>
                     <Text style={{ color: 'white', textAlign: 'center' }}>Rezept abspeichern</Text>
