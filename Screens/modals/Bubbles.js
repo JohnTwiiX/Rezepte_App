@@ -2,6 +2,8 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { defaultTypes } from './OverviewChips';
+import { defaultCategory } from './OverviewCollection';
 // import { getStorage } from './Overview';
 
 // const receptTypes = ["Fisch", "Fleisch", "Kuchen", "Dessert", "Festtage", "", ""]
@@ -17,24 +19,40 @@ function CircleButton({ descr, size, onPress }) {
     );
 }
 
+async function fetchBubbles() {
+    let values = await AsyncStorage.multiGet(['Rezeptart', 'Sammlung']);
+    console.log(values)
+    return values
+}
+
 
 export default function CircleButtons() {
     const [receptTypes, setReceptTypes] = React.useState([]);
-
     useFocusEffect(
         React.useCallback(() => {
             async function fetchData() {
-                let values
                 try {
-                    values = await AsyncStorage.multiGet(['Rezeptart', 'Sammlung'])
+                    fetchBubbles().then((data) => {
+                        let bubbles = [];
+                        if (data[0][1] === null && data[1][1] === null) {
+                            defaultTypes.forEach((value) => {
+                                bubbles.push(value)
+                            });
+                            defaultCategory.forEach((value) => {
+                                bubbles.push(value)
+                            });
+                        } else {
+                            data.forEach(([key, value]) => {
+                                bubbles.push(...JSON.parse(value))
+                            });
+                        }
+                        console.log(bubbles)
+                        setReceptTypes(bubbles);
+                    })
                 } catch (e) {
                     // read error
                 }
-                let data = [];
-                values.forEach(([key, value]) => {
-                    data.push(...JSON.parse(value))
-                });
-                setReceptTypes(data);
+
             }
             fetchData();
         }, []),

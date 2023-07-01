@@ -6,7 +6,7 @@ import AddChip from './addChip';
 import DeleteChip from './DeleteChip';
 import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
 
-let defaultCategory = ["Weihnachtsessen", "Geburtstag", "Festlich"];
+export let defaultCategory = ["Weihnachtsessen", "Geburtstag", "Festlich"];
 
 
 export default function CollectionChips({ selectedChipCol }) {

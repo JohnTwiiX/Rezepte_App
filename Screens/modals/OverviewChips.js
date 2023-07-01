@@ -7,7 +7,7 @@ import DeleteChip from './DeleteChip';
 import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
 
 
-let defaultTypes = ["Vorspeise", "Hauptspeise", "Aperitif", "Dessert", "Getränke"];
+export let defaultTypes = ["Vorspeise", "Hauptspeise", "Aperitif", "Dessert", "Getränke"];
 
 
 export default function ReceptTypeChips({ selectedChipType }) {

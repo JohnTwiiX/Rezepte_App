@@ -32,7 +32,7 @@ const getMyObject = async () => {
 getAllKeys = async () => {
     let keys = []
     try {
-        keys = await AsyncStorage.getAllKeys()
+        return keys = await AsyncStorage.getAllKeys()
     } catch (e) {
         // read key error
     }
@@ -147,7 +147,6 @@ export default function Overview({ route }) {
 
     React.useEffect(() => {
         if (title !== undefined) {
-            console.log(title)
             saveInStorageInput('title', title);
         }
     }, [title]);
@@ -175,12 +174,12 @@ export default function Overview({ route }) {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Button title='Klick mich' onPress={() => { getAllKeys(); console.log(fetchedRecept) }} />
+                {/* <Button title='Klick mich' onPress={() => { getAllKeys().then((data) => { console.log(data) }); }} /> */}
                 <TextInput
                     style={styles.input}
                     label="Titel"
                     value={fetchedRecept ? fetchedRecept.title : title}
-                    onChangeText={title => { setTitle(title), saveInStorageInput('title', title) }}
+                    onChangeText={title => { setTitle(title) }}
                 />
                 <View style={styles.chipContainer} >
                     <Text>Rezeptart:</Text>
@@ -198,25 +197,20 @@ export default function Overview({ route }) {
                     style={styles.input}
                     label="Portionsgröße"
                     value={fetchedRecept ? fetchedRecept?.description?.potionSize : potionSize}
-                    onChangeText={potionSize => { setPotionSize(potionSize), saveInStorageInput('potionSize', potionSize) }}
+                    onChangeText={potionSize => { setPotionSize(potionSize) }}
                 />
                 <TextInput
                     style={styles.input}
                     label="Vorbereitungszeit"
                     value={fetchedRecept ? fetchedRecept?.description?.workTime : workTime}
-                    onChangeText={workTime => { setWorkTime(workTime), saveInStorageInput('workTime', workTime) }}
+                    onChangeText={workTime => { setWorkTime(workTime) }}
                 />
                 <TextInput
                     style={styles.input}
                     label="Kochzeit"
                     value={fetchedRecept ? fetchedRecept?.description?.cookingTime : cookingTime}
-                    onChangeText={cookingTime => { setCookingTime(cookingTime), saveInStorageInput('cookingTime', cookingTime) }}
+                    onChangeText={cookingTime => { setCookingTime(cookingTime) }}
                 />
-                {/* <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => navigation.navigate('Ingredients')}>
-                    <Text>Weiter</Text>
-                </TouchableOpacity> */}
             </View>
         </ScrollView>
     );
@@ -227,9 +221,6 @@ const styles = StyleSheet.create({
         padding: 8
     },
     button: {
-        // position: 'absolute',
-        // top: 16,
-        // left: 16,
         alignItems: 'center',
         backgroundColor: 'blue',
         padding: 10,
