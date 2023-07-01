@@ -21,7 +21,6 @@ function CircleButton({ descr, size, onPress }) {
 
 async function fetchBubbles() {
     let values = await AsyncStorage.multiGet(['Rezeptart', 'Sammlung']);
-    console.log(values)
     return values
 }
 
@@ -46,7 +45,6 @@ export default function CircleButtons() {
                                 bubbles.push(...JSON.parse(value))
                             });
                         }
-                        console.log(bubbles)
                         setReceptTypes(bubbles);
                     })
                 } catch (e) {

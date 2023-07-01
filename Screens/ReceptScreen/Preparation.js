@@ -104,7 +104,7 @@ export default function PreparationsScreen({ navigation }) {
                 const data = await getStorage('receptArray');
                 if (data) {
                     setSections(data);
-                    if (isFetchedRecept === true) {
+                    if (isFetchedRecept() === true) {
                         const recept = getRecept();
                         setInputValues(recept.description.preparation);
                     }
@@ -133,6 +133,7 @@ export default function PreparationsScreen({ navigation }) {
                             onChangeText={text => setInputValues(prevValues => ({ ...prevValues, [item.title]: text }))}
                         />
                     </List.Accordion>
+
                 )}
             </List.Section>
             <View style={{ flex: 1, justifyContent: 'flex-end' }}>
