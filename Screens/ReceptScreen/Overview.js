@@ -129,14 +129,17 @@ export default function Overview({ route }) {
     const { recept } = route.params;
 
 
-    if (recept && fetchedReceptCompleted === false) {
-        fetchData(recept).then((data) => {
-            setFetchedRecept(data);
-            receptForAll = data;
-            fetchedReceptCompleted = true;
-            console.log(fetchedRecept.description)
-        });
-    };
+
+
+    React.useEffect(() => {
+        if (recept) {
+            fetchData(recept).then((data) => {
+                setFetchedRecept(data);
+                receptForAll = data;
+                fetchedReceptCompleted = true;
+            });
+        };
+    }, [])
 
     React.useEffect(() => {
         setTitle(fetchedRecept.title);
@@ -218,7 +221,10 @@ export default function Overview({ route }) {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 8
+        padding: 8,
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'space-between'
     },
     button: {
         alignItems: 'center',

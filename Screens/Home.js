@@ -2,8 +2,15 @@ import * as React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CircleButtons from './modals/Bubbles';
+import { setFetchedReceptCompleted } from './ReceptScreen/Overview';
+import { saveAll } from './ReceptScreen/Preparation';
 
 export default function HomeScreen({ navigation }) {
+    React.useEffect(() => {
+        setFetchedReceptCompleted();
+        saveAll();
+    }, []);
+
     return (
         <View style={styles.container}>
             <TouchableOpacity

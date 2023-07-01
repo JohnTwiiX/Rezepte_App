@@ -86,8 +86,10 @@ async function removeAllExcept(keysToKeep) {
 //     removeAllExcept(keysToKeep);
 // }
 
-async function saveAll(inputValues) {
-    await saveMultiple(inputValues)
+export async function saveAll(inputValues) {
+    if (inputValues) {
+        await saveMultiple(inputValues);
+    }
     const keysToKeep = ['Kategorie', 'Rezeptart', 'Sammlung', 'sections', 'recepts'];
     await removeAllExcept(keysToKeep);
 }
@@ -111,7 +113,6 @@ export default function PreparationsScreen({ navigation }) {
                 }
             }
             fetchData();
-
         }, []),
     );
     return (

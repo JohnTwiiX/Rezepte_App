@@ -170,7 +170,7 @@ export default function IngredientsScreen({ navigation }) {
                                         <List.Accordion
                                             key={i}
                                             expanded={openAccordion === i}
-                                            onPress={() => setOpenAccordion(i)}
+                                            onPress={() => openAccordion === i ? setOpenAccordion() : setOpenAccordion(i)}
                                             onLongPress={() => {
                                                 sectionTack = true;
                                                 setSectionIndex(i);

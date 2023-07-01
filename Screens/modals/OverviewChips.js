@@ -71,7 +71,8 @@ export default function ReceptTypeChips({ selectedChipType }) {
                     key={index}
                     mode='outlined'
                     selected={false}
-                    style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChip.includes(type) ? { backgroundColor: '#64ffda' } : { backgroundColor: 'rgb(232,225,237)' }]}
+                    style={[styles.chip, selectedChip.includes(type) ? { backgroundColor: 'rgb(153,94,124)' } : { backgroundColor: 'rgb(232,225,237)' }]}
+                    textStyle={selectedChip.includes(type) ? styles.chipActive : {}}
                     onLongPress={() => { setSelectedChip([type]), setModalVisible(true) }}
                     onPress={() => {
                         if (selectedChip.includes(type)) {
@@ -99,4 +100,14 @@ export default function ReceptTypeChips({ selectedChipType }) {
 
 }
 
-;
+const styles = StyleSheet.create({
+    chip: {
+        width: 'auto',
+        height: 50,
+        borderRadius: 25,
+        margin: 6
+    },
+    chipActive: {
+        color: 'white',
+    }
+})
