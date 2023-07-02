@@ -4,12 +4,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CircleButtons from './modals/Bubbles';
 import { setFetchedReceptCompleted } from './ReceptScreen/Overview';
 import { saveAll } from './ReceptScreen/Preparation';
+import { setSectionArrayEmpty } from './ReceptScreen/Ingredients';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function HomeScreen({ navigation }) {
-    React.useEffect(() => {
-        setFetchedReceptCompleted();
-        saveAll();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            setFetchedReceptCompleted();
+            saveAll();
+        }, []),);
 
     return (
         <View style={styles.container}>
