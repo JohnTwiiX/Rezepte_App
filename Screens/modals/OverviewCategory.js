@@ -71,7 +71,8 @@ export default function CategoryChips({ selectedChipCat }) {
                 <Chip
                     key={index}
                     mode="outlined"
-                    style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChips.includes(type) ? { backgroundColor: '#64ffda' } : { backgroundColor: 'rgb(232,225,237)' }]}
+                    style={[styles.chip, selectedChips.includes(type) ? { backgroundColor: 'rgb(153,94,124)' } : { backgroundColor: 'rgb(232,225,237)' }]}
+                    textStyle={selectedChips.includes(type) ? styles.chipActive : {}}
                     onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                     selected={false}
                     onPress={() => {
@@ -95,3 +96,15 @@ export default function CategoryChips({ selectedChipCat }) {
     )
 
 }
+
+const styles = StyleSheet.create({
+    chip: {
+        width: 'auto',
+        height: 50,
+        borderRadius: 25,
+        margin: 6
+    },
+    chipActive: {
+        color: 'white',
+    }
+})
