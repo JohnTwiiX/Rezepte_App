@@ -83,7 +83,7 @@ function saveSectionArray(accordionTitle, setSectionArray) {
     setSectionArray(sectionArray => [
         ...sectionArray,
         {
-            title: setTitle ? accordionTitle : '',
+            title: setTitle ? accordionTitle : '-',
             ingredients: tempIngredArray,
         }
     ]);

@@ -94,12 +94,15 @@ export async function saveAll(inputValues) {
     await removeAllExcept(keysToKeep);
 }
 
+
+
 export default function PreparationsScreen({ navigation }) {
     const [sections, setSections] = React.useState([]);
     const [inputValues, setInputValues] = React.useState({});
     const [missingValues, setMissingValues] = React.useState([]);
     const [visibleDialog, setVisibleDialog] = React.useState(false);
     const [dialogSave, setDialogSave] = React.useState(false);
+    const [selectedAccordion, setSelectedAccordion] = React.useState('')
     useFocusEffect(
         React.useCallback(() => {
             async function fetchData() {
@@ -122,13 +125,15 @@ export default function PreparationsScreen({ navigation }) {
                     <List.Accordion
                         key={index}
                         title={item.title}
+                        expanded={item.title === selectedAccordion}
+                        onPress={() => setSelectedAccordion(item.title)}
                         style={{ borderWidth: 1, }}
                     >
                         <TextInput
                             multiline={true}
                             returnKeyType="done"
                             textAlignVertical='top'
-                            style={{ height: 40, borderColor: 'gray', backgroundColor: 'white', height: '100%', overflow: 'hidden', padding: 8 }}
+                            style={{ borderColor: 'gray', backgroundColor: 'white', height: 200, overflow: 'hidden', padding: 8 }}
                             placeholder="Type something here!"
                             value={inputValues[item.title] || ""}
                             onChangeText={text => setInputValues(prevValues => ({ ...prevValues, [item.title]: text }))}
