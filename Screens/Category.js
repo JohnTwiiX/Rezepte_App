@@ -60,7 +60,7 @@ function RenderRecepts(props) {
             <TouchableOpacity
                 style={{ margin: 8 }}
                 key={index}
-                onPress={() => navigation.navigate('Recept', { title: recept.title })}>
+                onPress={() => navigation.navigate('Recept', { title: recept.title, category: props.title })}>
                 <Card >
                     {/* <Card.Cover source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} /> */}
                     <Card.Content>
@@ -165,7 +165,7 @@ export default function CategoryScreen({ route }) {
             </View>
             <ScrollView>
                 <View>
-                    {selectedChips.length === 0 ? <RenderRecepts recepts={recepts} /> : <RenderRecepts recepts={filteredRecepts} />}
+                    {selectedChips.length === 0 ? <RenderRecepts recepts={recepts} title={title} /> : <RenderRecepts recepts={filteredRecepts} title={title} />}
                 </View>
             </ScrollView>
             {/* Dialog um eine Meldung anzuzeigen ##################################################################### */}

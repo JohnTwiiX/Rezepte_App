@@ -63,14 +63,16 @@ export default function ReceptScreen({ route }) {
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={{}}>
-                <Text style={{ textAlign: 'center' }}>{recepts.title}</Text>
-            </View>
-            <View>
-                <TouchableOpacity style={{}}
+            <View style={{ display: 'flex', justifyContent: 'space-between', padding: 16, flexDirection: 'row' }}>
+                {/* <TouchableOpacity
+                    style={{ width: 24 }}
                     onPress={() => navigation.navigate('AddRecept', { recept: title })}>
                     <Icon name="pencil" size={24} color="black" />
                 </TouchableOpacity>
+                <TouchableOpacity style={{ width: 24 }}
+                    onPress={() => console.log('nice')}>
+                    <Icon name="trash-outline" size={24} color="black" />
+                </TouchableOpacity> */}
             </View>
             <View>
                 {isLoading ?

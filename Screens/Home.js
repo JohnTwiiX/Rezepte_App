@@ -6,6 +6,21 @@ import { setFetchedReceptCompleted } from './ReceptScreen/Overview';
 import { saveAll } from './ReceptScreen/Preparation';
 import { setSectionArrayEmpty } from './ReceptScreen/Ingredients';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+getAllKeys = async () => {
+    let keys = []
+    try {
+        keys = await AsyncStorage.getAllKeys()
+    } catch (e) {
+        // read key error
+        console.error(e)
+    }
+
+    console.log(keys)
+    // example console.log result:
+    // ['@MyApp_user', '@MyApp_key']
+}
 
 export default function HomeScreen({ navigation }) {
     useFocusEffect(
@@ -18,7 +33,8 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('AddRecept')}>
+                onPress={() => navigation.navigate('AddRecept')}
+                onLongPress={() => getAllKeys()}>
                 <Icon name="add" size={20} color="#fff" />
             </TouchableOpacity>
 
