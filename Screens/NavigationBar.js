@@ -119,14 +119,16 @@ export default function NavigationBar() {
                                     options={({ navigation, route }) => ({
                                         title: route.params.title,
                                         headerRight: () => {
+                                            const title = route.params.title;
                                             return (<View style={{ flexDirection: 'row' }}>
+
                                                 <Icon style={{ marginRight: 16 }} name='pencil' size={24} color={'white'} onPress={() => {
                                                     navigation.navigate('AddRecept', { recept: title })
                                                 }} />
                                                 <Icon name='trash-outline' size={24} color={'white'} onPress={() => {
                                                     title = route.params.category;
-                                                    setSelectedRecept(route.params.title);
-                                                    setVisibleDialog(route.params.title);
+                                                    setSelectedRecept(title);
+                                                    setVisibleDialog(title);
                                                 }} />
                                             </View>)
                                         },

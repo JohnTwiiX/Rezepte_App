@@ -133,6 +133,7 @@ export default function Overview({ route }) {
 
     React.useEffect(() => {
         if (recept) {
+            console.log(recept)
             fetchData(recept).then((data) => {
                 setFetchedRecept(data);
                 receptForAll = data;
