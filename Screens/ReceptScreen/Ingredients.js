@@ -237,24 +237,24 @@ export default function IngredientsScreen({ navigation }) {
                         </ScrollView>
                     </View>
 
-                    <View style={{ width: '40%' }}>
+                    <View style={{ width: '40%', marginTop: 8, marginLeft: 4 }}>
                         {/* {console.log('---- S ', sectionIndex, '--- I ', ingredIndex)} */}
                         <View>
                             <Text>{accordionTitle}</Text>
                             <IngredientList ingredients={ingredArray} />
                         </View>
 
-                        <View style={{ marginTop: 24 }}>
+                        <View style={{ marginTop: 0 }}>
                             <ScrollView>
                                 {sectionArray?.map((item, index) =>
-                                    <View style={{ marginTop: 16, borderBottomWidth: 1, borderBottomColor: 'black' }} key={index}>
+                                    <View style={{ marginTop: 16, marginRight: 8, marginLeft: 4, padding: 4, borderWidth: 2, borderColor: 'black' }} key={index}>
                                         <Text>{item.title} </Text>
                                         {item.ingredients.map((item, index) =>
-                                            <Text key={index}>{item}</Text>
+                                            <Text key={index}>- {item}</Text>
                                         )}
                                         <TouchableOpacity style={{ alignItems: 'center' }}
                                             onPress={() => setSectionArray([...sectionArray.slice(0, index), ...sectionArray.slice(index + 1)])}>
-                                            <Icon name="md-trash" size={24} color="black" />
+                                            <Icon name="close-circle-outline" size={20} color="black" />
                                         </TouchableOpacity>
                                     </View>
                                 )}
