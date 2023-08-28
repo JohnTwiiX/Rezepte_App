@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     button: {
-        backgroundColor: '#0066cc',
+        backgroundColor: '#c2cac2',
         margin: 8
     },
     innerView: {

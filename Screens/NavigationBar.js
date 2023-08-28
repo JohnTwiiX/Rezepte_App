@@ -63,7 +63,7 @@ export default function NavigationBar() {
                     screenOptions={{
                         headerShown: false,
                         tabBarShowLabel: false,
-                        tabBarActiveBackgroundColor: 'blue',
+                        tabBarActiveBackgroundColor: '#e1e1e1',
                         tabBarItemStyle: { borderRadius: 100 }
                     }}>
 

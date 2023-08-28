@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         top: 16,
         right: 16,
         alignItems: 'center',
-        backgroundColor: 'blue',
+        backgroundColor: '#9a998c',
         padding: 10,
         borderRadius: 100,
         zIndex: 2
