@@ -8,7 +8,8 @@
     import com.facebook.react.bridge.UiThreadUtil;
     import com.facebook.react.bridge.ReactContextBaseJavaModule;
     import com.facebook.react.bridge.ReactMethod;
-    public class FullScreenModule extends ReactContextBaseJavaModule {
+
+     class FullScreenModule extends ReactContextBaseJavaModule {
       @Override
       public String getName() {
         return "FullScreen";
@@ -48,4 +49,3 @@
         super(reactContext);
       }
     }
-    ```

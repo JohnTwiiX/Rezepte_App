@@ -64,7 +64,14 @@ export default function NavigationBar() {
                         headerShown: false,
                         tabBarShowLabel: false,
                         tabBarActiveBackgroundColor: '#e1e1e1',
-                        tabBarItemStyle: { borderRadius: 100 }
+                        tabBarItemStyle: { borderRadius: 100, height: 50 },
+                        style: {
+                            position: 'absolute', // Position it at the bottom
+                            bottom: 0, // Place it at the bottom of the screen
+                            left: 0,
+                            right: 0,
+                            borderTopWidth: 0, // Remove top border
+                        },
                     }}>
 
                     <Tab.Screen
