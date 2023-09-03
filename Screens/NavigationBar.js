@@ -23,15 +23,13 @@ let deleteRecept = false;
 let title = '';
 
 async function deleteReceptStorage(title) {
-
     try {
         let jsonValue = await AsyncStorage.getItem('recepts');
-        console.log(jsonValue)
         if (jsonValue !== null) {
             const recepts = JSON.parse(jsonValue);
             const filteredRecepts = recepts.filter(recept => recept.title !== title);
             // Save the updated array back to AsyncStorage
-            await AsyncStorage.setItem('recepts', JSON.stringify(filteredRecepts));
+            // await AsyncStorage.setItem('recepts', JSON.stringify(filteredRecepts));
         }
     } catch (error) {
         console.error(error);
@@ -44,15 +42,14 @@ async function deleteReceptStorage(title) {
 export default function NavigationBar() {
     const [visibleDialog, setVisibleDialog] = React.useState(false);
     const [selectedRecept, setSelectedRecept] = React.useState('');
+    const navigation = useNavigation();
 
-    React.useEffect(() => {
-        // const navigation = useNavigation();
+    React.useEffect(async () => {
         if (selectedRecept) {
-            deleteReceptStorage(selectedRecept);
+            await deleteReceptStorage(selectedRecept);
         }
         setSelectedRecept('');
         deleteRecept = false;
-        // navigation.navigate('Category', { title: title });
     }, [deleteRecept === true])
 
     return (
@@ -65,13 +62,7 @@ export default function NavigationBar() {
                         tabBarShowLabel: false,
                         tabBarActiveBackgroundColor: '#e1e1e1',
                         tabBarItemStyle: { borderRadius: 100, height: 50 },
-                        style: {
-                            position: 'absolute', // Position it at the bottom
-                            bottom: 0, // Place it at the bottom of the screen
-                            left: 0,
-                            right: 0,
-                            borderTopWidth: 0, // Remove top border
-                        },
+                        tabBarStyle: { height: 50 }
                     }}>
 
                     <Tab.Screen
@@ -129,11 +120,10 @@ export default function NavigationBar() {
                                             const title = route.params.title;
                                             return (<View style={{ flexDirection: 'row' }}>
 
-                                                <Icon style={{ marginRight: 16 }} name='pencil' size={24} color={'white'} onPress={() => {
+                                                <Icon style={{ marginRight: 16 }} name='pencil' size={24} color={'black'} onPress={() => {
                                                     navigation.navigate('AddRecept', { recept: title })
                                                 }} />
-                                                <Icon name='trash-outline' size={24} color={'white'} onPress={() => {
-                                                    title = route.params.category;
+                                                <Icon name='trash-outline' size={24} color={'black'} onPress={() => {
                                                     setSelectedRecept(title);
                                                     setVisibleDialog(title);
                                                 }} />
@@ -161,7 +151,7 @@ export default function NavigationBar() {
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={() => {
-                            deleteRecept = true; setVisibleDialog(false)
+                            deleteRecept = true; setVisibleDialog(false); navigation.navigate('Category', { title: title });
                         }}>Ja</Button>
                         <Button onPress={() => { setSelectedRecept(''); setVisibleDialog(false) }}>Nein</Button>
                     </Dialog.Actions>

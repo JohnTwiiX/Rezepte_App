@@ -71,7 +71,7 @@ export default function CategoryChips({ selectedChipCat }) {
                 <Chip
                     key={index}
                     mode="outlined"
-                    style={[styles.chip, selectedChips.includes(type) ? { backgroundColor: 'rgb(153,94,124)' } : { backgroundColor: 'rgb(232,225,237)' }]}
+                    style={[styles.chip, selectedChips.includes(type) ? { backgroundColor: '#9a998c' } : { backgroundColor: '#e1e1e1' }]}
                     textStyle={selectedChips.includes(type) ? styles.chipActive : {}}
                     onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                     selected={false}

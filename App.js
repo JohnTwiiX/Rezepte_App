@@ -2,8 +2,19 @@ import * as React from 'react';
 import { Button, Text, SafeAreaView } from 'react-native';
 import NavigationBar from './Screens/NavigationBar';
 import { StatusBar } from 'react-native';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import FullScreen from './utils/FullScreen'; // Import FullScreen module
 
+const customTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#9a998c', // Change 'blue' to your desired primary color
+    surface: '#e1e1e1', // Change the background color here
+    backdrop: '#e1e1e1',
+    background: '#e1e1e1'
+  }
+};
 
 
 export default function App() {
@@ -12,8 +23,10 @@ export default function App() {
   }, []);
   return (
     <SafeAreaView style={{ flex: 1, }}>
-      <StatusBar hidden={true} />
-      <NavigationBar />
+      <PaperProvider theme={customTheme}>
+        <StatusBar hidden={true} />
+        <NavigationBar />
+      </PaperProvider>
     </SafeAreaView>
   );
 }

@@ -71,7 +71,7 @@ export default function ReceptTypeChips({ selectedChipType }) {
                     key={index}
                     mode='outlined'
                     selected={false}
-                    style={[styles.chip, selectedChip.includes(type) ? { backgroundColor: 'rgb(153,94,124)' } : { backgroundColor: 'rgb(232,225,237)' }]}
+                    style={[styles.chip, selectedChip.includes(type) ? { backgroundColor: '#9a998c' } : { backgroundColor: '#e1e1e1' }]}
                     textStyle={selectedChip.includes(type) ? styles.chipActive : {}}
                     onLongPress={() => { setSelectedChip([type]), setModalVisible(true) }}
                     onPress={() => {

@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
     },
     input: {
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
+        backgroundColor: '#e1e1e1'
     }
 });

@@ -17,6 +17,7 @@ export default function AddChip({ setArray, variable, title }) {
     return (
         <View>
             <Modal
+                style={{ backgroundColor: '#e1e1e1' }}
                 animationType="slide"
                 transparent={true}
                 // onDismiss={setModalVisible(false)}
@@ -30,8 +31,9 @@ export default function AddChip({ setArray, variable, title }) {
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Füge eine {title} hinzu:</Text>
                         <TextInput
-                            style={{ marginTop: 16 }}
+                            style={{ marginTop: 16, color: 'black' }}
                             placeholder={title + ' ...'}
+                            placeholderTextColor={'black'}
                             onChangeText={text => setInputValue(text)}
                         />
                         <View style={{ flexDirection: "row", marginTop: 20 }}>
@@ -44,7 +46,7 @@ export default function AddChip({ setArray, variable, title }) {
             </Modal>
             <Chip
                 mode="outlined"
-                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, { backgroundColor: 'rgb(232,225,237)' }]}
+                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, { backgroundColor: '#e1e1e1' }]}
                 selected={false}
             // onPress={() => { }}
             >
