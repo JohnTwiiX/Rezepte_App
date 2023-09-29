@@ -42,14 +42,16 @@ async function deleteReceptStorage(title) {
 export default function NavigationBar() {
     const [visibleDialog, setVisibleDialog] = React.useState(false);
     const [selectedRecept, setSelectedRecept] = React.useState('');
-    const navigation = useNavigation();
 
-    React.useEffect(async () => {
-        if (selectedRecept) {
-            await deleteReceptStorage(selectedRecept);
+    React.useEffect(() => {
+        async function fetchData() {
+            if (selectedRecept) {
+                await deleteReceptStorage(selectedRecept);
+            }
+            setSelectedRecept('');
+            deleteRecept = false;
         }
-        setSelectedRecept('');
-        deleteRecept = false;
+        fetchData();
     }, [deleteRecept === true])
 
     return (
@@ -119,7 +121,6 @@ export default function NavigationBar() {
                                         headerRight: () => {
                                             const title = route.params.title;
                                             return (<View style={{ flexDirection: 'row' }}>
-
                                                 <Icon style={{ marginRight: 16 }} name='pencil' size={24} color={'black'} onPress={() => {
                                                     navigation.navigate('AddRecept', { recept: title })
                                                 }} />
@@ -151,6 +152,7 @@ export default function NavigationBar() {
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={() => {
+                            const navigation = useNavigation();
                             deleteRecept = true; setVisibleDialog(false); navigation.navigate('Category', { title: title });
                         }}>Ja</Button>
                         <Button onPress={() => { setSelectedRecept(''); setVisibleDialog(false) }}>Nein</Button>
@@ -158,8 +160,5 @@ export default function NavigationBar() {
                 </Dialog >
             </NavigationContainer>
         </SafeAreaProvider>
-
     )
-
-
 }
