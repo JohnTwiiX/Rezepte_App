@@ -40,7 +40,8 @@ export default function HeaderRightSet({ title, navigation }) {
                     leadingIcon='pencil-outline'
                     title="Bearbeiten"
                     onPress={() => {
-                        navigation.navigate('AddRecept', { recept: title });
+                        console.log(title)
+                        navigation.navigate('AddRecept', { title: `${title} bearbeiten`, recept: title });
                         closeMenu();
                     }}
                 >
@@ -49,7 +50,7 @@ export default function HeaderRightSet({ title, navigation }) {
                 <Menu.Item
                     leadingIcon='delete-outline'
                     title="Löschen"
-                    onPress={() => { setOpenDialog(true); }}>
+                    onPress={() => { setOpenDialog(true); closeMenu() }}>
                 </Menu.Item>
             </Menu>
             <HeaderRightNav

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -62,9 +62,9 @@ export default function NavigationBar() {
                                 <HomeStack.Screen
                                     name="AddRecept"
                                     component={AddReceptScreen}
-                                    options={{
-                                        headerShown: false,
-                                    }} >
+                                    options={({ route }) => ({
+                                        title: route.params.title
+                                    })}  >
                                 </HomeStack.Screen>
                                 <HomeStack.Screen
                                     name="Category"

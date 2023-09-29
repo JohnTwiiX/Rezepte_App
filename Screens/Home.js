@@ -33,7 +33,7 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('AddRecept')}
+                onPress={() => navigation.navigate('AddRecept', { title: 'Rezept erstellen' })}
                 onLongPress={() => getAllKeys()}>
                 <Icon name="add" size={20} color="#fff" />
             </TouchableOpacity>

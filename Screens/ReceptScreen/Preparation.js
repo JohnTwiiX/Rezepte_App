@@ -118,6 +118,15 @@ export default function PreparationsScreen({ navigation }) {
             fetchData();
         }, []),
     );
+
+    const handleAccordion = (title) => {
+        if (title !== selectedAccordion) {
+            setSelectedAccordion(title)
+        } else {
+            setSelectedAccordion('')
+        }
+    }
+
     return (
         <View style={{ flex: 1, margin: 8 }}>
             <List.Section style={{}}>
@@ -126,7 +135,7 @@ export default function PreparationsScreen({ navigation }) {
                         key={index}
                         title={item.title}
                         expanded={item.title === selectedAccordion}
-                        onPress={() => setSelectedAccordion(item.title)}
+                        onPress={() => handleAccordion(item.title)}
                         style={{ borderWidth: 1, }}
                     >
                         <TextInput
