@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,50 +9,13 @@ import BasketScreen from './Basket';
 import AddReceptScreen from './AddRecept';
 import CategoryScreen from './Category';
 import ReceptScreen from './Recept';
-import { Button, Dialog, Divider, PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-
+import HeaderRightSet from './modals/headerRightSet';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
-let deleteRecept = false;
-let title = '';
-
-async function deleteReceptStorage(title) {
-    try {
-        let jsonValue = await AsyncStorage.getItem('recepts');
-        if (jsonValue !== null) {
-            const recepts = JSON.parse(jsonValue);
-            const filteredRecepts = recepts.filter(recept => recept.title !== title);
-            // Save the updated array back to AsyncStorage
-            // await AsyncStorage.setItem('recepts', JSON.stringify(filteredRecepts));
-        }
-    } catch (error) {
-        console.error(error);
-        // Handle error
-    };
-    deleteRecept = false;
-    console.log(deleteRecept);
-}
 
 export default function NavigationBar() {
-    const [visibleDialog, setVisibleDialog] = React.useState(false);
-    const [selectedRecept, setSelectedRecept] = React.useState('');
-
-    React.useEffect(() => {
-        async function fetchData() {
-            if (selectedRecept) {
-                await deleteReceptStorage(selectedRecept);
-            }
-            setSelectedRecept('');
-            deleteRecept = false;
-        }
-        fetchData();
-    }, [deleteRecept === true])
-
     return (
         <SafeAreaProvider>
             <NavigationContainer>
@@ -115,22 +77,13 @@ export default function NavigationBar() {
                                 <HomeStack.Screen
                                     name="Recept"
                                     component={ReceptScreen}
-                                    // initialParams={title}
-                                    options={({ navigation, route }) => ({
+                                    options={({ route, navigation }) => ({
                                         title: route.params.title,
-                                        headerRight: () => {
-                                            const title = route.params.title;
-                                            return (<View style={{ flexDirection: 'row' }}>
-                                                <Icon style={{ marginRight: 16 }} name='pencil' size={24} color={'black'} onPress={() => {
-                                                    navigation.navigate('AddRecept', { recept: title })
-                                                }} />
-                                                <Icon name='trash-outline' size={24} color={'black'} onPress={() => {
-                                                    setSelectedRecept(title);
-                                                    setVisibleDialog(title);
-                                                }} />
-                                            </View>)
-                                        },
-                                    })}  >
+                                        headerRight: () => (
+                                            <HeaderRightSet title={route.params.title} navigation={navigation} />
+                                        ),
+                                    })}
+                                >
                                 </HomeStack.Screen>
                             </HomeStack.Navigator>
                         )}
@@ -145,19 +98,6 @@ export default function NavigationBar() {
                             )
                         }} />
                 </Tab.Navigator>
-                < Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(false)
-                }>
-                    <Dialog.Content>
-                        <Text> Möchtest du das Rezept löschen? </Text>
-                    </Dialog.Content>
-                    <Dialog.Actions>
-                        <Button onPress={() => {
-                            const navigation = useNavigation();
-                            deleteRecept = true; setVisibleDialog(false); navigation.navigate('Category', { title: title });
-                        }}>Ja</Button>
-                        <Button onPress={() => { setSelectedRecept(''); setVisibleDialog(false) }}>Nein</Button>
-                    </Dialog.Actions>
-                </Dialog >
             </NavigationContainer>
         </SafeAreaProvider>
     )

@@ -11,7 +11,7 @@ const customTheme = {
     ...DefaultTheme.colors,
     primary: '#9a998c', // Change 'blue' to your desired primary color
     surface: '#e1e1e1', // Change the background color here
-    backdrop: '#e1e1e1',
+    backdrop: 'transparent',
     background: '#e1e1e1'
   }
 };
