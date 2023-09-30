@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        fontFamily: 'Playfair_9pt_SemiCondensed-BlackItalic'
     },
     button: {
         backgroundColor: '#c2cac2',
@@ -87,7 +88,8 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: 'center',
-        fontSize: 20
+        fontSize: 21,
+        fontFamily: 'spinwerad'
     }
 });
 

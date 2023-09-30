@@ -57,13 +57,15 @@ export default function NavigationBar() {
                                     component={HomeScreen}
                                     options={{
                                         title: "Sandra's Awesome Rezepte App",
+                                        headerTitleAlign: 'center'
                                     }} >
                                 </HomeStack.Screen>
                                 <HomeStack.Screen
                                     name="AddRecept"
                                     component={AddReceptScreen}
                                     options={({ route }) => ({
-                                        title: route.params.title
+                                        title: route.params.title,
+                                        headerTitleAlign: 'center'
                                     })}  >
                                 </HomeStack.Screen>
                                 <HomeStack.Screen
@@ -71,7 +73,8 @@ export default function NavigationBar() {
                                     component={CategoryScreen}
                                     // initialParams={title}
                                     options={({ route }) => ({
-                                        title: route.params.title
+                                        title: route.params.title,
+                                        headerTitleAlign: 'center'
                                     })}  >
                                 </HomeStack.Screen>
                                 <HomeStack.Screen
@@ -79,6 +82,7 @@ export default function NavigationBar() {
                                     component={ReceptScreen}
                                     options={({ route, navigation }) => ({
                                         title: route.params.title,
+                                        headerTitleAlign: 'center',
                                         headerRight: () => (
                                             <HeaderRightSet title={route.params.title} navigation={navigation} />
                                         ),
