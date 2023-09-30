@@ -131,7 +131,16 @@ function filterRecepts(recepts, selectedChips) {
     return filteredRecepts;
 }
 
-export default function CategoryScreen({ route }) {
+let openDialog = false;
+
+export function setDialogVisible() {
+
+    openDialog = true
+}
+
+
+
+export default function CategoryScreen({ navigation, route }) {
     const [selectedChips, setSelectedChips] = React.useState([]);
     const [categoryChips, setCategoryChips] = React.useState([]);
     const [workChips, setWorkChips] = React.useState([]);
@@ -153,16 +162,25 @@ export default function CategoryScreen({ route }) {
         setFilteredRecepts(filterRecepts(recepts, selectedChips));
     }, [selectedChips]);
 
+    React.useEffect(() => {
+        console.log('wird getriggert')
+        if (route.params?.showDialog) {
+            console.log('öffnet Dialog')
+            setVisibleDialog(true);
+            // Reset showDialog after opening the dialog
+            navigation.setParams({ showDialog: false });
+        }
+    }, [route.params?.showDialog]);
 
     return (
         <View style={{ flex: 1 }}>
-            <View >
+            {/* <View >
                 <TouchableOpacity
                     onPress={() => { setVisibleDialog(true) }}>
                     <Text>Filtern nach</Text>
                 </TouchableOpacity>
 
-            </View>
+            </View> */}
             <ScrollView>
                 <View>
                     {selectedChips.length === 0 ? <RenderRecepts recepts={recepts} title={title} /> : <RenderRecepts recepts={filteredRecepts} title={title} />}

@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, View, StyleSheet } from 'react-native';
 import { Button, Dialog, Divider, Menu } from 'react-native-paper';
-import HeaderRightNav from './headerRightNav';
+import HeaderRightNav from './HeaderRightNav';
 
 
 

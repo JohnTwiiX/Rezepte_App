@@ -10,7 +10,8 @@ import AddReceptScreen from './AddRecept';
 import CategoryScreen from './Category';
 import ReceptScreen from './Recept';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HeaderRightSet from './modals/headerRightSet';
+import HeaderRightSet from './modals/HeaderRightSet';
+import CategoryFilter from './modals/CategoryFilter';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -72,9 +73,12 @@ export default function NavigationBar() {
                                     name="Category"
                                     component={CategoryScreen}
                                     // initialParams={title}
-                                    options={({ route }) => ({
+                                    options={({ route, navigation }) => ({
                                         title: route.params.title,
-                                        headerTitleAlign: 'center'
+                                        headerTitleAlign: 'center',
+                                        headerRight: () => (
+                                            <CategoryFilter openDialog={() => navigation.setParams({ showDialog: true })} />
+                                        ),
                                     })}  >
                                 </HomeStack.Screen>
                                 <HomeStack.Screen

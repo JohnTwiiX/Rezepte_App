@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TextInput, Chip } from 'react-native-paper';
-import AddChip from './addChip';
+import AddChip from './AddChip';
 import DeleteChip from './DeleteChip';
 import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
 import { fetchData } from '../ReceptScreen/Overview';
