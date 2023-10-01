@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Button } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { TextInput, Divider } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { TextInput, Divider, List } from 'react-native-paper';
 import ReceptTypeChips from '../modals/OverviewChips';
 import CategoryChips from '../modals/OverviewCategory';
 import CollectionChips from '../modals/OverviewCollection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TimeSwitch from '../modals/TimeSwitch';
 
 const removeValue = async () => {
     try {
@@ -126,6 +127,7 @@ export default function Overview({ route }) {
     const [workTime, setWorkTime] = React.useState("");
     const [cookingTime, setCookingTime] = React.useState("");
     const [fetchedRecept, setFetchedRecept] = React.useState({})
+    const [timeProp, setTimepromp] = React.useState("min")
     const { recept } = route.params;
 
 
@@ -197,24 +199,57 @@ export default function Overview({ route }) {
                     <Text>Sammlungen:</Text>
                     <CollectionChips selectedChipCol={fetchedRecept?.description?.collection} />
                 </View>
-                <TextInput
-                    style={styles.input}
-                    label="Portionsgröße"
-                    value={fetchedRecept ? fetchedRecept?.description?.potionSize : potionSize}
-                    onChangeText={potionSize => { setPotionSize(potionSize) }}
-                />
-                <TextInput
-                    style={styles.input}
-                    label="Vorbereitungszeit"
-                    value={fetchedRecept ? fetchedRecept?.description?.workTime : workTime}
-                    onChangeText={workTime => { setWorkTime(workTime) }}
-                />
-                <TextInput
-                    style={styles.input}
-                    label="Kochzeit"
-                    value={fetchedRecept ? fetchedRecept?.description?.cookingTime : cookingTime}
-                    onChangeText={cookingTime => { setCookingTime(cookingTime) }}
-                />
+                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', marginTop: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TextInput
+                            style={styles.input}
+                            label={
+                                potionSize ? null : (
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                        <Icon name='account-outline' size={20} color='rgba(0, 0, 0, 0.3)' />
+                                    </View>
+                                )
+                            }
+                            keyboardType='phone-pad'
+                            value={fetchedRecept ? fetchedRecept?.description?.potionSize : potionSize}
+                            onChangeText={potionSize => { setPotionSize(potionSize) }}
+                        />
+                        <Text>Pers</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TextInput
+                            style={styles.input}
+                            label={
+                                workTime ? null : (
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                        <Icon name='clock-time-two-outline' size={20} color='rgba(0, 0, 0, 0.3)' />
+                                    </View>
+                                )
+                            }
+                            keyboardType='phone-pad'
+                            value={fetchedRecept ? fetchedRecept?.description?.workTime : workTime}
+                            onChangeText={workTime => { setWorkTime(workTime) }}
+                        />
+                        <TimeSwitch />
+                    </View>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TextInput
+                            style={styles.input}
+                            label={
+                                cookingTime ? null : (
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                        <Icon name='pot-mix-outline' size={20} color='rgba(0, 0, 0, 0.3)' />
+                                    </View>
+                                )
+                            }
+                            keyboardType='phone-pad'
+                            value={fetchedRecept ? fetchedRecept?.description?.cookingTime : cookingTime}
+                            onChangeText={cookingTime => { setCookingTime(cookingTime) }}
+                        />
+                        <TimeSwitch />
+                    </View>
+                </View>
             </View>
         </ScrollView>
     );
@@ -247,6 +282,7 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 8,
         marginBottom: 8,
-        backgroundColor: '#e1e1e1'
+        backgroundColor: '#e1e1e1',
+        textAlign: 'center'
     }
 });

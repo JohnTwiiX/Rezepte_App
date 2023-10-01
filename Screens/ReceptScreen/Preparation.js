@@ -102,7 +102,6 @@ export default function PreparationsScreen({ navigation }) {
     const [missingValues, setMissingValues] = React.useState([]);
     const [visibleDialog, setVisibleDialog] = React.useState(false);
     const [dialogSave, setDialogSave] = React.useState(false);
-    const [selectedAccordion, setSelectedAccordion] = React.useState('')
     useFocusEffect(
         React.useCallback(() => {
             async function fetchData() {
@@ -119,14 +118,6 @@ export default function PreparationsScreen({ navigation }) {
         }, []),
     );
 
-    const handleAccordion = (title) => {
-        if (title !== selectedAccordion) {
-            setSelectedAccordion(title)
-        } else {
-            setSelectedAccordion('')
-        }
-    }
-
     return (
         <View style={{ flex: 1, margin: 8 }}>
             <List.Section style={{}}>
@@ -134,8 +125,6 @@ export default function PreparationsScreen({ navigation }) {
                     <List.Accordion
                         key={index}
                         title={item.title}
-                        expanded={item.title === selectedAccordion}
-                        onPress={() => handleAccordion(item.title)}
                         style={{ borderWidth: 1, }}
                     >
                         <TextInput

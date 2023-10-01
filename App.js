@@ -37,7 +37,8 @@ const customTheme = {
       },
       passive: "white"
     },
-    color: "#e1e1e1"
+    color: "#e1e1e1",
+    tabColor: "#9a998c"
 
   }
 }

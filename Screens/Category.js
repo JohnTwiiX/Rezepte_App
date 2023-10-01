@@ -75,7 +75,7 @@ function RenderRecepts(props) {
                                     <Icon name='clock-time-two-outline' size={18} style={{ marginRight: 4 }} />
                                     <Text>{recept.description.workTime}</Text>
                                     <Text>  |  </Text>
-                                    <Icon name='pot-steam-outline' size={18} style={{ marginRight: 4 }} />
+                                    <Icon name='pot-mix-outline' size={18} style={{ marginRight: 4 }} />
                                     <Text>{recept.description.cookingTime}</Text>
                                 </View>
                             </View>
