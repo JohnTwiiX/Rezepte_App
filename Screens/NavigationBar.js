@@ -12,11 +12,14 @@ import ReceptScreen from './Recept';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HeaderRightSet from './modals/HeaderRightSet';
 import CategoryFilter from './modals/CategoryFilter';
+import { useTheme } from 'react-native-paper';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
+
 export default function NavigationBar() {
+    const theme = useTheme();
     return (
         <SafeAreaProvider>
             <NavigationContainer>
@@ -25,7 +28,7 @@ export default function NavigationBar() {
                     screenOptions={{
                         headerShown: false,
                         tabBarShowLabel: false,
-                        tabBarActiveBackgroundColor: '#e1e1e1',
+                        tabBarActiveBackgroundColor: theme.colors.color,
                         tabBarItemStyle: { borderRadius: 100, height: 50 },
                         tabBarStyle: { height: 50 }
                     }}>
@@ -51,14 +54,14 @@ export default function NavigationBar() {
                         {() => (
                             <HomeStack.Navigator screenOptions={{
                                 // headerShown: false,
-                                tabBarShowLabel: false
+                                tabBarShowLabel: false,
+                                headerTitleAlign: 'center'
                             }}>
                                 <HomeStack.Screen
                                     name="Home"
                                     component={HomeScreen}
                                     options={{
                                         title: "Sandra's Awesome Rezepte App",
-                                        headerTitleAlign: 'center'
                                     }} >
                                 </HomeStack.Screen>
                                 <HomeStack.Screen
@@ -66,7 +69,6 @@ export default function NavigationBar() {
                                     component={AddReceptScreen}
                                     options={({ route }) => ({
                                         title: route.params.title,
-                                        headerTitleAlign: 'center'
                                     })}  >
                                 </HomeStack.Screen>
                                 <HomeStack.Screen
@@ -75,7 +77,6 @@ export default function NavigationBar() {
                                     // initialParams={title}
                                     options={({ route, navigation }) => ({
                                         title: route.params.title,
-                                        headerTitleAlign: 'center',
                                         headerRight: () => (
                                             <CategoryFilter openDialog={() => navigation.setParams({ showDialog: true })} />
                                         ),

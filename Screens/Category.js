@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Avatar, Card, Text, Dialog, Button, Chip } from 'react-native-paper';
+import { Avatar, Card, Text, Dialog, Button, Chip, useTheme } from 'react-native-paper';
 import { getStorage } from './ReceptScreen/Overview';
 
 async function fetchData(title, setRecepts) {
@@ -69,10 +69,13 @@ function RenderRecepts(props) {
                             <View style={{ marginLeft: 15 }}>
                                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{recept.title}</Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Icon name='account-outline' size={18} style={{ marginRight: 4 }} />
                                     <Text>{recept.description.potionSize}</Text>
                                     <Text>  |  </Text>
+                                    <Icon name='clock-time-two-outline' size={18} style={{ marginRight: 4 }} />
                                     <Text>{recept.description.workTime}</Text>
                                     <Text>  |  </Text>
+                                    <Icon name='pot-steam-outline' size={18} style={{ marginRight: 4 }} />
                                     <Text>{recept.description.cookingTime}</Text>
                                 </View>
                             </View>
@@ -84,12 +87,13 @@ function RenderRecepts(props) {
     });
 }
 function RenderChips({ chips, selectedChips, setSelectedChips }) {
+    const theme = useTheme()
     return chips.map((item, index) => {
         return (
             <Chip
                 key={index}
-                mode="outlined"
-                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChips.includes(item) ? { backgroundColor: '#64ffda' } : { backgroundColor: 'rgb(232,225,237)' }]}
+                textStyle={selectedChips.includes(item) ? { color: theme.colors.chip.active.color } : 'black'}
+                mode="outlined" style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChips.includes(item) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
                 // onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                 selected={false}
                 onPress={() => {
