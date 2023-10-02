@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { TextInput, Chip } from 'react-native-paper';
+import { TextInput, Chip, useTheme } from 'react-native-paper';
 import AddChip from './AddChip';
 import DeleteChip from './DeleteChip';
 import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
@@ -19,6 +19,8 @@ export default function CategoryChips({ selectedChipCat }) {
 
     const previousLength = React.useRef(category.length);
     const selectedLength = React.useRef(selectedChips.length);
+    const theme = useTheme();
+
     React.useEffect(() => {
         if (selectedChipCat && selectedChips !== selectedChipCat) {
             selectedChipCat.forEach(chip => {
@@ -71,8 +73,8 @@ export default function CategoryChips({ selectedChipCat }) {
                 <Chip
                     key={index}
                     mode="outlined"
-                    style={[styles.chip, selectedChips.includes(type) ? { backgroundColor: '#9a998c' } : { backgroundColor: '#e1e1e1' }]}
-                    textStyle={selectedChips.includes(type) ? styles.chipActive : {}}
+                    textStyle={selectedChips.includes(type) ? { color: theme.colors.chip.active.color } : 'black'}
+                    style={[styles.chip, selectedChips.includes(type) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
                     onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                     selected={false}
                     onPress={() => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { TextInput, Chip } from 'react-native-paper';
+import { TextInput, Chip, useTheme } from 'react-native-paper';
 import AddChip from './AddChip';
 import DeleteChip from './DeleteChip';
 import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
@@ -17,6 +17,7 @@ export default function ReceptTypeChips({ selectedChipType }) {
     const title = 'Rezeptart';
     const previousLength = React.useRef(receptTypes.length);
     const selectedLength = React.useRef(selectedChip.length);
+    const theme = useTheme();
 
     React.useEffect(() => {
         if (selectedChipType && selectedChip !== selectedChipType) {
@@ -71,8 +72,8 @@ export default function ReceptTypeChips({ selectedChipType }) {
                     key={index}
                     mode='outlined'
                     selected={false}
-                    style={[styles.chip, selectedChip.includes(type) ? { backgroundColor: '#9a998c' } : { backgroundColor: '#e1e1e1' }]}
-                    textStyle={selectedChip.includes(type) ? styles.chipActive : {}}
+                    textStyle={selectedChip.includes(type) ? { color: theme.colors.chip.active.color } : 'black'}
+                    style={[styles.chip, selectedChip.includes(type) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
                     onLongPress={() => { setSelectedChip([type]), setModalVisible(true) }}
                     onPress={() => {
                         if (selectedChip.includes(type)) {

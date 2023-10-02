@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { List, Checkbox, Dialog, Paragraph, Button } from 'react-native-paper';
+import { List, Checkbox, Dialog, Paragraph, Button, useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { isFetchedRecept, saveInStorage } from './Overview';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getRecept } from './Overview';
+import UnitSwitch from '../modals/UnitSwitch';
 
 let defaultSections = [
     {
@@ -91,13 +92,18 @@ function saveSectionArray(accordionTitle, setSectionArray) {
     return
 }
 
-function saveInArray(selectedItem, itemTitle) {
-    if (selectedItem && itemTitle) {
-        ingredArray.push(
-            [itemTitle, ' ', selectedItem]
-        )
+function saveInArray(selectedItem, value, unitSwitch) {
+    if (selectedItem && value) {
+        if (unitSwitch === 'EL' || unitSwitch === 'TL' || unitSwitch === 'Prise') {
+            ingredArray.push(
+                [value, ' ', unitSwitch, ' ', selectedItem]
+            )
+        } else {
+            ingredArray.push(
+                [value, unitSwitch, ' ', selectedItem]
+            )
+        }
     }
-
 }
 
 const IngredientList = ({ ingredients }) => {
@@ -129,6 +135,8 @@ export default function IngredientsScreen({ navigation }) {
     const [sectionTitle, setSectionsTitle] = React.useState('');
     const [sectionArray, setSectionArray] = React.useState([]);
     const [sections, setSections] = React.useState(defaultSections);
+    const [unitSwitch, setUnitSwitch] = React.useState('g');
+    const theme = useTheme();
 
     React.useEffect(() => {
         const loadSections = async () => {
@@ -226,12 +234,12 @@ export default function IngredientsScreen({ navigation }) {
                             </List.Section>
                             <TouchableOpacity
                                 // disabled={ingredArray.length <= 0 && accordionTitle === 'Abschnitt ...' ? true : false}
-                                style={styles.button}
+                                style={[styles.button, { backgroundColor: theme.colors.button }]}
                                 onPress={() => {
                                     if (ingredArray.length == 0) { alert('Du hast keine Zutaten ausgewählt.') }
                                     else { saveSectionArray(accordionTitle, setSectionArray); setVisibleDialog(false); setAccordionTitle('Abschnitt ...'), setTitle = false, setItemArray(false) }
                                 }}>
-                                <Text style={{ color: 'white' }}>Auswahl speichern</Text>
+                                <Text style={{ color: 'white', fontSize: 18 }}>Auswahl speichern</Text>
                                 {/* <Icon name="chevron-back-outline" size={20} color="#fff" /> */}
                             </TouchableOpacity>
                         </ScrollView>
@@ -340,16 +348,22 @@ export default function IngredientsScreen({ navigation }) {
             <Dialog visible={visibleDialogItem} onDismiss={() => { setVisibleDialogItem(false) }}>
                 <Dialog.Title>Wähle die Menge von {selectedItem}</Dialog.Title>
                 <Dialog.Content>
-                    <TextInput
-                        autoFocus={visibleDialogItem}
-                        placeholder='Menge ...'
-                        maxLength={10}
-                        onChangeText={text => setInputValue(text)}
-                    />
+                    <View style={{ flexDirection: 'row' }}>
+                        <TextInput
+                            style={{ flex: 1 }}
+                            autoFocus={visibleDialogItem}
+                            placeholder='Menge...'
+                            maxLength={10}
+                            onChangeText={text => setInputValue(text)}
+                            keyboardType='number-pad'
+                        />
+                        <UnitSwitch title={unitSwitch} setUnitSwitch={setUnitSwitch} />
+                    </View>
+
                 </Dialog.Content>
                 <Dialog.Actions >
                     <Button disabled={inputValue.length > 0 ? false : true}
-                        onPress={() => { saveInArray(selectedItem, inputValue), setVisibleDialogItem(false); }}>Speichern</Button>
+                        onPress={() => { saveInArray(selectedItem, inputValue, unitSwitch), setVisibleDialogItem(false); }}>Speichern</Button>
                     {/* <Button >Entfernen</Button> */}
                     <Button onPress={() => { ; setVisibleDialogItem(false); setInputValue('') }}>Abbrechen</Button>
 
@@ -376,7 +390,6 @@ const styles = StyleSheet.create({
     },
     button: {
         alignItems: 'center',
-        backgroundColor: 'blue',
         padding: 10,
         borderRadius: 100,
     },

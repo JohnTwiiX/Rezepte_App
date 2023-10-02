@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TextInput, Divider, List } from 'react-native-paper';
+import { TextInput, Divider, List, useTheme } from 'react-native-paper';
 import ReceptTypeChips from '../modals/OverviewChips';
 import CategoryChips from '../modals/OverviewCategory';
 import CollectionChips from '../modals/OverviewCollection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TimeSwitch from '../modals/TimeSwitch';
+import { styles as styleContainer } from '../modals/TimeSwitch';
 
 const removeValue = async () => {
     try {
@@ -126,9 +127,11 @@ export default function Overview({ route }) {
     const [potionSize, setPotionSize] = React.useState("");
     const [workTime, setWorkTime] = React.useState("");
     const [cookingTime, setCookingTime] = React.useState("");
-    const [fetchedRecept, setFetchedRecept] = React.useState({})
-    const [timeProp, setTimepromp] = React.useState("min")
+    const [fetchedRecept, setFetchedRecept] = React.useState({});
+    const [timeSwitchWork, setTimeSwitchWork] = React.useState("min");
+    const [timeSwitchCook, setTimeSwitchCook] = React.useState("min");
     const { recept } = route.params;
+    const theme = useTheme();
 
 
 
@@ -176,13 +179,21 @@ export default function Overview({ route }) {
         }
     }, [cookingTime]);
 
+    React.useEffect(() => {
+        setCookingTime(`${cookingTime} ${timeSwitchCook}`)
+    }, [timeSwitchCook]);
+
+    React.useEffect(() => {
+        setWorkTime(`${workTime} ${timeSwitchWork}`)
+    }, [timeSwitchWork]);
+
 
     return (
         <ScrollView>
             <View style={styles.container}>
                 {/* <Button title='Klick mich' onPress={() => { getAllKeys().then((data) => { console.log(data) }); }} /> */}
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, { backgroundColor: theme.colors.color }]}
                     label="Titel"
                     value={fetchedRecept ? fetchedRecept.title : title}
                     onChangeText={title => { setTitle(title) }}
@@ -202,7 +213,7 @@ export default function Overview({ route }) {
                 <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', marginTop: 12 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: theme.colors.color }]}
                             label={
                                 potionSize ? null : (
                                     <View style={{ flexDirection: 'row', alignItems: 'center', }}>
@@ -214,11 +225,14 @@ export default function Overview({ route }) {
                             value={fetchedRecept ? fetchedRecept?.description?.potionSize : potionSize}
                             onChangeText={potionSize => { setPotionSize(potionSize) }}
                         />
-                        <Text>Pers</Text>
+                        <View style={[styleContainer.container, { backgroundColor: theme.colors.color }]}>
+                            <Text >Pers</Text>
+                        </View>
+
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: theme.colors.color }]}
                             label={
                                 workTime ? null : (
                                     <View style={{ flexDirection: 'row', alignItems: 'center', }}>
@@ -228,14 +242,14 @@ export default function Overview({ route }) {
                             }
                             keyboardType='phone-pad'
                             value={fetchedRecept ? fetchedRecept?.description?.workTime : workTime}
-                            onChangeText={workTime => { setWorkTime(workTime) }}
+                            onChangeText={workTime => { setWorkTime(`${workTime} ${timeSwitchWork}`) }}
                         />
-                        <TimeSwitch />
+                        <TimeSwitch title={timeSwitchWork} setTimeSwitch={setTimeSwitchWork} />
                     </View>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: theme.colors.color }]}
                             label={
                                 cookingTime ? null : (
                                     <View style={{ flexDirection: 'row', alignItems: 'center', }}>
@@ -245,9 +259,9 @@ export default function Overview({ route }) {
                             }
                             keyboardType='phone-pad'
                             value={fetchedRecept ? fetchedRecept?.description?.cookingTime : cookingTime}
-                            onChangeText={cookingTime => { setCookingTime(cookingTime) }}
+                            onChangeText={cookingTime => { setCookingTime(`${cookingTime} ${timeSwitchCook}`) }}
                         />
-                        <TimeSwitch />
+                        <TimeSwitch title={timeSwitchCook} setTimeSwitch={setTimeSwitchCook} />
                     </View>
                 </View>
             </View>
@@ -255,34 +269,35 @@ export default function Overview({ route }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 8,
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'space-between'
-    },
-    button: {
-        alignItems: 'center',
-        backgroundColor: 'blue',
-        padding: 10,
-        borderRadius: 100,
+const styles = StyleSheet.create(
+    {
+        container: {
+            padding: 8,
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'space-between'
+        },
+        button: {
+            alignItems: 'center',
+            backgroundColor: 'blue',
+            padding: 10,
+            borderRadius: 100,
 
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        marginLeft: 10,
-    },
-    chipContainer: {
-        padding: 8,
-        borderBottomWidth: 1,
-        borderBottomColor: 'black',
-    },
-    input: {
-        marginTop: 8,
-        marginBottom: 8,
-        backgroundColor: '#e1e1e1',
-        textAlign: 'center'
-    }
-});
+        },
+        buttonText: {
+            color: '#fff',
+            fontSize: 16,
+            marginLeft: 10,
+        },
+        chipContainer: {
+            padding: 8,
+            borderBottomWidth: 1,
+            borderBottomColor: 'black',
+        },
+        input: {
+            marginTop: 8,
+            marginBottom: 8,
+            textAlign: 'center',
+            borderTopRightRadius: 0,
+        }
+    });

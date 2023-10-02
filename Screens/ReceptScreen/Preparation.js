@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { TextInput, TouchableOpacity, View, Text } from 'react-native';
-import { List, Dialog, Paragraph, Button } from 'react-native-paper';
+import { TextInput, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { List, Dialog, Paragraph, Button, useTheme } from 'react-native-paper';
 import { getRecept, getStorage, isFetchedRecept, setFetchedReceptCompleted } from './Overview';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -102,6 +102,7 @@ export default function PreparationsScreen({ navigation }) {
     const [missingValues, setMissingValues] = React.useState([]);
     const [visibleDialog, setVisibleDialog] = React.useState(false);
     const [dialogSave, setDialogSave] = React.useState(false);
+    const theme = useTheme();
     useFocusEffect(
         React.useCallback(() => {
             async function fetchData() {
@@ -142,7 +143,7 @@ export default function PreparationsScreen({ navigation }) {
             </List.Section>
             <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                 <TouchableOpacity
-                    style={{ backgroundColor: 'blue' }}
+                    style={[styles.button, { backgroundColor: theme.colors.button }]}
                     onPress={async () => {
                         const values = await AsyncStorage.multiGet(['title', 'selectedRezeptart', 'selectedKategorie', 'potionSize', 'workTime', 'receptArray']);
                         const valueObject = {};
@@ -166,7 +167,7 @@ export default function PreparationsScreen({ navigation }) {
                             setDialogSave(true);
                         }
                     }}>
-                    <Text style={{ color: 'white', textAlign: 'center' }}>Rezept abspeichern</Text>
+                    <Text style={{ color: 'white', textAlign: 'center', fontSize: 18 }}>Rezept abspeichern</Text>
                 </TouchableOpacity>
             </View>
             <Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(false)}>
@@ -201,3 +202,11 @@ export default function PreparationsScreen({ navigation }) {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    button: {
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 100,
+    }
+})

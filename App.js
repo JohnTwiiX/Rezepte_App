@@ -23,12 +23,14 @@ const customTheme = {
   colors: {
     ...DefaultTheme.colors,
     surface: "#c2cac2",
-    primary: "#c2cac2",
+    // primary: "#c2cac2",
+    primary: "black",
     backdrop: 'transparent',
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: "white",
-      level3: "#e0e5df"
+      level3: "#e0e5df",
+      level4: "black"
     },
     chip: {
       active: {
@@ -38,7 +40,8 @@ const customTheme = {
       passive: "white"
     },
     color: "#e1e1e1",
-    tabColor: "#9a998c"
+    tabColor: "#9a998c",
+    button: "#9a998c"
 
   }
 }

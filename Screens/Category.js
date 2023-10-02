@@ -93,7 +93,8 @@ function RenderChips({ chips, selectedChips, setSelectedChips }) {
             <Chip
                 key={index}
                 textStyle={selectedChips.includes(item) ? { color: theme.colors.chip.active.color } : 'black'}
-                mode="outlined" style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChips.includes(item) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
+                mode="outlined"
+                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChips.includes(item) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
                 // onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                 selected={false}
                 onPress={() => {
