@@ -10,7 +10,7 @@ import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
 export let defaultTypes = ["Vorspeise", "Hauptspeise", "Aperitif", "Dessert", "Getränke"];
 
 
-export default function ReceptTypeChips({ selectedChipType }) {
+export default function ReceptTypeChips({ handleDataChange, selectedChipType }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [selectedChip, setSelectedChip] = React.useState([]);
     const [receptTypes, setreceptTypes] = React.useState(defaultTypes);
@@ -35,9 +35,10 @@ export default function ReceptTypeChips({ selectedChipType }) {
     }, [receptTypes]);
 
     React.useEffect(() => {
+        handleDataChange('chipType', selectedChip);
         if (selectedChip.length !== selectedLength.current) {
             selectedLength.current = selectedChip.length;
-            saveInStorage('selectedRezeptart', selectedChip);
+
         }
     }, [selectedChip]);
 

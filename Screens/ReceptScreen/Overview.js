@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Button } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Button, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TextInput, Divider, List, useTheme } from 'react-native-paper';
 import ReceptTypeChips from '../modals/OverviewChips';
 import CategoryChips from '../modals/OverviewCategory';
 import CollectionChips from '../modals/OverviewCollection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import TimeSwitch from '../modals/TimeSwitch';
-import { styles as styleContainer } from '../modals/TimeSwitch';
+import Switcher from '../modals/Switcher';
+import { useData } from '../modals/DataProvider';
 
 const removeValue = async () => {
     try {
@@ -90,13 +90,13 @@ export const getStorage = async (title) => {
     }
 }
 
-const saveInStorageInput = async (title, value) => {
-    try {
-        await AsyncStorage.setItem(title, value);
-    } catch (error) {
-        console.log(`Error saving ${title}: ${error}`);
-    }
-}
+// const saveInStorageInput = async (title, value) => {
+//     try {
+//         await AsyncStorage.setItem(title, value);
+//     } catch (error) {
+//         console.log(`Error saving ${title}: ${error}`);
+//     }
+// }
 export async function fetchData(recept) {
     const data = await getStorage('recepts');
 
@@ -119,6 +119,28 @@ export function setFetchedReceptCompleted() {
     fetchedReceptCompleted = false;
 }
 
+function jsonToString(crowd, unit) {
+    if (crowd && unit) {
+        const result = JSON.stringify({
+            'crowd': crowd,
+            'unit': unit
+        });
+        return result
+    } else {
+        return null;
+    }
+
+}
+
+function stringToJson(prop) {
+    if (prop) {
+        const result = JSON.parse(prop);
+        return result
+    }
+
+
+}
+
 let receptForAll
 let fetchedReceptCompleted = false;
 
@@ -128,13 +150,18 @@ export default function Overview({ route }) {
     const [workTime, setWorkTime] = React.useState("");
     const [cookingTime, setCookingTime] = React.useState("");
     const [fetchedRecept, setFetchedRecept] = React.useState({});
-    const [timeSwitchWork, setTimeSwitchWork] = React.useState("min");
-    const [timeSwitchCook, setTimeSwitchCook] = React.useState("min");
+    const [workSwitch, setWorkSwitch] = React.useState("min");
+    const [cookSwitch, setCookSwitch] = React.useState("min");
+    const [potionSwitch, setPotionSwtich] = React.useState("Person");
     const { recept } = route.params;
     const theme = useTheme();
+    const inputRef = React.useRef(null);
+    const { data, updateData } = useData();
 
-
-
+    const handleBackgroundPress = () => {
+        // Minimiere das Keyboard, wenn irgendwo anders auf dem Bildschirm geklickt wird
+        Keyboard.dismiss();
+    };
 
     React.useEffect(() => {
         if (recept) {
@@ -148,67 +175,117 @@ export default function Overview({ route }) {
     }, [])
 
     React.useEffect(() => {
-        setTitle(fetchedRecept.title);
-        setPotionSize(fetchedRecept?.description?.potionSize);
-        setWorkTime(fetchedRecept?.description?.workTime);
-        setCookingTime(fetchedRecept?.description?.cookingTime);
+        if (fetchedRecept.length < 0) {
+            const potion = stringToJson(fetchedRecept?.description?.potionSize);
+            const work = stringToJson(fetchedRecept?.description?.workTime);
+            const cook = stringToJson(fetchedRecept?.description?.cookingTime);
+
+            setTitle(fetchedRecept.title);
+
+            setPotionSize(potion.crowd);
+            setPotionSwtich(potion.unit);
+
+            setWorkTime(work.crowd);
+            setWorkSwitch(work.unit);
+
+            setCookingTime(cook.crowd);
+            setCookSwitch(cook.unit);
+        }
+
     }, [fetchedRecept]);
 
     React.useEffect(() => {
         if (title !== undefined) {
-            saveInStorageInput('title', title);
+            handleDataChange('title', title);
         }
     }, [title]);
 
     React.useEffect(() => {
         if (potionSize !== undefined) {
-            saveInStorageInput('potionSize', potionSize);
+            handleDataChange('potionSize', jsonToString(potionSize, potionSwitch));
         }
-
     }, [potionSize]);
 
     React.useEffect(() => {
         if (workTime !== undefined) {
-            saveInStorageInput('workTime', workTime);
+            handleDataChange('workTime', jsonToString(workTime, workSwitch));
         }
     }, [workTime]);
 
     React.useEffect(() => {
         if (cookingTime !== undefined) {
-            saveInStorageInput('cookingTime', cookingTime);
+            handleDataChange('cookingTime', jsonToString(cookingTime, cookSwitch));
         }
     }, [cookingTime]);
 
     React.useEffect(() => {
-        setCookingTime(`${cookingTime} ${timeSwitchCook}`)
-    }, [timeSwitchCook]);
+        if (cookingTime) {
+            const result = jsonToString(cookingTime, cookSwitch)
+            console.log(result)
+            if (result !== null) {
+                console.log(result)
+                handleDataChange('cookingTime', result);
+            }
+        }
+    }, [cookSwitch]);
 
     React.useEffect(() => {
-        setWorkTime(`${workTime} ${timeSwitchWork}`)
-    }, [timeSwitchWork]);
+        if (workTime) {
+            const result = jsonToString(workTime, workSwitch)
+            if (result !== null) {
+                handleDataChange('workTime', result);
+            }
+        }
+    }, [workSwitch]);
+
+    React.useEffect(() => {
+        if (potionSize) {
+            const result = jsonToString(potionSize, potionSwitch)
+            if (result !== null) {
+                handleDataChange('potionTime', result);
+            }
+        }
+    }, [potionSwitch]);
+
+
+
+    const handleDataChange = (dataValue, newValue) => {
+
+        if (newValue) {
+            console.log(dataValue)
+            console.log(newValue)
+            // Erstelle ein neues Objekt, das eine Kopie der aktuellen Daten enthält
+            const updatedData = { ...data };
+            // Aktualisiere das Objekt mit dem neuen Wert für den angegebenen Schlüssel (dataValue)
+            updatedData[dataValue] = newValue;
+            // Aktualisiere die Daten im Kontext mit dem aktualisierten Objekt
+            updateData(updatedData);
+        }
+    };
 
 
     return (
-        <ScrollView>
+        <TouchableWithoutFeedback onPress={handleBackgroundPress}>
             <View style={styles.container}>
                 {/* <Button title='Klick mich' onPress={() => { getAllKeys().then((data) => { console.log(data) }); }} /> */}
                 <TextInput
                     style={[styles.input, { backgroundColor: theme.colors.color }]}
                     label="Titel"
-                    value={fetchedRecept ? fetchedRecept.title : title}
+                    ref={inputRef}
+                    value={title ? title : fetchedRecept.title}
                     onChangeText={title => { setTitle(title) }}
                 />
                 <View style={styles.chipContainer} >
                     <Text>Rezeptart:</Text>
-                    <ReceptTypeChips selectedChipType={fetchedRecept?.description?.receptType} />
+                    <ReceptTypeChips handleDataChange={handleDataChange} selectedChipType={fetchedRecept?.description?.receptType} />
                 </View>
                 <View style={styles.chipContainer}>
                     <Text>Kategorie:</Text>
-                    <CategoryChips selectedChipCat={fetchedRecept?.description?.category} />
+                    <CategoryChips handleDataChange={handleDataChange} selectedChipCat={fetchedRecept?.description?.category} />
                 </View>
                 <View style={styles.chipContainer}>
                     <Text>Sammlungen:</Text>
-                    <CollectionChips selectedChipCol={fetchedRecept?.description?.collection} />
+                    <CollectionChips handleDataChange={handleDataChange} selectedChipCol={fetchedRecept?.description?.collection} />
                 </View>
                 <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', marginTop: 12 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -221,13 +298,12 @@ export default function Overview({ route }) {
                                     </View>
                                 )
                             }
+                            ref={inputRef}
                             keyboardType='phone-pad'
-                            value={fetchedRecept ? fetchedRecept?.description?.potionSize : potionSize}
+                            value={potionSize ? potionSize : stringToJson(fetchedRecept?.description?.potionSize)?.crowd}
                             onChangeText={potionSize => { setPotionSize(potionSize) }}
                         />
-                        <View style={[styleContainer.container, { backgroundColor: theme.colors.color }]}>
-                            <Text >Pers</Text>
-                        </View>
+                        <Switcher title={potionSwitch} setSwitch={setPotionSwtich} prop={'potion'} />
 
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -240,11 +316,12 @@ export default function Overview({ route }) {
                                     </View>
                                 )
                             }
+                            ref={inputRef}
                             keyboardType='phone-pad'
-                            value={fetchedRecept ? fetchedRecept?.description?.workTime : workTime}
-                            onChangeText={workTime => { setWorkTime(`${workTime} ${timeSwitchWork}`) }}
+                            value={workTime ? workTime : stringToJson(fetchedRecept?.description?.workTime)?.crowd}
+                            onChangeText={workTime => { setWorkTime(workTime) }}
                         />
-                        <TimeSwitch title={timeSwitchWork} setTimeSwitch={setTimeSwitchWork} />
+                        <Switcher title={workSwitch} setSwitch={setWorkSwitch} prop={'work'} />
                     </View>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -257,15 +334,16 @@ export default function Overview({ route }) {
                                     </View>
                                 )
                             }
+                            ref={inputRef}
                             keyboardType='phone-pad'
-                            value={fetchedRecept ? fetchedRecept?.description?.cookingTime : cookingTime}
-                            onChangeText={cookingTime => { setCookingTime(`${cookingTime} ${timeSwitchCook}`) }}
+                            value={cookingTime ? cookingTime : stringToJson(fetchedRecept?.description?.cookingTime)?.crowd}
+                            onChangeText={cookingTime => { setCookingTime(cookingTime) }}
                         />
-                        <TimeSwitch title={timeSwitchCook} setTimeSwitch={setTimeSwitchCook} />
+                        <Switcher title={cookSwitch} setSwitch={setCookSwitch} prop={'cook'} />
                     </View>
                 </View>
             </View>
-        </ScrollView>
+        </TouchableWithoutFeedback>
     );
 }
 

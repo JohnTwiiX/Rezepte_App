@@ -9,7 +9,7 @@ import { saveInStorage, getStorage } from '../ReceptScreen/Overview';
 export let defaultCategory = ["Weihnachtsessen", "Geburtstag", "Festlich"];
 
 
-export default function CollectionChips({ selectedChipCol }) {
+export default function CollectionChips({ handleDataChange, selectedChipCol }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [selectedChips, setSelectedChips] = React.useState([]);
     const [category, setCategory] = React.useState(defaultCategory);
@@ -37,7 +37,7 @@ export default function CollectionChips({ selectedChipCol }) {
     React.useEffect(() => {
         if (selectedChips.length !== selectedLength.current) {
             selectedLength.current = selectedChips.length;
-            saveInStorage('selectedSammlung', selectedChips);
+            handleDataChange('chipsCollection', selectedChips);
         }
     }, [selectedChips]);
 

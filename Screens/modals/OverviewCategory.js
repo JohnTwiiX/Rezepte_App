@@ -11,7 +11,7 @@ let defaultCategory = ["Gemüse", "Rind", "Huhn", "Fisch", "Obst"];
 
 
 
-export default function CategoryChips({ selectedChipCat }) {
+export default function CategoryChips({ handleDataChange, selectedChipCat }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [selectedChips, setSelectedChips] = React.useState([]);
     const [category, setCategory] = React.useState(defaultCategory)
@@ -39,7 +39,7 @@ export default function CategoryChips({ selectedChipCat }) {
     React.useEffect(() => {
         if (selectedChips.length !== selectedLength.current) {
             selectedLength.current = selectedChips.length;
-            saveInStorage('selectedKategorie', selectedChips);
+            handleDataChange('chipsCategory', selectedChips);
         }
     }, [selectedChips]);
 

@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { isFetchedRecept, saveInStorage } from './Overview';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getRecept } from './Overview';
-import UnitSwitch from '../modals/UnitSwitch';
+import Switcher from '../modals/Switcher';
 
 let defaultSections = [
     {
@@ -357,11 +357,11 @@ export default function IngredientsScreen({ navigation }) {
                             onChangeText={text => setInputValue(text)}
                             keyboardType='number-pad'
                         />
-                        <UnitSwitch title={unitSwitch} setUnitSwitch={setUnitSwitch} />
+                        <Switcher title={unitSwitch} setSwitch={setUnitSwitch} prop={'units'} />
                     </View>
 
                 </Dialog.Content>
-                <Dialog.Actions >
+                <Dialog.Actions style={{ zIndex: 0 }}>
                     <Button disabled={inputValue.length > 0 ? false : true}
                         onPress={() => { saveInArray(selectedItem, inputValue, unitSwitch), setVisibleDialogItem(false); }}>Speichern</Button>
                     {/* <Button >Entfernen</Button> */}
