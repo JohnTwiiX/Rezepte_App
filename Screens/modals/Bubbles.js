@@ -2,8 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { defaultTypes } from './OverviewChips';
-import { defaultCategory } from './OverviewCollection';
+import { defaultCollection, defaultTypes } from './ReceptChips';
 // import { getStorage } from './Overview';
 
 // const receptTypes = ["Fisch", "Fleisch", "Kuchen", "Dessert", "Festtage", "", ""]
@@ -20,7 +19,7 @@ function CircleButton({ descr, size, onPress }) {
 }
 
 async function fetchBubbles() {
-    let values = await AsyncStorage.multiGet(['Rezeptart', 'Sammlung']);
+    let values = await AsyncStorage.multiGet(['types', 'collection']);
     return values
 }
 
@@ -37,7 +36,7 @@ export default function CircleButtons() {
                             defaultTypes.forEach((value) => {
                                 bubbles.push(value)
                             });
-                            defaultCategory.forEach((value) => {
+                            defaultCollection.forEach((value) => {
                                 bubbles.push(value)
                             });
                         } else {

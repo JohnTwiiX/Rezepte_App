@@ -12,6 +12,7 @@ getAllKeys = async () => {
     let keys = []
     try {
         keys = await AsyncStorage.getAllKeys()
+        console.log(keys)
     } catch (e) {
         // read key error
         console.error(e)

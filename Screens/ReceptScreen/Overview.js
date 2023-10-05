@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Button, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TextInput, Divider, List, useTheme } from 'react-native-paper';
-import ReceptTypeChips from '../modals/OverviewChips';
-import CategoryChips from '../modals/OverviewCategory';
-import CollectionChips from '../modals/OverviewCollection';
+import { Text, View, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Switcher from '../modals/Switcher';
 import { useData } from '../modals/DataProvider';
+import OverviewInput from '../modals/OverviewInput';
+import ReceptChips from '../modals/ReceptChips';
 
 const removeValue = async () => {
     try {
@@ -120,16 +117,11 @@ export function setFetchedReceptCompleted() {
 }
 
 function jsonToString(crowd, unit) {
-    if (crowd && unit) {
-        const result = JSON.stringify({
-            'crowd': crowd,
-            'unit': unit
-        });
-        return result
-    } else {
-        return null;
-    }
-
+    const result = JSON.stringify({
+        crowd: crowd,
+        unit: unit
+    });
+    return result
 }
 
 function stringToJson(prop) {
@@ -154,7 +146,6 @@ export default function Overview({ route }) {
     const [cookSwitch, setCookSwitch] = React.useState("min");
     const [potionSwitch, setPotionSwtich] = React.useState("Person");
     const { recept } = route.params;
-    const theme = useTheme();
     const inputRef = React.useRef(null);
     const { data, updateData } = useData();
 
@@ -195,65 +186,53 @@ export default function Overview({ route }) {
     }, [fetchedRecept]);
 
     React.useEffect(() => {
-        if (title !== undefined) {
+        if (title.length >= 0) {
             handleDataChange('title', title);
         }
     }, [title]);
 
     React.useEffect(() => {
-        if (potionSize !== undefined) {
+        if (potionSize.length >= 0) {
             handleDataChange('potionSize', jsonToString(potionSize, potionSwitch));
         }
     }, [potionSize]);
 
     React.useEffect(() => {
-        if (workTime !== undefined) {
+        if (workTime.length >= 0) {
             handleDataChange('workTime', jsonToString(workTime, workSwitch));
         }
     }, [workTime]);
 
     React.useEffect(() => {
-        if (cookingTime !== undefined) {
+        if (cookingTime.length >= 0) {
             handleDataChange('cookingTime', jsonToString(cookingTime, cookSwitch));
         }
     }, [cookingTime]);
 
     React.useEffect(() => {
         if (cookingTime) {
-            const result = jsonToString(cookingTime, cookSwitch)
-            console.log(result)
-            if (result !== null) {
-                console.log(result)
-                handleDataChange('cookingTime', result);
-            }
+            // console.log(cookingTime)
+            handleDataChange('cookingTime', jsonToString(cookingTime, cookSwitch));
         }
     }, [cookSwitch]);
 
     React.useEffect(() => {
         if (workTime) {
-            const result = jsonToString(workTime, workSwitch)
-            if (result !== null) {
-                handleDataChange('workTime', result);
-            }
+            handleDataChange('workTime', jsonToString(workTime, workSwitch));
         }
     }, [workSwitch]);
 
     React.useEffect(() => {
         if (potionSize) {
-            const result = jsonToString(potionSize, potionSwitch)
-            if (result !== null) {
-                handleDataChange('potionTime', result);
-            }
+            handleDataChange('potionTime', jsonToString(potionSize, potionSwitch));
         }
     }, [potionSwitch]);
 
 
 
     const handleDataChange = (dataValue, newValue) => {
-
         if (newValue) {
-            console.log(dataValue)
-            console.log(newValue)
+            // console.log(dataValue, newValue)
             // Erstelle ein neues Objekt, das eine Kopie der aktuellen Daten enthält
             const updatedData = { ...data };
             // Aktualisiere das Objekt mit dem neuen Wert für den angegebenen Schlüssel (dataValue)
@@ -265,85 +244,45 @@ export default function Overview({ route }) {
 
 
     return (
-        <TouchableWithoutFeedback onPress={handleBackgroundPress}>
-            <View style={styles.container}>
-                {/* <Button title='Klick mich' onPress={() => { getAllKeys().then((data) => { console.log(data) }); }} /> */}
-                <TextInput
-                    style={[styles.input, { backgroundColor: theme.colors.color }]}
-                    label="Titel"
-                    ref={inputRef}
-                    value={title ? title : fetchedRecept.title}
-                    onChangeText={title => { setTitle(title) }}
-                />
-                <View style={styles.chipContainer} >
-                    <Text>Rezeptart:</Text>
-                    <ReceptTypeChips handleDataChange={handleDataChange} selectedChipType={fetchedRecept?.description?.receptType} />
-                </View>
-                <View style={styles.chipContainer}>
-                    <Text>Kategorie:</Text>
-                    <CategoryChips handleDataChange={handleDataChange} selectedChipCat={fetchedRecept?.description?.category} />
-                </View>
-                <View style={styles.chipContainer}>
-                    <Text>Sammlungen:</Text>
-                    <CollectionChips handleDataChange={handleDataChange} selectedChipCol={fetchedRecept?.description?.collection} />
-                </View>
-                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', marginTop: 12 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <TextInput
-                            style={[styles.input, { backgroundColor: theme.colors.color }]}
-                            label={
-                                potionSize ? null : (
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                        <Icon name='account-outline' size={20} color='rgba(0, 0, 0, 0.3)' />
-                                    </View>
-                                )
-                            }
-                            ref={inputRef}
-                            keyboardType='phone-pad'
-                            value={potionSize ? potionSize : stringToJson(fetchedRecept?.description?.potionSize)?.crowd}
-                            onChangeText={potionSize => { setPotionSize(potionSize) }}
-                        />
-                        <Switcher title={potionSwitch} setSwitch={setPotionSwtich} prop={'potion'} />
-
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
+            >
+                <TouchableWithoutFeedback onPress={handleBackgroundPress}>
+                    <View style={styles.container}>
+                        {/* <Button title='Klick mich' onPress={() => { getAllKeys().then((data) => { console.log(data) }); }} /> */}
+                        <OverviewInput title={'title'} titleValue={title} setValue={setTitle} inputRef={inputRef} />
+                        <View style={styles.chipContainer} >
+                            <Text>Rezeptart:</Text>
+                            <ReceptChips title={'types'} handleDataChange={handleDataChange} selectedChips={fetchedRecept?.description?.receptType} />
+                        </View>
+                        <View style={styles.chipContainer}>
+                            <Text>Kategorie:</Text>
+                            <ReceptChips title={'category'} handleDataChange={handleDataChange} selectedChips={fetchedRecept?.description?.category} />
+                        </View>
+                        <View style={styles.chipContainer}>
+                            <Text>Sammlungen:</Text>
+                            <ReceptChips title={'collection'} handleDataChange={handleDataChange} selectedChips={fetchedRecept?.description?.collection} />
+                        </View>
+                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', marginTop: 12 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <OverviewInput title={'potion'} titleValue={potionSize} setValue={setPotionSize} inputRef={inputRef} />
+                                <Switcher title={potionSwitch} setSwitch={setPotionSwtich} prop={'potion'} />
+                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <OverviewInput title={'work'} titleValue={workTime} setValue={setWorkTime} inputRef={inputRef} />
+                                <Switcher title={workSwitch} setSwitch={setWorkSwitch} prop={'work'} />
+                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <OverviewInput title={'cook'} titleValue={cookingTime} setValue={setCookingTime} inputRef={inputRef} />
+                                <Switcher title={cookSwitch} setSwitch={setCookSwitch} prop={'cook'} />
+                            </View>
+                        </View>
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <TextInput
-                            style={[styles.input, { backgroundColor: theme.colors.color }]}
-                            label={
-                                workTime ? null : (
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                        <Icon name='clock-time-two-outline' size={20} color='rgba(0, 0, 0, 0.3)' />
-                                    </View>
-                                )
-                            }
-                            ref={inputRef}
-                            keyboardType='phone-pad'
-                            value={workTime ? workTime : stringToJson(fetchedRecept?.description?.workTime)?.crowd}
-                            onChangeText={workTime => { setWorkTime(workTime) }}
-                        />
-                        <Switcher title={workSwitch} setSwitch={setWorkSwitch} prop={'work'} />
-                    </View>
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <TextInput
-                            style={[styles.input, { backgroundColor: theme.colors.color }]}
-                            label={
-                                cookingTime ? null : (
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                        <Icon name='pot-mix-outline' size={20} color='rgba(0, 0, 0, 0.3)' />
-                                    </View>
-                                )
-                            }
-                            ref={inputRef}
-                            keyboardType='phone-pad'
-                            value={cookingTime ? cookingTime : stringToJson(fetchedRecept?.description?.cookingTime)?.crowd}
-                            onChangeText={cookingTime => { setCookingTime(cookingTime) }}
-                        />
-                        <Switcher title={cookSwitch} setSwitch={setCookSwitch} prop={'cook'} />
-                    </View>
-                </View>
-            </View>
-        </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 }
 
