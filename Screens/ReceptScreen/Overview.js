@@ -144,8 +144,8 @@ export default function Overview({ route }) {
     const [fetchedRecept, setFetchedRecept] = React.useState({});
     const [workSwitch, setWorkSwitch] = React.useState("min");
     const [cookSwitch, setCookSwitch] = React.useState("min");
-    const [potionSwitch, setPotionSwtich] = React.useState("Person");
-    const { recept } = route.params;
+    const [potionSwitch, setPotionSwitch] = React.useState("Person");
+    // const { recept } = route.params;
     const inputRef = React.useRef(null);
     const { data, updateData } = useData();
 
@@ -154,36 +154,62 @@ export default function Overview({ route }) {
         Keyboard.dismiss();
     };
 
-    React.useEffect(() => {
-        if (recept) {
-            console.log(recept)
-            fetchData(recept).then((data) => {
-                setFetchedRecept(data);
-                receptForAll = data;
-                fetchedReceptCompleted = true;
-            });
-        };
-    }, [])
-
-    React.useEffect(() => {
-        if (fetchedRecept.length < 0) {
-            const potion = stringToJson(fetchedRecept?.description?.potionSize);
-            const work = stringToJson(fetchedRecept?.description?.workTime);
-            const cook = stringToJson(fetchedRecept?.description?.cookingTime);
-
-            setTitle(fetchedRecept.title);
-
-            setPotionSize(potion.crowd);
-            setPotionSwtich(potion.unit);
-
-            setWorkTime(work.crowd);
-            setWorkSwitch(work.unit);
-
-            setCookingTime(cook.crowd);
-            setCookSwitch(cook.unit);
+    const handleDataChange = (dataValue, newValue) => {
+        if (newValue) {
+            // console.log(dataValue, newValue)
+            // Erstelle ein neues Objekt, das eine Kopie der aktuellen Daten enthält
+            const updatedData = { ...data };
+            // Aktualisiere das Objekt mit dem neuen Wert für den angegebenen Schlüssel (dataValue)
+            updatedData[dataValue] = newValue;
+            // Aktualisiere die Daten im Kontext mit dem aktualisierten Objekt
+            updateData(updatedData);
         }
+    };
+    // React.useEffect(() => {
+    //     if (recept) {
+    //         console.log(recept)
+    //         fetchData(recept).then((data) => {
+    //             setFetchedRecept(data);
+    //             receptForAll = data;
+    //             fetchedReceptCompleted = true;
+    //         });
+    //     };
+    // }, [])
 
-    }, [fetchedRecept]);
+    // React.useEffect(() => {
+    //     if (fetchedRecept.length < 0) {
+    //         const potion = stringToJson(fetchedRecept?.description?.potionSize);
+    //         const work = stringToJson(fetchedRecept?.description?.workTime);
+    //         const cook = stringToJson(fetchedRecept?.description?.cookingTime);
+
+    //         setTitle(fetchedRecept.title);
+
+    //         setPotionSize(potion.crowd);
+    //         setPotionSwitch(potion.unit);
+
+    //         setWorkTime(work.crowd);
+    //         setWorkSwitch(work.unit);
+
+    //         setCookingTime(cook.crowd);
+    //         setCookSwitch(cook.unit);
+    //     }
+
+    // }, [fetchedRecept]);
+
+    React.useEffect(() => {
+        if (data.isFetched) {
+            setTitle(data.title);
+            setPotionSize(stringToJson(data.potionSize).crowd);
+            setPotionSwitch(stringToJson(data.potionSize).unit);
+            setWorkTime(stringToJson(data.workTime).crowd);
+            setWorkSwitch(stringToJson(data.workTime).unit);
+            setCookingTime(stringToJson(data.cookingTime).crowd);
+            setCookSwitch(stringToJson(data.cookingTime).unit);
+            handleDataChange('isFetched', false)
+        }
+    }, [data.isFetched])
+
+
 
     React.useEffect(() => {
         if (title.length >= 0) {
@@ -193,7 +219,12 @@ export default function Overview({ route }) {
 
     React.useEffect(() => {
         if (potionSize.length >= 0) {
-            handleDataChange('potionSize', jsonToString(potionSize, potionSwitch));
+            let value = potionSwitch
+            if (potionSize >= 2) {
+                value += 'en';
+            }
+            console.log(value)
+            handleDataChange('potionSize', jsonToString(potionSize, value));
         }
     }, [potionSize]);
 
@@ -224,24 +255,14 @@ export default function Overview({ route }) {
 
     React.useEffect(() => {
         if (potionSize) {
-            handleDataChange('potionTime', jsonToString(potionSize, potionSwitch));
+            let value = potionSwitch;
+            if (potionSize >= 2) {
+                value += 'en';
+            }
+            console.log(value)
+            handleDataChange('potionSize', jsonToString(potionSize, value));
         }
     }, [potionSwitch]);
-
-
-
-    const handleDataChange = (dataValue, newValue) => {
-        if (newValue) {
-            // console.log(dataValue, newValue)
-            // Erstelle ein neues Objekt, das eine Kopie der aktuellen Daten enthält
-            const updatedData = { ...data };
-            // Aktualisiere das Objekt mit dem neuen Wert für den angegebenen Schlüssel (dataValue)
-            updatedData[dataValue] = newValue;
-            // Aktualisiere die Daten im Kontext mit dem aktualisierten Objekt
-            updateData(updatedData);
-        }
-    };
-
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -255,20 +276,20 @@ export default function Overview({ route }) {
                         <OverviewInput title={'title'} titleValue={title} setValue={setTitle} inputRef={inputRef} />
                         <View style={styles.chipContainer} >
                             <Text>Rezeptart:</Text>
-                            <ReceptChips title={'types'} handleDataChange={handleDataChange} selectedChips={fetchedRecept?.description?.receptType} />
+                            <ReceptChips title={'types'} handleDataChange={handleDataChange} selectedChips={data?.chipType} />
                         </View>
                         <View style={styles.chipContainer}>
                             <Text>Kategorie:</Text>
-                            <ReceptChips title={'category'} handleDataChange={handleDataChange} selectedChips={fetchedRecept?.description?.category} />
+                            <ReceptChips title={'category'} handleDataChange={handleDataChange} selectedChips={data?.chipsCategory} />
                         </View>
                         <View style={styles.chipContainer}>
                             <Text>Sammlungen:</Text>
-                            <ReceptChips title={'collection'} handleDataChange={handleDataChange} selectedChips={fetchedRecept?.description?.collection} />
+                            <ReceptChips title={'collection'} handleDataChange={handleDataChange} selectedChips={data?.chipsCollection} />
                         </View>
                         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', marginTop: 12 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <OverviewInput title={'potion'} titleValue={potionSize} setValue={setPotionSize} inputRef={inputRef} />
-                                <Switcher title={potionSwitch} setSwitch={setPotionSwtich} prop={'potion'} />
+                                <Switcher title={potionSwitch} setSwitch={setPotionSwitch} prop={'potion'} many={potionSize >= 2} howMany={potionSize} />
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <OverviewInput title={'work'} titleValue={workTime} setValue={setWorkTime} inputRef={inputRef} />

@@ -6,6 +6,8 @@ import { isFetchedRecept, saveInStorage } from './Overview';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getRecept } from './Overview';
 import Switcher from '../modals/Switcher';
+import { useData } from '../modals/DataProvider';
+
 
 let defaultSections = [
     {
@@ -137,6 +139,8 @@ export default function IngredientsScreen({ navigation }) {
     const [sections, setSections] = React.useState(defaultSections);
     const [unitSwitch, setUnitSwitch] = React.useState('g');
     const theme = useTheme();
+    const { data, updateData } = useData();
+
 
     React.useEffect(() => {
         const loadSections = async () => {
@@ -149,15 +153,33 @@ export default function IngredientsScreen({ navigation }) {
             };
         };
         loadSections();
-        if (isFetchedRecept() === true) {
-            const recept = getRecept();
-            setSectionArray(recept?.description?.receptArray);
-        }
+        // if (isFetchedRecept() === true) {
+        //     const recept = getRecept();
+        //     setSectionArray(recept?.description?.receptArray);
+        // }
 
     }, []);
 
+    const handleDataChange = (dataValue, newValue) => {
+        if (newValue) {
+            // console.log(dataValue, newValue)
+            // Erstelle ein neues Objekt, das eine Kopie der aktuellen Daten enthält
+            const updatedData = { ...data };
+            // Aktualisiere das Objekt mit dem neuen Wert für den angegebenen Schlüssel (dataValue)
+            updatedData[dataValue] = newValue;
+            // Aktualisiere die Daten im Kontext mit dem aktualisierten Objekt
+            updateData(updatedData);
+        }
+    };
+
     React.useEffect(() => {
-        saveInStorage('receptArray', sectionArray);
+        if (data.isFetched) {
+            setSectionArray(data.receptArray)
+        }
+    }, [data.isFetched])
+
+    React.useEffect(() => {
+        handleDataChange('receptArray', sectionArray);
     }, [sectionArray]);
 
     return (
@@ -246,7 +268,6 @@ export default function IngredientsScreen({ navigation }) {
                     </View>
 
                     <View style={{ width: '40%', marginTop: 8, marginLeft: 4 }}>
-                        {/* {console.log('---- S ', sectionIndex, '--- I ', ingredIndex)} */}
                         <View>
                             <Text>{accordionTitle}</Text>
                             <IngredientList ingredients={ingredArray} />
@@ -256,7 +277,7 @@ export default function IngredientsScreen({ navigation }) {
                             <ScrollView>
                                 {sectionArray?.map((item, index) =>
                                     <View style={{ marginTop: 16, marginRight: 8, marginLeft: 4, padding: 4, borderWidth: 2, borderColor: 'black' }} key={index}>
-                                        <Text>{item.title} </Text>
+                                        <Text style={{ textAlign: 'center' }}>{item.title} </Text>
                                         {item.ingredients.map((item, index) =>
                                             <Text key={index}>- {item}</Text>
                                         )}

@@ -40,7 +40,6 @@ export default function HeaderRightSet({ title, navigation }) {
                     leadingIcon='pencil-outline'
                     title="Bearbeiten"
                     onPress={() => {
-                        console.log(title)
                         navigation.navigate('AddRecept', { title: `${title} bearbeiten`, recept: title });
                         closeMenu();
                     }}

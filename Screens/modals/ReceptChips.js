@@ -37,7 +37,7 @@ export default function ReceptChips({ title, handleDataChange, selectedChips }) 
                 filterChips(chip);
             });
         }
-    }, [selectedChips?.length]);
+    }, [selectedChips]);
 
     React.useEffect(() => {
         if (chips.length !== previousLength.current) {

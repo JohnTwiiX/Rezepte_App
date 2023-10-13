@@ -23,6 +23,22 @@ getAllKeys = async () => {
     // ['@MyApp_user', '@MyApp_key']
 }
 
+getrecepts = async () => {
+    try {
+        let recepts = await AsyncStorage.getItem('recepts');
+        if (recepts) {
+            // Überprüfe, ob das Ergebnis von AsyncStorage nicht null ist
+            recepts = JSON.parse(recepts); // Parsen des JSON-Strings zu einem Array oder Objekt
+            recepts.forEach((item) => {
+                console.log(item);
+            });
+        }
+
+    } catch (e) {
+        console.error(e)
+    }
+}
+
 export default function HomeScreen({ navigation }) {
     useFocusEffect(
         React.useCallback(() => {
@@ -35,10 +51,9 @@ export default function HomeScreen({ navigation }) {
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => navigation.navigate('AddRecept', { title: 'Rezept erstellen' })}
-                onLongPress={() => getAllKeys()}>
+                onLongPress={() => getrecepts()}>
                 <Icon name="add" size={20} color="#fff" />
             </TouchableOpacity>
-
             <View>
                 <CircleButtons />
             </View>

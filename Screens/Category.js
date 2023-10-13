@@ -56,6 +56,9 @@ async function fetchChips(recepts, setCategoryChips, setWorkChips, setCookChips,
 function RenderRecepts(props) {
     const navigation = useNavigation();
     return props.recepts.map((recept, index) => {
+        const potionSize = JSON.parse(recept.description.potionSize)
+        const workTime = JSON.parse(recept.description.workTime)
+        const cookingTime = JSON.parse(recept.description.cookingTime)
         return (
             <TouchableOpacity
                 style={{ margin: 8 }}
@@ -70,13 +73,13 @@ function RenderRecepts(props) {
                                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{recept.title}</Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Icon name='account-outline' size={18} style={{ marginRight: 4 }} />
-                                    <Text>{recept.description.potionSize}</Text>
+                                    <Text>{potionSize.crowd} {potionSize.unit}</Text>
                                     <Text>  |  </Text>
                                     <Icon name='clock-time-two-outline' size={18} style={{ marginRight: 4 }} />
-                                    <Text>{recept.description.workTime}</Text>
+                                    <Text>{workTime.crowd}{workTime.unit}</Text>
                                     <Text>  |  </Text>
                                     <Icon name='pot-mix-outline' size={18} style={{ marginRight: 4 }} />
-                                    <Text>{recept.description.cookingTime}</Text>
+                                    <Text>{cookingTime.crowd}{cookingTime.unit}</Text>
                                 </View>
                             </View>
                         </View>
@@ -168,9 +171,7 @@ export default function CategoryScreen({ navigation, route }) {
     }, [selectedChips]);
 
     React.useEffect(() => {
-        console.log('wird getriggert')
         if (route.params?.showDialog) {
-            console.log('öffnet Dialog')
             setVisibleDialog(true);
             // Reset showDialog after opening the dialog
             navigation.setParams({ showDialog: false });

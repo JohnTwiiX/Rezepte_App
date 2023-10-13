@@ -5,6 +5,7 @@ import { getRecept, getStorage, isFetchedRecept, setFetchedReceptCompleted } fro
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sectionArray } from './Ingredients';
+import { useData } from '../modals/DataProvider';
 
 // async function saveRecept(recept) {
 //     try {
@@ -48,22 +49,22 @@ async function saveRecept(recept) {
     }
 }
 
-async function saveMultiple(inputValues) {
-    const values = await AsyncStorage.multiGet(['title', 'selectedRezeptart', 'selectedKategorie', 'selectedSammlung', 'potionSize', 'workTime', 'cookingTime', 'receptArray']);
-    const valueObject = {};
-    values.forEach(([key, value]) => {
-        valueObject[key] = value;
-    });
+async function saveMultiple(data, inputValues) {
+    // const values = await AsyncStorage.multiGet(['title', 'types', 'category', 'collection', 'potionSize', 'workTime', 'cookingTime', 'receptArray']);
+    // const valueObject = {};
+    // values.forEach(([key, value]) => {
+    //     valueObject[key] = value;
+    // });
     const recept = {
-        title: valueObject.title,
+        title: data.title,
         description: {
-            receptType: JSON.parse(valueObject.selectedRezeptart),
-            category: JSON.parse(valueObject.selectedKategorie),
-            collection: JSON.parse(valueObject.selectedSammlung),
-            potionSize: valueObject.potionSize,
-            workTime: valueObject.workTime,
-            cookingTime: valueObject.cookingTime,
-            receptArray: JSON.parse(valueObject.receptArray),
+            receptType: data.chipType,
+            category: data.chipsCategory,
+            collection: data.chipsCollection,
+            potionSize: data.potionSize,
+            workTime: data.workTime,
+            cookingTime: data.cookingTime,
+            receptArray: data.receptArray,
             preparation: inputValues,
         },
     }
@@ -86,9 +87,9 @@ async function removeAllExcept(keysToKeep) {
 //     removeAllExcept(keysToKeep);
 // }
 
-export async function saveAll(inputValues) {
+export async function saveAll(data, inputValues) {
     if (inputValues) {
-        await saveMultiple(inputValues);
+        await saveMultiple(data, inputValues);
     }
     const keysToKeep = ['types', 'category', 'collection', 'sections', 'recepts'];
     await removeAllExcept(keysToKeep);
@@ -97,32 +98,23 @@ export async function saveAll(inputValues) {
 
 
 export default function PreparationsScreen({ navigation }) {
-    const [sections, setSections] = React.useState([]);
-    const [inputValues, setInputValues] = React.useState({});
+    const [inputValues, setInputValues] = React.useState([]);
     const [missingValues, setMissingValues] = React.useState([]);
     const [visibleDialog, setVisibleDialog] = React.useState(false);
     const [dialogSave, setDialogSave] = React.useState(false);
     const theme = useTheme();
-    useFocusEffect(
-        React.useCallback(() => {
-            async function fetchData() {
-                const data = await getStorage('receptArray');
-                if (data) {
-                    setSections(data);
-                    if (isFetchedRecept() === true) {
-                        const recept = getRecept();
-                        setInputValues(recept.description.preparation);
-                    }
-                }
-            }
-            fetchData();
-        }, []),
-    );
+    const { data } = useData();
+
+    React.useEffect(() => {
+        if (data.isFetched) {
+            setInputValues(data.preparation)
+        }
+    }, [data.isFetched])
 
     return (
         <View style={{ flex: 1, margin: 8 }}>
             <List.Section style={{}}>
-                {sections.map((item, index) =>
+                {data.receptArray.map((item, index) =>
                     <List.Accordion
                         key={index}
                         title={item.title}
@@ -145,22 +137,16 @@ export default function PreparationsScreen({ navigation }) {
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: theme.colors.button }]}
                     onPress={async () => {
-                        const values = await AsyncStorage.multiGet(['title', 'selectedRezeptart', 'selectedKategorie', 'potionSize', 'workTime', 'receptArray']);
-                        const valueObject = {};
-                        values.forEach(([key, value]) => {
-                            valueObject[key] = value;
-                        });
-
-                        if (!valueObject.title || !valueObject.selectedRezeptart || !valueObject.selectedKategorie || !valueObject.potionSize || !valueObject.workTime || !valueObject.receptArray) {
-                            const missing = [];
-                            if (!valueObject.title) missing.push('Titel');
-                            if (!valueObject.selectedRezeptart) missing.push('Rezeptart');
-                            if (!valueObject.selectedKategorie) missing.push('Kategorie');
-                            if (!valueObject.potionSize) missing.push('Portionsgröße');
-                            if (!valueObject.workTime) missing.push('Vorbereitunszeit');
-                            if (!valueObject.receptArray || JSON.parse(valueObject.receptArray).length == 0) missing.push('Zutaten');
-                            // console.log(missing)
-                            setMissingValues(missing);
+                        const values = data;
+                        const missings = [];
+                        if (values.title.length === 0) missings.push('Titel');
+                        if (values.chipType.length === 0) missings.push('Rezeptart');
+                        if (values.chipsCategory.length === 0) missings.push('Kategorie');
+                        if (values.potionSize.length === 0) missings.push('Portionsgröße');
+                        if (values.workTime.length === 0) missings.push('Vorbereitunszeit');
+                        if (values.receptArray.length == 0) missings.push('Zutaten');
+                        if (missings.length >= 1) {
+                            setMissingValues(missings);
                             setVisibleDialog(true);
                             return;
                         } else {
@@ -191,8 +177,7 @@ export default function PreparationsScreen({ navigation }) {
                             routes: [{ name: 'Home' }],
                         });
                         // Hier könntest du die Werte in den useStates zurücksetzen:
-                        setSections([]);
-                        saveAll(inputValues);
+                        saveAll(data, inputValues);
                         setFetchedReceptCompleted();
                         setDialogSave(false)
                     }}>Ja</Button>

@@ -9,14 +9,22 @@ import { useTheme } from 'react-native-paper';
 import { DataProvider } from './modals/DataProvider';
 
 
+
 const TabRecept = createMaterialTopTabNavigator();
+
+
 
 
 export default function AddReceptScreen({ route }) {
     const theme = useTheme();
+
+    const recept = route.params.recept;
+
+
+
     return (
         <SafeAreaView style={{ height: '100%' }}>
-            <DataProvider>
+            <DataProvider recept={recept}>
                 <TabRecept.Navigator
                     screenOptions={{
                         tabBarIndicatorStyle: {

@@ -13,6 +13,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HeaderRightSet from './modals/HeaderRightSet';
 import CategoryFilter from './modals/CategoryFilter';
 import { useTheme } from 'react-native-paper';
+import AddReceptBtn from './modals/AddReceptBtn';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -60,9 +61,12 @@ export default function NavigationBar() {
                                 <HomeStack.Screen
                                     name="Home"
                                     component={HomeScreen}
-                                    options={{
+                                    options={({ route, navigation }) => ({
                                         title: "Sandra's Awesome Rezepte App",
-                                    }} >
+                                        headerRight: () => (
+                                            <AddReceptBtn navigation={navigation} />
+                                        ),
+                                    })}>
                                 </HomeStack.Screen>
                                 <HomeStack.Screen
                                     name="AddRecept"
@@ -91,8 +95,7 @@ export default function NavigationBar() {
                                         headerRight: () => (
                                             <HeaderRightSet title={route.params.title} navigation={navigation} />
                                         ),
-                                    })}
-                                >
+                                    })}>
                                 </HomeStack.Screen>
                             </HomeStack.Navigator>
                         )}

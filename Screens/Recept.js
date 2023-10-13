@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-nat
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Avatar, Card, Text, Dialog, Button, Chip } from 'react-native-paper';
+import { Avatar, Card, Text, Dialog, Button, Chip, ActivityIndicator, useTheme } from 'react-native-paper';
 import { getStorage } from './ReceptScreen/Overview';
 
 async function fetchData(title, setRecepts, setIsLoading) {
@@ -16,7 +16,7 @@ async function fetchData(title, setRecepts, setIsLoading) {
         // console.log(mainDishes.description.category)
     }
 }
-function RenderChips({ chips }) {
+function RenderChips({ chips, potion }) {
     if (typeof chips === 'string') {
         return (
             <Chip
@@ -24,9 +24,8 @@ function RenderChips({ chips }) {
                 mode="outlined"
                 style={[{ width: 'auto', height: 30, borderRadius: 25, margin: 6 }, { backgroundColor: 'rgb(232,225,237)' }]}
                 selected={true}
-
             >
-                {chips}
+                <Text>{JSON.parse(chips).crowd}{potion && ' '}{JSON.parse(chips).unit}</Text>
             </Chip>
         )
     } if (chips) {
@@ -51,6 +50,8 @@ function RenderChips({ chips }) {
 export default function ReceptScreen({ route }) {
     const [isLoading, setIsLoading] = React.useState(true);
     const [recepts, setRecepts] = React.useState({});
+    const theme = useTheme();
+
 
     const { title } = route.params;
     useFocusEffect(
@@ -62,121 +63,91 @@ export default function ReceptScreen({ route }) {
 
 
     return (
-        <View style={{ flex: 1 }}>
-            <View style={{ display: 'flex', justifyContent: 'space-between', padding: 16, flexDirection: 'row' }}>
-                {/* <TouchableOpacity
-                    style={{ width: 24 }}
-                    onPress={() => navigation.navigate('AddRecept', { recept: title })}>
-                    <Icon name="pencil" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity style={{ width: 24 }}
-                    onPress={() => console.log('nice')}>
-                    <Icon name="trash-outline" size={24} color="black" />
-                </TouchableOpacity> */}
-            </View>
-            <View>
+        <View style={{ flex: 1, padding: 8 }}>
+            <ScrollView >
                 {isLoading ?
                     (
-                        <View>
-                            <Text>No data to display</Text>
+                        <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                            <ActivityIndicator animating={true} size={240} color={theme.colors.primary} />
                         </View>
-                    ) : (
-                        <View style={{ flexDirection: 'row' }}>
-                            <ScrollView style={{ width: '50%', backgroundColor: 'yellow' }}>
-                                <View >
-                                    <View><Text>Zutaten:</Text>
-                                        {recepts.description.receptArray.map((item, index) =>
-                                            <View key={index}>
-                                                <Text >{item.title}</Text>
-                                                <View>
-                                                    {item.ingredients.map((ingred, index) =>
-                                                        // {ingred.map}
-                                                        <Text key={index}>{ingred}</Text>
-                                                    )}
-                                                </View>
-                                            </View>
-                                        )}
-                                    </View>
-                                </View>
-                            </ScrollView>
-                            {recepts.description.preparation ? (
-                                <ScrollView style={{ width: '50%' }}>
-                                    <View style={{}}>
-                                        <View><Text>Zubereitung:</Text>
-                                            {recepts.description.receptArray.map((item, index) =>
-                                                <View key={index}>
-                                                    <Text
 
-                                                        style={{ borderBottomColor: 'black', borderBottomWidth: 2 }}>{item.title}</Text>
-                                                    <View>
-                                                        <Text key={index}>{recepts.description.preparation[item.title]}</Text>
-                                                    </View>
-                                                </View>
+                    ) : (
+                        <View>
+                            <View>
+                                <Image style={{ width: '100%', height: 240, borderRadius: 10 }} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
+                            </View>
+                            <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 16 }}>
+                                <View style={{ width: '50%' }}>
+                                    <Text style={{ fontSize: 26 }}>Zutaten:</Text>
+                                </View>
+                                <View style={{ width: '50%' }}>
+                                    <Text style={{ fontSize: 26 }}>Zubereitung:</Text>
+                                </View>
+                            </View>
+                            {recepts.description.receptArray.map((item, index) =>
+                                <View key={index}>
+                                    <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'rgba(0,0,0,0.5)' }}><Text style={{ textAlign: 'center', fontSize: 22 }}>{item.title}</Text></View>
+                                    <View style={{ flexDirection: 'row', padding: 8 }}>
+                                        <View style={{ width: '50%', minHeight: 250 }}>
+                                            {item.ingredients.map((ingred, index) =>
+                                                <Text key={index} style={{ fontSize: 18 }}>{ingred}</Text>
                                             )}
                                         </View>
+                                        <View style={{ width: '50%' }}>
+                                            <Text style={{ fontSize: 18 }} key={index}>{recepts.description.preparation[item.title]}</Text>
+                                        </View>
                                     </View>
-                                </ScrollView>
-                            ) :
-                                <View style={{ width: '50%' }}>
-                                    <Text>No data to display</Text>
                                 </View>
-                            }
+                            )}
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 24 }}>
+                                <View style={styles.m_8}>
+                                    <Text>Rezeptart:</Text>
+                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <RenderChips chips={recepts.description.receptType} />
+                                    </View>
+                                </View>
+                                <View style={styles.m_8}>
+                                    <Text>Kategorie:</Text>
+                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <RenderChips chips={recepts.description.category} />
+                                    </View>
+                                </View>
+                                <View style={styles.m_8}>
+                                    <Text>Sammlung:</Text>
+                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <RenderChips chips={recepts.description.collection} />
+                                    </View>
+                                </View>
+                                <View style={styles.m_8}>
+                                    <Text>Arbeitszeit:</Text>
+                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <RenderChips chips={recepts.description.workTime} />
+                                    </View>
+                                </View>
+                                <View style={styles.m_8}>
+                                    <Text>Kochzeit:</Text>
+                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <RenderChips chips={recepts.description.cookingTime} />
+                                    </View>
+                                </View>
+                                <View style={styles.m_8}>
+                                    <Text>Portionsgröße:</Text>
+                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                        <RenderChips chips={recepts.description.potionSize} potion={true} />
+                                    </View>
+                                </View>
+                            </View>
                         </View>
                     )
                 }
-            </View>
-            {isLoading ? (
-                <View style={{ width: '50%' }}>
-                    <Text>No data to display</Text>
-                </View>
-            ) : (
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                    <View style={styles.m_8}>
-                        <Text>Rezeptart:</Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={recepts.description.receptType} />
-                        </View>
-                    </View>
-                    <View style={styles.m_8}>
-                        <Text>Kategorie:</Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={recepts.description.category} />
-                        </View>
-                    </View>
-                    <View style={styles.m_8}>
-                        <Text>Sammlung:</Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={recepts.description.collection} />
-                        </View>
-                    </View>
-                    <View style={styles.m_8}>
-                        <Text>Arbeitszeit:</Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={recepts.description.workTime} />
-                        </View>
-                    </View>
-                    <View style={styles.m_8}>
-                        <Text>Kochzeit:</Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={recepts.description.cookingTime} />
-                        </View>
-                    </View>
-                    <View style={styles.m_8}>
-                        <Text>Portionsgröße:</Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={recepts.description.potionSize} />
-                        </View>
-                    </View>
-                </View>
-            )}
-
+            </ScrollView>
         </View >
     );
 }
 
 const styles = StyleSheet.create({
     m_8: {
-        margin: 8
+        margin: 4
     },
 
 });
