@@ -1,10 +1,16 @@
 import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { View, StyleSheet, Dimensions, ScrollView, Image } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Avatar, Card, Text, Dialog, Button, Chip, ActivityIndicator, useTheme } from 'react-native-paper';
 import { getStorage } from './ReceptScreen/Overview';
+import { ScrollView as GHScrollView } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ReceptMinDrawer from './modals/ReceptMinDrawer';
+import ReceptMaxDrawer from './modals/ReceptMaxDrawer';
+
+
+const icons = ['clock-time-two-outline', 'pot-mix-outline']
 
 async function fetchData(title, setRecepts, setIsLoading) {
     setIsLoading(true);
@@ -16,16 +22,25 @@ async function fetchData(title, setRecepts, setIsLoading) {
         // console.log(mainDishes.description.category)
     }
 }
-function RenderChips({ chips, potion }) {
+function RenderChips({ chips, type, crowd }) {
     if (typeof chips === 'string') {
+        let value = JSON.parse(chips).crowd
+        let valueInt = parseInt(value)
+        let result = valueInt + crowd
+        // console.log(result)
+        let cookWork = false;
+        if (type === 'work' || type === 'cook') cookWork = true;
         return (
             <Chip
                 // key={index}
                 mode="outlined"
-                style={[{ width: 'auto', height: 30, borderRadius: 25, margin: 6 }, { backgroundColor: 'rgb(232,225,237)' }]}
-                selected={true}
-            >
-                <Text>{JSON.parse(chips).crowd}{potion && ' '}{JSON.parse(chips).unit}</Text>
+                style={[{ width: 'auto', height: 34, borderRadius: 25, margin: 6 }, { backgroundColor: 'rgb(232,225,237)' }]}>
+                <View style={{ flexDirection: 'row' }}>
+                    {type === 'work' && <Icon name={'clock-time-two-outline'} size={20} color='rgba(0, 0, 0, 0.3)' style={{ marginRight: 8 }} />}
+                    {type === 'cook' && <Icon name={'pot-mix-outline'} size={20} color='rgba(0, 0, 0, 0.3)' style={{ marginRight: 8 }} />}
+                    <Text>{cookWork && JSON.parse(chips).crowd}{type === 'potion' && result}{type === 'potion' && ' '}{JSON.parse(chips).unit}</Text>
+                </View>
+
             </Chip>
         )
     } if (chips) {
@@ -35,9 +50,7 @@ function RenderChips({ chips, potion }) {
                     key={index}
                     mode="outlined"
                     style={[{ width: 'auto', height: 30, borderRadius: 25, margin: 6 }, { backgroundColor: 'rgb(232,225,237)' }]}
-                    selected={true}
-
-                >
+                    selected={true}>
                     {item}
                 </Chip>
             );
@@ -48,10 +61,12 @@ function RenderChips({ chips, potion }) {
 
 
 export default function ReceptScreen({ route }) {
+    const screenWidth = Dimensions.get('window').width;
     const [isLoading, setIsLoading] = React.useState(true);
     const [recepts, setRecepts] = React.useState({});
+    const [crowdResult, setCrowdResult] = React.useState(0)
+    const [crowd, setCrowd] = React.useState(0);
     const theme = useTheme();
-
 
     const { title } = route.params;
     useFocusEffect(
@@ -59,7 +74,43 @@ export default function ReceptScreen({ route }) {
             fetchData(title, setRecepts, setIsLoading);
         }, []),
     );
-    const navigation = useNavigation();
+
+    const plusCrowd = () => {
+        const newCrowd = crowd + 1;
+        console.log(newCrowd);
+        setCrowd(newCrowd);
+        setCrowdResult(newCrowd);
+    }
+
+    const minusCrowd = () => {
+        const newCrowd = crowd - 1;
+        console.log(newCrowd);
+        setCrowd(newCrowd);
+        setCrowdResult(newCrowd);
+    }
+
+    const handleCrow = (crows) => {
+        console.log(crows)
+        let filterCrowd = crows[0];
+        if (typeof filterCrowd === Number) filterCrowd = parseInt(crows[0]);
+        if (crows[1] === ' ') {
+            if (crowdResult === 0) {
+                return `${filterCrowd} ${crows[2]}`
+            } else if (crowd === -1) {
+                return `${filterCrowd / 2} ${crows[2]}`
+            } else {
+                return `${filterCrowd * (crowd + 1)} ${crows[2]}`
+            }
+        } else {
+            if (crowdResult === 0) {
+                return `${filterCrowd} ${crows[1]}`
+            } else if (crowd === -1) {
+                return `${filterCrowd / 2} ${crows[1]}`
+            } else {
+                return `${filterCrowd * (crowd + 1)} ${crows[1]}`
+            }
+        }
+    }
 
 
     return (
@@ -76,67 +127,32 @@ export default function ReceptScreen({ route }) {
                             <View>
                                 <Image style={{ width: '100%', height: 240, borderRadius: 10 }} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
                             </View>
-                            <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 16 }}>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 26 }}>Zutaten:</Text>
-                                </View>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 26 }}>Zubereitung:</Text>
-                                </View>
-                            </View>
-                            {recepts.description.receptArray.map((item, index) =>
-                                <View key={index}>
-                                    <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'rgba(0,0,0,0.5)' }}><Text style={{ textAlign: 'center', fontSize: 22 }}>{item.title}</Text></View>
-                                    <View style={{ flexDirection: 'row', padding: 8 }}>
-                                        <View style={{ width: '50%', minHeight: 250 }}>
-                                            {item.ingredients.map((ingred, index) =>
-                                                <Text key={index} style={{ fontSize: 18 }}>{ingred}</Text>
-                                            )}
+                            <View>
+                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-around' }}>
+                                    <View style={styles.m_8}>
+                                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                            <RenderChips chips={recepts.description.workTime} type={'work'} />
                                         </View>
-                                        <View style={{ width: '50%' }}>
-                                            <Text style={{ fontSize: 18 }} key={index}>{recepts.description.preparation[item.title]}</Text>
+                                    </View>
+                                    <View style={styles.m_8}>
+                                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                            <RenderChips chips={recepts.description.cookingTime} type={'cook'} />
                                         </View>
                                     </View>
                                 </View>
+                                <View style={[styles.m_8, { alignItems: 'center' }]}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Icon name='minus' size={16} onPress={minusCrowd} />
+                                        <RenderChips chips={recepts.description.potionSize} type={'potion'} crowd={crowd} />
+                                        <Icon name='plus' size={16} onPress={plusCrowd} />
+                                    </View>
+                                </View>
+                            </View>
+                            {screenWidth <= 1080 ? (
+                                <ReceptMinDrawer recepts={recepts} handleCrow={handleCrow} />
+                            ) : (
+                                <ReceptMaxDrawer recepts={recepts} handleCrow={handleCrow} />
                             )}
-                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 24 }}>
-                                <View style={styles.m_8}>
-                                    <Text>Rezeptart:</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        <RenderChips chips={recepts.description.receptType} />
-                                    </View>
-                                </View>
-                                <View style={styles.m_8}>
-                                    <Text>Kategorie:</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        <RenderChips chips={recepts.description.category} />
-                                    </View>
-                                </View>
-                                <View style={styles.m_8}>
-                                    <Text>Sammlung:</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        <RenderChips chips={recepts.description.collection} />
-                                    </View>
-                                </View>
-                                <View style={styles.m_8}>
-                                    <Text>Arbeitszeit:</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        <RenderChips chips={recepts.description.workTime} />
-                                    </View>
-                                </View>
-                                <View style={styles.m_8}>
-                                    <Text>Kochzeit:</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        <RenderChips chips={recepts.description.cookingTime} />
-                                    </View>
-                                </View>
-                                <View style={styles.m_8}>
-                                    <Text>Portionsgröße:</Text>
-                                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                                        <RenderChips chips={recepts.description.potionSize} potion={true} />
-                                    </View>
-                                </View>
-                            </View>
                         </View>
                     )
                 }

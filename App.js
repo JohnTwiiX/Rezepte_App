@@ -4,6 +4,8 @@ import NavigationBar from './Screens/NavigationBar';
 import { StatusBar } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import FullScreen from './utils/FullScreen'; // Import FullScreen module
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 // const customTheme = {
 //   ...DefaultTheme,
@@ -92,10 +94,12 @@ export default function App() {
   }, []);
   return (
     <SafeAreaView style={{ flex: 1, }}>
-      <PaperProvider theme={customTheme}>
-        <StatusBar hidden={true} />
-        <NavigationBar />
-      </PaperProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <PaperProvider theme={customTheme}>
+          <StatusBar hidden={true} />
+          <NavigationBar />
+        </PaperProvider>
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 }
