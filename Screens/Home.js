@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Dialog, Button, RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CircleButtons from './modals/Bubbles';
 import { setFetchedReceptCompleted } from './ReceptScreen/Overview';
@@ -40,6 +41,8 @@ getrecepts = async () => {
 }
 
 export default function HomeScreen({ navigation }) {
+    const [visible, setVisible] = React.useState(false);
+    const [checked, setChecked] = React.useState('');
     useFocusEffect(
         React.useCallback(() => {
             setFetchedReceptCompleted();
@@ -50,13 +53,32 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('AddRecept', { title: 'Rezept erstellen' })}
-                onLongPress={() => getrecepts()}>
+                onPress={() => { setVisible(true) }}
+                onLongPress={() => getAllKeys()}>
                 <Icon name="add" size={20} color="#fff" />
             </TouchableOpacity>
             <View>
                 <CircleButtons />
             </View>
+            <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+                <Dialog.Content>
+                    <Text style={{ fontSize: 22 }}>Was für eine Bubble möchtest du erstellen?</Text>
+                    <RadioButton
+                        value="types"
+                        status={checked === 'types' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked('first')}
+                    />
+                    <RadioButton
+                        value="collection"
+                        status={checked === 'collection' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked('second')}
+                    />
+                </Dialog.Content>
+                <Dialog.Actions>
+                    <Button onPress={() => { setVisible(false) }}>Speichern</Button>
+                    <Button onPress={() => { setVisible(false) }}>Abbrechen</Button>
+                </Dialog.Actions>
+            </Dialog>
         </View>
     );
 }

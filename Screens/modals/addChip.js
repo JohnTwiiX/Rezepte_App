@@ -46,7 +46,7 @@ export default function AddChip({ setArray, variable, title }) {
             </Modal>
             <Chip
                 mode="outlined"
-                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, { backgroundColor: '#e1e1e1' }]}
+                style={[{ width: 'auto', height: 40, borderRadius: 25, margin: 6, justifyContent: 'center' }, { backgroundColor: '#e1e1e1' }]}
                 selected={false}
             // onPress={() => { }}
             >

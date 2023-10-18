@@ -17,10 +17,8 @@ const TabRecept = createMaterialTopTabNavigator();
 
 export default function AddReceptScreen({ route }) {
     const theme = useTheme();
-
     const recept = route.params.recept;
-
-
+    const chip = route.params.chip;
 
     return (
         <SafeAreaView style={{ height: '100%' }}>

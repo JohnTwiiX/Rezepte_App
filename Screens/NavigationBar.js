@@ -63,9 +63,9 @@ export default function NavigationBar() {
                                     component={HomeScreen}
                                     options={({ route, navigation }) => ({
                                         title: "Sandra's Awesome Rezepte App",
-                                        headerRight: () => (
-                                            <AddReceptBtn navigation={navigation} />
-                                        ),
+                                        // headerRight: () => (
+                                        //     <AddReceptBtn navigation={navigation} />
+                                        // ),
                                     })}>
                                 </HomeStack.Screen>
                                 <HomeStack.Screen

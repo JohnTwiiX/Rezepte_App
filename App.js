@@ -26,6 +26,8 @@ const customTheme = {
     ...DefaultTheme.colors,
     surface: "#c2cac2",
     // primary: "#c2cac2",
+    primaryContainer: "#c2cac2",
+    onPrimaryContainer: "black",
     primary: "black",
     backdrop: 'transparent',
     elevation: {

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Avatar, Card, Text, Dialog, Button, Chip, useTheme } from 'react-native-paper';
+import { Avatar, Card, Text, Dialog, Button, Chip, useTheme, FAB } from 'react-native-paper';
 import { getStorage } from './ReceptScreen/Overview';
 
 async function fetchData(title, setRecepts) {
@@ -89,7 +89,7 @@ function RenderRecepts(props) {
         );
     });
 }
-function RenderChips({ chips, selectedChips, setSelectedChips }) {
+function RenderChips({ chips, selectedChips, setSelectedChips, type }) {
     const theme = useTheme()
     return chips.map((item, index) => {
         return (
@@ -97,7 +97,7 @@ function RenderChips({ chips, selectedChips, setSelectedChips }) {
                 key={index}
                 textStyle={selectedChips.includes(item) ? { color: theme.colors.chip.active.color } : 'black'}
                 mode="outlined"
-                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6 }, selectedChips.includes(item) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
+                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6, justifyContent: 'center' }, selectedChips.includes(item) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
                 // onLongPress={() => { setSelectedChips([type]), setModalVisible(true) }}
                 selected={false}
                 onPress={() => {
@@ -108,7 +108,8 @@ function RenderChips({ chips, selectedChips, setSelectedChips }) {
                     }
                 }}
             >
-                {item}
+                {type && item}
+                {!type && `${JSON.parse(item).crowd} ${JSON.parse(item).unit}`}
             </Chip>
         );
     });
@@ -180,18 +181,16 @@ export default function CategoryScreen({ navigation, route }) {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* <View >
-                <TouchableOpacity
-                    onPress={() => { setVisibleDialog(true) }}>
-                    <Text>Filtern nach</Text>
-                </TouchableOpacity>
-
-            </View> */}
             <ScrollView>
                 <View>
                     {selectedChips.length === 0 ? <RenderRecepts recepts={recepts} title={title} /> : <RenderRecepts recepts={filteredRecepts} title={title} />}
                 </View>
             </ScrollView>
+            <FAB
+                icon="plus"
+                style={styles.fab}
+                onPress={() => navigation.navigate('AddRecept', { title: 'Rezept erstellen' })}
+            />
             {/* Dialog um eine Meldung anzuzeigen ##################################################################### */}
             <Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(false)}>
                 <Dialog.Content>
@@ -199,7 +198,7 @@ export default function CategoryScreen({ navigation, route }) {
                     <View >
                         <Text>Kategorie: </Text>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={categoryChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} />
+                            <RenderChips chips={categoryChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} type={true} />
                         </View>
                         <Text>Arbeitszeit: </Text>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
@@ -252,5 +251,11 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 8,
         marginBottom: 8
-    }
+    },
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
+    },
 });

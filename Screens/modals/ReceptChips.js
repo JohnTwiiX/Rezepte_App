@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Chip, useTheme } from 'react-native-paper';
 import AddChip from './AddChip';
 import DeleteChip from './DeleteChip';
@@ -107,17 +107,26 @@ export default function ReceptChips({ title, handleDataChange, selectedChips }) 
     return (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
             {chips.map((type, index) =>
-                <Chip
+                <TouchableWithoutFeedback
                     key={index}
-                    mode='outlined'
-                    selected={false}
-                    textStyle={selectedChip.includes(type) ? { color: theme.colors.chip.active.color } : 'black'}
-                    style={[styles.chip, selectedChip.includes(type) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
-                    onLongPress={() => { setSelectedChip([type]), setModalVisible(true) }}
                     onPress={() => onPressChips(type)}
+                    onLongPress={() => { setSelectedChip([type]); setModalVisible(true); }}
                 >
-                    {type}
-                </Chip>
+                    <View style={styles.chipContainer}>
+                        <Chip
+                            key={index}
+                            mode='outlined'
+                            selected={false}
+                            textStyle={selectedChip.includes(type) ? { color: theme.colors.chip.active.color } : 'black'}
+                            style={[
+                                styles.chip,
+                                selectedChip.includes(type) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }
+                            ]}
+                        >
+                            {type}
+                        </Chip>
+                    </View>
+                </TouchableWithoutFeedback>
             )}
             <AddChip
                 setArray={setChips}
@@ -136,10 +145,10 @@ export default function ReceptChips({ title, handleDataChange, selectedChips }) 
 
 const styles = StyleSheet.create({
     chip: {
-        width: 'auto',
-        height: 50,
+        padding: 4,
         borderRadius: 25,
-        margin: 6
+        margin: 6,
+        justifyContent: 'center'
     },
     chipActive: {
         color: 'white',
