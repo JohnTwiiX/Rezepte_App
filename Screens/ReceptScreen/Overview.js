@@ -214,9 +214,6 @@ export default function Overview({ route }) {
     React.useEffect(() => {
         if (potionSize) {
             let value = potionSwitch;
-            if (potionSize >= 2) {
-                value += 'en';
-            }
             handleDataChange('potionSize', jsonToString(potionSize, value));
         }
     }, [potionSwitch]);

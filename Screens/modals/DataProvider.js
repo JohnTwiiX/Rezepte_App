@@ -47,7 +47,7 @@ export function useData() {
 }
 
 
-export function DataProvider({ children, recept, chip }) {
+export function DataProvider({ children }) {
     const [data, setData] = useState({
         // Overview
         title: '',
@@ -57,51 +57,70 @@ export function DataProvider({ children, recept, chip }) {
         types: '',
         category: [],
         collection: [],
+        imgUri: '',
         // Ingredients
         receptArray: [],
         // preparation
-
         // Settings
-        isFetched: false
+        isFetched: false,
     });
 
-    React.useEffect(() => {
-        if (recept) {
-            fetchData(recept).then((data) => {
-                // setFetchedRecept(data);
-                setData({
-                    // Overview
-                    title: data.title,
-                    potionSize: data.description.potionSize,
-                    workTime: data.description.workTime,
-                    cookingTime: data.description.cookingTime,
-                    types: data.description.receptType,
-                    category: data.description.category,
-                    collection: data.description.collection,
-                    // Ingredients
-                    receptArray: data.description.receptArray,
-                    // preparation
-                    preparation: data.description.preparation,
-                    // Settings
-                    isFetched: true
-                });
+    const setRecept = (recept) => {
+        fetchData(recept).then((data) => {
+            // setFetchedRecept(data);
+            setData({
+                // Overview
+                title: data.title,
+                potionSize: data.description.potionSize,
+                workTime: data.description.workTime,
+                cookingTime: data.description.cookingTime,
+                types: data.description.receptType,
+                category: data.description.category,
+                collection: data.description.collection,
+                imgUri: data.description.imgUri,
+                // Ingredients
+                receptArray: data.description.receptArray,
+                // preparation
+                preparation: data.description.preparation,
+                // Settings
+                isFetched: true,
             });
-        };
-        if (chip) {
-            const updatedData = { ...data };
-            sortChip(chip).then((result) => {
-                updatedData[result] = [chip];
-                updateData(updatedData);
-            });
-        }
-    }, []);
+        });
+    }
+
+    const setChip = (chip) => {
+        const updatedData = { ...data };
+        sortChip(chip).then((result) => {
+            updatedData[result] = [chip];
+            updateData(updatedData);
+        });
+    }
 
     const updateData = (newData) => {
         setData(newData);
     };
 
+    const deleteData = () => {
+        setData({
+            // Overview
+            title: '',
+            potionSize: '',
+            workTime: '',
+            cookingTime: '',
+            types: '',
+            category: [],
+            collection: [],
+            imgUri: '',
+            // Ingredients
+            receptArray: [],
+            // preparation
+            // Settings
+            isFetched: false,
+        })
+    }
+
     return (
-        <DataContext.Provider value={{ data, updateData }}>
+        <DataContext.Provider value={{ data, updateData, setRecept, setChip, deleteData }}>
             {children}
         </DataContext.Provider>
     );

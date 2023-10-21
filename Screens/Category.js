@@ -5,6 +5,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Avatar, Card, Text, Dialog, Button, Chip, useTheme, FAB } from 'react-native-paper';
 import { getStorage } from './ReceptScreen/Overview';
+import { useData } from './modals/DataProvider';
 
 async function fetchData(title, setRecepts) {
     const data = await getStorage('recepts');
@@ -68,7 +69,13 @@ function RenderRecepts(props) {
                     {/* <Card.Cover source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} /> */}
                     <Card.Content>
                         <View style={{ flexDirection: 'row' }}>
-                            <Avatar.Image size={50} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
+                            {recept.description.imgUri.length >= 1
+                                ?
+                                <Avatar.Image size={50} source={{ uri: recept.description.imgUri }} />
+                                :
+                                <Avatar.Image size={50} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
+                            }
+
                             <View style={{ marginLeft: 15 }}>
                                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{recept.title}</Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -159,9 +166,11 @@ export default function CategoryScreen({ navigation, route }) {
     const [visibleDialog, setVisibleDialog] = React.useState(false);
     const [filteredRecepts, setFilteredRecepts] = React.useState([]);
     const { title } = route.params;
+    const { deleteData } = useData();
     useFocusEffect(
         React.useCallback(() => {
             fetchData(title, setRecepts);
+            deleteData();
         }, []),
     );
     React.useEffect(() => {

@@ -111,7 +111,6 @@ export default function ReceptScreen({ route }) {
         }
     }
 
-
     return (
         <View style={{ flex: 1, padding: 8, height: '100%' }}>
             <ScrollView >
@@ -120,11 +119,15 @@ export default function ReceptScreen({ route }) {
                         <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                             <ActivityIndicator animating={true} size={240} color={theme.colors.primary} />
                         </View>
-
                     ) : (
                         <View>
                             <View>
-                                <Image style={{ width: '100%', height: 240, borderRadius: 10 }} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
+                                {recepts.description.imgUri?.length >= 1 ?
+                                    <Image style={{ width: '100%', height: 240, borderRadius: 10 }} source={{ uri: recepts.description.imgUri }} />
+                                    :
+                                    <Image style={{ width: '100%', height: 240, borderRadius: 10 }} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
+                                }
+
                             </View>
                             <View>
                                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-around' }}>

@@ -14,6 +14,8 @@ import HeaderRightSet from './modals/HeaderRightSet';
 import CategoryFilter from './modals/CategoryFilter';
 import { useTheme } from 'react-native-paper';
 import AddReceptBtn from './modals/AddReceptBtn';
+import ImagePickerIcon from './modals/ImagePicker';
+import { DataProvider } from './modals/DataProvider';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -33,7 +35,6 @@ export default function NavigationBar() {
                         tabBarItemStyle: { borderRadius: 100, height: 50 },
                         tabBarStyle: { height: 50 }
                     }}>
-
                     <Tab.Screen
                         name="Basket"
                         component={BasketScreen}
@@ -53,51 +54,56 @@ export default function NavigationBar() {
                             )
                         }}>
                         {() => (
-                            <HomeStack.Navigator screenOptions={{
-                                // headerShown: false,
-                                tabBarShowLabel: false,
-                                headerTitleAlign: 'center'
-                            }}>
-                                <HomeStack.Screen
-                                    name="Home"
-                                    component={HomeScreen}
-                                    options={({ route, navigation }) => ({
-                                        title: "Sandra's Awesome Rezepte App",
-                                        // headerRight: () => (
-                                        //     <AddReceptBtn navigation={navigation} />
-                                        // ),
-                                    })}>
-                                </HomeStack.Screen>
-                                <HomeStack.Screen
-                                    name="AddRecept"
-                                    component={AddReceptScreen}
-                                    options={({ route }) => ({
-                                        title: route.params.title,
-                                    })}  >
-                                </HomeStack.Screen>
-                                <HomeStack.Screen
-                                    name="Category"
-                                    component={CategoryScreen}
-                                    // initialParams={title}
-                                    options={({ route, navigation }) => ({
-                                        title: route.params.title,
-                                        headerRight: () => (
-                                            <CategoryFilter openDialog={() => navigation.setParams({ showDialog: true })} />
-                                        ),
-                                    })}  >
-                                </HomeStack.Screen>
-                                <HomeStack.Screen
-                                    name="Recept"
-                                    component={ReceptScreen}
-                                    options={({ route, navigation }) => ({
-                                        title: route.params.title,
-                                        headerTitleAlign: 'center',
-                                        headerRight: () => (
-                                            <HeaderRightSet title={route.params.title} navigation={navigation} />
-                                        ),
-                                    })}>
-                                </HomeStack.Screen>
-                            </HomeStack.Navigator>
+                            <DataProvider>
+                                <HomeStack.Navigator screenOptions={{
+                                    // headerShown: false,
+                                    tabBarShowLabel: false,
+                                    headerTitleAlign: 'center'
+                                }}>
+                                    <HomeStack.Screen
+                                        name="Home"
+                                        component={HomeScreen}
+                                        options={({ route, navigation }) => ({
+                                            title: "Sandra's Awesome Rezepte App",
+                                            // headerRight: () => (
+                                            //     <AddReceptBtn navigation={navigation} />
+                                            // ),
+                                        })}>
+                                    </HomeStack.Screen>
+                                    <HomeStack.Screen
+                                        name="AddRecept"
+                                        component={AddReceptScreen}
+                                        options={({ route }) => ({
+                                            title: route.params.title,
+                                            headerRight: () => (
+                                                <ImagePickerIcon />
+                                            )
+                                        })}  >
+                                    </HomeStack.Screen>
+                                    <HomeStack.Screen
+                                        name="Category"
+                                        component={CategoryScreen}
+                                        // initialParams={title}
+                                        options={({ route, navigation }) => ({
+                                            title: route.params.title,
+                                            headerRight: () => (
+                                                <CategoryFilter openDialog={() => navigation.setParams({ showDialog: true })} />
+                                            ),
+                                        })}  >
+                                    </HomeStack.Screen>
+                                    <HomeStack.Screen
+                                        name="Recept"
+                                        component={ReceptScreen}
+                                        options={({ route, navigation }) => ({
+                                            title: route.params.title,
+                                            headerTitleAlign: 'center',
+                                            headerRight: () => (
+                                                <HeaderRightSet title={route.params.title} navigation={navigation} />
+                                            ),
+                                        })}>
+                                    </HomeStack.Screen>
+                                </HomeStack.Navigator>
+                            </DataProvider>
                         )}
                     </Tab.Screen>
                     <Tab.Screen
@@ -114,3 +120,11 @@ export default function NavigationBar() {
         </SafeAreaProvider>
     )
 }
+
+// function AddReceptScreenWrapper() {
+//     return (
+//         <DataProvider recept={recept} chip={chip}>
+//             <AddReceptScreen />
+//         </DataProvider>
+//     );
+// }

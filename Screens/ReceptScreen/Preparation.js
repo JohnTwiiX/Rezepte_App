@@ -66,6 +66,7 @@ async function saveMultiple(data, inputValues) {
             cookingTime: data.cookingTime,
             receptArray: data.receptArray,
             preparation: inputValues,
+            imgUri: data.imgUri,
         },
     }
     saveRecept(recept);
