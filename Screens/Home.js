@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Dialog, Button, RadioButton } from 'react-native-paper';
+import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Keyboard, Alert } from 'react-native';
+import { Dialog, Button, RadioButton, TextInput, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CircleButtons from './modals/Bubbles';
 import { setFetchedReceptCompleted } from './ReceptScreen/Overview';
@@ -24,6 +24,16 @@ getAllKeys = async () => {
     // ['@MyApp_user', '@MyApp_key']
 }
 
+deleteKey = async () => {
+    try {
+        await AsyncStorage.removeItem('recepts')
+    } catch (e) {
+        // remove error
+    }
+
+    console.log('Done.')
+}
+
 getrecepts = async () => {
     try {
         let recepts = await AsyncStorage.getItem('recepts');
@@ -34,15 +44,85 @@ getrecepts = async () => {
                 console.log(item);
             });
         }
-
     } catch (e) {
         console.error(e)
+    }
+}
+// export async function saveInStorage(title, array) {
+//     try {
+//         const arrayInString = JSON.stringify(array);
+//         await AsyncStorage.setItem(title, arrayInString);
+//     } catch (error) {
+//         console.log(`Error saving ${title}: ${error}`);
+//     }
+// }
+
+const getStorage = async () => {
+    try {
+        const arrayInString = await AsyncStorage.getItem('recepts');
+        console.log(arrayInString)
+    } catch (error) {
+        console.log(`Error retrieving ${title}: ${error}`);
+    }
+}
+
+saveInStorage = async (type, text) => {
+    try {
+        const alteWerte = await AsyncStorage.getItem(type);
+        if (alteWerte != null) {
+            const alteListe = alteWerte ? JSON.parse(alteWerte) : [];
+            if (alteListe.includes(text)) {
+                console.log('HELP');
+                return true;
+            }
+            alteListe.push(text);
+            try {
+                const alteListeString = JSON.stringify(alteListe);
+                await AsyncStorage.setItem(type, alteListeString);
+            } catch (error) {
+                console.error(`Error saving ${text} in ${type}: ${error}`)
+            }
+        }
+    } catch (error) {
+        console.error(`Error retrieving ${type}: ${error}`)
     }
 }
 
 export default function HomeScreen({ navigation }) {
     const [visible, setVisible] = React.useState(false);
-    const [checked, setChecked] = React.useState('');
+    const [type, setType] = React.useState('');
+    const [text, setText] = React.useState('');
+    const [alert, setAlert] = React.useState(false);
+    const [exist, setExist] = React.useState(false);
+    const [update, setUpdate] = React.useState(false);
+
+    const theme = useTheme();
+
+    const handleSaveBubble = async () => {
+        if (type.length === 0 || text.length === 0) {
+            setAlert(true);
+            return;
+        };
+        const exists = await saveInStorage(type, text);
+        if (exists) {
+            setAlert(true);
+            setExist(true);
+            return;
+        }
+        setUpdate(true);
+        setVisible(false);
+    };
+    const handleBackgroundPress = () => {
+        // Minimiere das Keyboard, wenn irgendwo anders auf dem Bildschirm geklickt wird
+        Keyboard.dismiss();
+    };
+
+    React.useEffect(() => {
+        setAlert(false);
+        setText('');
+        setType('');
+    }, [visible === false]);
+
     useFocusEffect(
         React.useCallback(() => {
             setFetchedReceptCompleted();
@@ -50,36 +130,53 @@ export default function HomeScreen({ navigation }) {
         }, []),);
 
     return (
+
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => { setVisible(true) }}
-                onLongPress={() => getAllKeys()}>
+                onLongPress={() => getStorage()}>
                 <Icon name="add" size={20} color="#fff" />
             </TouchableOpacity>
             <View>
-                <CircleButtons />
+                <CircleButtons update={update} setUpdate={setUpdate} />
             </View>
-            <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+
+            <Dialog visible={visible} onDismiss={() => setVisible(false)} style={{ paddingBottom: 50 }}>
                 <Dialog.Content>
                     <Text style={{ fontSize: 22 }}>Was für eine Bubble möchtest du erstellen?</Text>
-                    <RadioButton
-                        value="types"
-                        status={checked === 'types' ? 'checked' : 'unchecked'}
-                        onPress={() => setChecked('first')}
+                    <View style={{ margin: 16 }}>
+                        <RadioButton.Group onValueChange={newValue => setType(newValue)} value={type}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <RadioButton value="types" />
+                                    <Text>Rezeptart</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <RadioButton value="collection" />
+                                    <Text>Sammlung</Text>
+                                </View>
+                            </View>
+                        </RadioButton.Group>
+                        {alert && (type.length === 0) && <Text style={{ color: 'red', textAlign: 'center' }}>Du must eines der beiden klicken!</Text>}
+                    </View>
+                    <TextInput
+                        style={{ backgroundColor: theme.colors.color }}
+                        label="Bubble"
+                        value={text}
+                        onChangeText={text => setText(text)}
+                        error={alert && text.length === 0}
                     />
-                    <RadioButton
-                        value="collection"
-                        status={checked === 'collection' ? 'checked' : 'unchecked'}
-                        onPress={() => setChecked('second')}
-                    />
+                    {alert && (text.length === 0) && <Text style={{ color: 'red', textAlign: 'center' }}>Dein Text hierein schreiben!</Text>}
+                    {alert && exist && <Text style={{ color: 'red', textAlign: 'center' }}>Der eingetragene Wert existiert bereits!</Text>}
                 </Dialog.Content>
                 <Dialog.Actions>
-                    <Button onPress={() => { setVisible(false) }}>Speichern</Button>
+                    <Button onPress={() => { handleSaveBubble() }}>Speichern</Button>
                     <Button onPress={() => { setVisible(false) }}>Abbrechen</Button>
                 </Dialog.Actions>
             </Dialog>
         </View>
+
     );
 }
 

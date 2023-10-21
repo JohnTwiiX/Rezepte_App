@@ -23,6 +23,23 @@ const getStorage = async (title) => {
     }
 }
 
+async function sortChip(chip) {
+    try {
+        let values = await AsyncStorage.multiGet(['types', 'collection']);
+        let result = null;
+
+        values.forEach(([key, value]) => {
+            if (JSON.parse(value).includes(chip)) {
+                result = key;
+            }
+        });
+
+        return result; // Return the result
+    } catch (error) {
+
+    }
+}
+
 const DataContext = createContext();
 
 export function useData() {
@@ -30,17 +47,16 @@ export function useData() {
 }
 
 
-export function DataProvider({ children, recept }) {
-
+export function DataProvider({ children, recept, chip }) {
     const [data, setData] = useState({
         // Overview
         title: '',
         potionSize: '',
         workTime: '',
         cookingTime: '',
-        chipType: '',
-        chipsCategory: '',
-        chipsCollection: '',
+        types: '',
+        category: [],
+        collection: [],
         // Ingredients
         receptArray: [],
         // preparation
@@ -59,9 +75,9 @@ export function DataProvider({ children, recept }) {
                     potionSize: data.description.potionSize,
                     workTime: data.description.workTime,
                     cookingTime: data.description.cookingTime,
-                    chipType: data.description.receptType,
-                    chipsCategory: data.description.category,
-                    chipsCollection: data.description.collection,
+                    types: data.description.receptType,
+                    category: data.description.category,
+                    collection: data.description.collection,
                     // Ingredients
                     receptArray: data.description.receptArray,
                     // preparation
@@ -71,6 +87,13 @@ export function DataProvider({ children, recept }) {
                 });
             });
         };
+        if (chip) {
+            const updatedData = { ...data };
+            sortChip(chip).then((result) => {
+                updatedData[result] = [chip];
+                updateData(updatedData);
+            });
+        }
     }, []);
 
     const updateData = (newData) => {

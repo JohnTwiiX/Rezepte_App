@@ -87,13 +87,6 @@ export const getStorage = async (title) => {
     }
 }
 
-// const saveInStorageInput = async (title, value) => {
-//     try {
-//         await AsyncStorage.setItem(title, value);
-//     } catch (error) {
-//         console.log(`Error saving ${title}: ${error}`);
-//     }
-// }
 export async function fetchData(recept) {
     const data = await getStorage('recepts');
 
@@ -156,7 +149,6 @@ export default function Overview({ route }) {
 
     const handleDataChange = (dataValue, newValue) => {
         if (newValue) {
-            // console.log(dataValue, newValue)
             // Erstelle ein neues Objekt, das eine Kopie der aktuellen Daten enthält
             const updatedData = { ...data };
             // Aktualisiere das Objekt mit dem neuen Wert für den angegebenen Schlüssel (dataValue)
@@ -165,36 +157,6 @@ export default function Overview({ route }) {
             updateData(updatedData);
         }
     };
-    // React.useEffect(() => {
-    //     if (recept) {
-    //         console.log(recept)
-    //         fetchData(recept).then((data) => {
-    //             setFetchedRecept(data);
-    //             receptForAll = data;
-    //             fetchedReceptCompleted = true;
-    //         });
-    //     };
-    // }, [])
-
-    // React.useEffect(() => {
-    //     if (fetchedRecept.length < 0) {
-    //         const potion = stringToJson(fetchedRecept?.description?.potionSize);
-    //         const work = stringToJson(fetchedRecept?.description?.workTime);
-    //         const cook = stringToJson(fetchedRecept?.description?.cookingTime);
-
-    //         setTitle(fetchedRecept.title);
-
-    //         setPotionSize(potion.crowd);
-    //         setPotionSwitch(potion.unit);
-
-    //         setWorkTime(work.crowd);
-    //         setWorkSwitch(work.unit);
-
-    //         setCookingTime(cook.crowd);
-    //         setCookSwitch(cook.unit);
-    //     }
-
-    // }, [fetchedRecept]);
 
     React.useEffect(() => {
         if (data.isFetched) {
@@ -209,8 +171,6 @@ export default function Overview({ route }) {
         }
     }, [data.isFetched])
 
-
-
     React.useEffect(() => {
         if (title.length >= 0) {
             handleDataChange('title', title);
@@ -223,7 +183,6 @@ export default function Overview({ route }) {
             if (potionSize >= 2) {
                 value += 'en';
             }
-            console.log(value)
             handleDataChange('potionSize', jsonToString(potionSize, value));
         }
     }, [potionSize]);
@@ -242,7 +201,6 @@ export default function Overview({ route }) {
 
     React.useEffect(() => {
         if (cookingTime) {
-            // console.log(cookingTime)
             handleDataChange('cookingTime', jsonToString(cookingTime, cookSwitch));
         }
     }, [cookSwitch]);
@@ -259,10 +217,10 @@ export default function Overview({ route }) {
             if (potionSize >= 2) {
                 value += 'en';
             }
-            console.log(value)
             handleDataChange('potionSize', jsonToString(potionSize, value));
         }
     }, [potionSwitch]);
+
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -276,15 +234,15 @@ export default function Overview({ route }) {
                         <OverviewInput title={'title'} titleValue={title} setValue={setTitle} inputRef={inputRef} />
                         <View style={styles.chipContainer} >
                             <Text>Rezeptart:</Text>
-                            <ReceptChips title={'types'} handleDataChange={handleDataChange} selectedChips={data?.chipType} />
+                            <ReceptChips title={'types'} handleDataChange={handleDataChange} selectedChips={data?.types} />
                         </View>
                         <View style={styles.chipContainer}>
                             <Text>Kategorie:</Text>
-                            <ReceptChips title={'category'} handleDataChange={handleDataChange} selectedChips={data?.chipsCategory} />
+                            <ReceptChips title={'category'} handleDataChange={handleDataChange} selectedChips={data?.category} />
                         </View>
                         <View style={styles.chipContainer}>
                             <Text>Sammlungen:</Text>
-                            <ReceptChips title={'collection'} handleDataChange={handleDataChange} selectedChips={data?.chipsCollection} />
+                            <ReceptChips title={'collection'} handleDataChange={handleDataChange} selectedChips={data?.collection} />
                         </View>
                         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', marginTop: 12 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

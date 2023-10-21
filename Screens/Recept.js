@@ -113,7 +113,7 @@ export default function ReceptScreen({ route }) {
 
 
     return (
-        <View style={{ flex: 1, padding: 8 }}>
+        <View style={{ flex: 1, padding: 8, height: '100%' }}>
             <ScrollView >
                 {isLoading ?
                     (

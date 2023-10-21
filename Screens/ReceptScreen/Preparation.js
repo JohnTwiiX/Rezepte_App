@@ -58,9 +58,9 @@ async function saveMultiple(data, inputValues) {
     const recept = {
         title: data.title,
         description: {
-            receptType: data.chipType,
-            category: data.chipsCategory,
-            collection: data.chipsCollection,
+            receptType: data.types,
+            category: data.category,
+            collection: data.collection,
             potionSize: data.potionSize,
             workTime: data.workTime,
             cookingTime: data.cookingTime,
@@ -140,8 +140,8 @@ export default function PreparationsScreen({ navigation }) {
                         const values = data;
                         const missings = [];
                         if (values.title.length === 0) missings.push('Titel');
-                        if (values.chipType.length === 0) missings.push('Rezeptart');
-                        if (values.chipsCategory.length === 0) missings.push('Kategorie');
+                        if (values.types.length === 0) missings.push('Rezeptart');
+                        if (values.category.length === 0) missings.push('Kategorie');
                         if (values.potionSize.length === 0) missings.push('Portionsgröße');
                         if (values.workTime.length === 0) missings.push('Vorbereitunszeit');
                         if (values.receptArray.length == 0) missings.push('Zutaten');

@@ -22,7 +22,7 @@ export default function AddReceptScreen({ route }) {
 
     return (
         <SafeAreaView style={{ height: '100%' }}>
-            <DataProvider recept={recept}>
+            <DataProvider recept={recept} chip={chip}>
                 <TabRecept.Navigator
                     screenOptions={{
                         tabBarIndicatorStyle: {
@@ -34,7 +34,6 @@ export default function AddReceptScreen({ route }) {
                     <TabRecept.Screen
                         name='Overview'
                         component={Overview}
-                        initialParams={{ recept: route.params ? route.params.recept : route.params }}
                         options={{
                             title: 'Überblick',
                         }} />

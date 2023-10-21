@@ -189,7 +189,7 @@ export default function CategoryScreen({ navigation, route }) {
             <FAB
                 icon="plus"
                 style={styles.fab}
-                onPress={() => navigation.navigate('AddRecept', { title: 'Rezept erstellen' })}
+                onPress={() => navigation.navigate('AddRecept', { title: 'Rezept erstellen', chip: title })}
             />
             {/* Dialog um eine Meldung anzuzeigen ##################################################################### */}
             <Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(false)}>

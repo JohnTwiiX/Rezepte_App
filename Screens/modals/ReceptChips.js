@@ -48,13 +48,13 @@ export default function ReceptChips({ title, handleDataChange, selectedChips }) 
 
     React.useEffect(() => {
         if (title === 'types') {
-            handleDataChange('chipType', selectedChip);
+            handleDataChange('types', selectedChip);
         }
         if (title === 'category') {
-            handleDataChange('chipsCategory', selectedChip);
+            handleDataChange('category', selectedChip);
         }
         if (title === 'collection') {
-            handleDataChange('chipsCollection', selectedChip);
+            handleDataChange('collection', selectedChip);
         }
 
         if (selectedChip.length !== selectedLength.current) {
