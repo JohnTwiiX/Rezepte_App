@@ -45,14 +45,14 @@ async function moveUpDown(arr, item, isUp, setUpdate) {
     setUpdate(true);
 }
 
-function getIndex(array, bubble) {
+export function getIndex(array, bubble) {
     return array.findIndex(item => item.title === bubble);
 }
 
 export default function EditBubblePos({ arr, setUpdate, item }) {
 
     return (
-        <View style={{ justifyContent: 'space-between', height: '20%', padding: 8 }}>
+        <View style={{ justifyContent: 'space-between', height: '16%', padding: 8 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Button mode='outlined' onPress={() => moveToStartEnd(arr, item, true, setUpdate)}>Erste Stelle</Button>
                 <Button mode='outlined' onPress={() => moveUpDown(arr, item, true, setUpdate)}>Hoch</Button>

@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     },
     button: {
         position: 'absolute',
-        top: 16,
+        top: 24,
         right: 16,
         alignItems: 'center',
         padding: 10,

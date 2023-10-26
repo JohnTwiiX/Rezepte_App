@@ -5,7 +5,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { defaultCollection, defaultTypes } from './ReceptChips';
 import { useData } from './DataProvider';
-import EditBubblePos from './EditBubblePos';
+import EditBubblePos, { getIndex } from './EditBubblePos';
 import { saveInStorage } from '../ReceptScreen/Overview';
 // import { getStorage } from './Overview';
 
@@ -70,6 +70,19 @@ async function getFromStorage(key) {
     }
 }
 
+async function changeBubbleSize(size, receptTypes, item, setUpdate) {
+    const index = getIndex(receptTypes, item);
+    const newSizeArray = receptTypes.map((element, i) => {
+        if (i === index) {
+            return { ...element, size: size };
+        } else {
+            return element;
+        }
+    });
+    await saveInStorage('receptTypes', newSizeArray);
+    setUpdate(true);
+}
+
 async function fetchData(setReceptTypes, setSizes) {
     try {
         fetchBubbles().then(async (data) => {
@@ -103,12 +116,10 @@ async function fetchData(setReceptTypes, setSizes) {
             fetchedTypes = JSON.parse(fetchedTypes);
             if (bubbles.length === fetchBubbles.length && bubbles.every(item => fetchedTypes.some(bubble => bubble.title === item))) {
                 // All items are in the same order
-                console.log('------ in der ersten ')
                 setReceptTypes(fetchedTypes);
             } else {
                 if (fetchedTypes.length > bubbles.length) {
                     // Remove items from fetchedTypes that are not in bubbles
-                    console.log('------ in der zweiten ')
                     fetchedTypes = fetchedTypes.filter(item => bubbles.includes(item.title));
                 } else {
                     // Add new items from bubbles to fetchedTypes
@@ -137,8 +148,9 @@ export default function CircleButtons({ update, setUpdate }) {
     const [receptTypes, setReceptTypes] = React.useState([]);
     const [selectedItem, setSelectedItem] = React.useState('');
     const [visible, setVisible] = React.useState(false);
-    const [visibleMenu, setVisibleMenu] = React.useState(false);
-    const { data, updateData } = useData();
+    const [visibleSize, setVisibleSize] = React.useState(false);
+    const { data } = useData();
+    const theme = useTheme();
     useFocusEffect(
         React.useCallback(() => {
             fetchData(setReceptTypes);
@@ -152,55 +164,55 @@ export default function CircleButtons({ update, setUpdate }) {
         }
     }, [update]);
 
-    const handleDataChange = (newValue) => {
-        if (newValue) {
-            // Erstelle ein neues Objekt, das eine Kopie der aktuellen Daten enthält
-            const updatedData = { ...data };
-            // Aktualisiere das Objekt mit dem neuen Wert für den angegebenen Schlüssel (dataValue)
-            updatedData['isEditMode'] = newValue;
-            // Aktualisiere die Daten im Kontext mit dem aktualisierten Objekt
-            updateData(updatedData);
-        }
-    };
     const navigation = useNavigation();
     return (
-        <View>
-            {data && data.isEditMode && <Text>Du kann die Bubbles jetzt verändern</Text>}
+        <View style={data.isEditMode ? { borderWidth: 5, borderColor: theme.colors.button } : {}}>
+            {data && data.isEditMode && <Text style={{ textAlign: 'center', fontSize: 16, color: 'rgba(0,0,0,0.5)' }}>Verändere deine Bubbles in der Position/Größe.</Text>}
             <ScrollView >
                 <View style={styles.container}>
                     {receptTypes ? receptTypes.map((bubble, index) =>
-                        <CircleButton
-                            key={index}
-                            descr={bubble.title}
-                            size={bubble.size}
-                            onPress={() => data.isEditMode ?
-                                setSelectedItem(bubble.title) &&
-                                setVisibleMenu(true)
-                                :
-                                navigation.navigate('Category', { title: bubble.title })}
-                            onLongPress={() => {
-                                data.isEditMode ?
+                        <View>
+                            <CircleButton
+                                key={index}
+                                descr={bubble.title}
+                                size={bubble.size}
+                                onPress={() => data.isEditMode ?
                                     setSelectedItem(bubble.title)
                                     :
-                                    setSelectedItem(bubble.title) && setVisible(true)
-                            }}
-                            editMode={data.isEditMode}
-                            selectedItem={selectedItem}
-                        />)
+                                    navigation.navigate('Category', { title: bubble.title })}
+                                onLongPress={() => {
+                                    setSelectedItem(bubble.title);
+                                    data.isEditMode ? setVisibleSize(true) : setVisible(true);
+                                }}
+                                editMode={data.isEditMode}
+                                selectedItem={selectedItem}
+                            />
+                            {data.isEditMode && <Text style={{ textAlign: 'center' }}>Position {index + 1}.</Text>}
+                        </View>)
                         :
                         <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                             <ActivityIndicator animating={true} size={240} />
                         </View>}
                 </View>
             </ScrollView>
-            {data.isEditMode && <EditBubblePos arr={receptTypes} setUpdate={setUpdate} item={selectedItem} />}
+            {data.isEditMode && selectedItem && <EditBubblePos arr={receptTypes} setUpdate={setUpdate} item={selectedItem} />}
             <Dialog visible={visible} onDismiss={() => setVisible(false)}>
                 <Dialog.Content>
                     <Text style={{ fontSize: 22 }}>Bist du sicher, dass "{selectedItem}" gelöscht werden soll?</Text>
                 </Dialog.Content>
-                <Dialog.Actions>
+                <Dialog.Actions >
                     <Button onPress={() => { deleteBubble(selectedItem, setUpdate); setVisible(false) }}>Löschen</Button>
                     <Button onPress={() => { setVisible(false) }}>Abbrechen</Button>
+                </Dialog.Actions>
+            </Dialog>
+            <Dialog visible={visibleSize} onDismiss={() => setVisibleSize(false)}>
+                <Dialog.Content>
+                    <Text style={{ fontSize: 22 }}>Wähle eine Größe</Text>
+                </Dialog.Content>
+                <Dialog.Actions style={{ justifyContent: 'space-around' }}>
+                    <Button mode='outlined' onPress={() => { changeBubbleSize(130, receptTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Klein</Button>
+                    <Button mode='outlined' onPress={() => { changeBubbleSize(160, receptTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Mittel</Button>
+                    <Button mode='outlined' onPress={() => { changeBubbleSize(200, receptTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Groß</Button>
                 </Dialog.Actions>
             </Dialog>
         </View>
