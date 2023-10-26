@@ -69,7 +69,7 @@ function RenderRecepts(props) {
                     {/* <Card.Cover source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} /> */}
                     <Card.Content>
                         <View style={{ flexDirection: 'row' }}>
-                            {recept.description.imgUri.length >= 1
+                            {recept.description.imgUri?.length >= 1
                                 ?
                                 <Avatar.Image size={50} source={{ uri: recept.description.imgUri }} />
                                 :

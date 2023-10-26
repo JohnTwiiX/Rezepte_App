@@ -16,6 +16,7 @@ import { useTheme } from 'react-native-paper';
 import AddReceptBtn from './modals/AddReceptBtn';
 import ImagePickerIcon from './modals/ImagePicker';
 import { DataProvider } from './modals/DataProvider';
+import EditMode from './modals/EditMode';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -65,9 +66,9 @@ export default function NavigationBar() {
                                         component={HomeScreen}
                                         options={({ route, navigation }) => ({
                                             title: "Sandra's Awesome Rezepte App",
-                                            // headerRight: () => (
-                                            //     <AddReceptBtn navigation={navigation} />
-                                            // ),
+                                            headerRight: () => (
+                                                <EditMode />
+                                            ),
                                         })}>
                                     </HomeStack.Screen>
                                     <HomeStack.Screen

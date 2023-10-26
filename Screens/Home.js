@@ -24,10 +24,11 @@ getAllKeys = async () => {
     // ['@MyApp_user', '@MyApp_key']
 }
 
-deleteKey = async () => {
+deleteKey = async (key) => {
     try {
-        await AsyncStorage.removeItem('recepts')
+        await AsyncStorage.removeItem(key)
     } catch (e) {
+        console.log(e)
         // remove error
     }
 
@@ -72,7 +73,6 @@ saveInStorage = async (type, text) => {
         if (alteWerte != null) {
             const alteListe = alteWerte ? JSON.parse(alteWerte) : [];
             if (alteListe.includes(text)) {
-                console.log('HELP');
                 return true;
             }
             alteListe.push(text);
@@ -125,7 +125,6 @@ export default function HomeScreen({ navigation }) {
 
     useFocusEffect(
         React.useCallback(() => {
-            setFetchedReceptCompleted();
             saveAll();
         }, []),);
 
@@ -133,9 +132,10 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.container}>
             <TouchableOpacity
-                style={styles.button}
+                style={[styles.button, { backgroundColor: theme.colors.button }]}
                 onPress={() => { setVisible(true) }}
-                onLongPress={() => getStorage()}>
+                // onPress={() => { getAllKeys() }}
+                onLongPress={() => deleteKey('sizes')}>
                 <Icon name="add" size={20} color="#fff" />
             </TouchableOpacity>
             <View>
@@ -191,7 +191,6 @@ const styles = StyleSheet.create({
         top: 16,
         right: 16,
         alignItems: 'center',
-        backgroundColor: '#9a998c',
         padding: 10,
         borderRadius: 100,
         zIndex: 2

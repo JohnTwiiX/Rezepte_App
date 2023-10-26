@@ -63,6 +63,7 @@ export function DataProvider({ children }) {
         // preparation
         // Settings
         isFetched: false,
+        isEditMode: false,
     });
 
     const setRecept = (recept) => {
@@ -84,6 +85,7 @@ export function DataProvider({ children }) {
                 preparation: data.description.preparation,
                 // Settings
                 isFetched: true,
+                isEditMode: false,
             });
         });
     }

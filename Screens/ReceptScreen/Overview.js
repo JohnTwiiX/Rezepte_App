@@ -101,14 +101,6 @@ export function getRecept() {
     return receptForAll;
 }
 
-export function isFetchedRecept() {
-    return fetchedReceptCompleted
-}
-
-export function setFetchedReceptCompleted() {
-    fetchedReceptCompleted = false;
-}
-
 function jsonToString(crowd, unit) {
     const result = JSON.stringify({
         crowd: crowd,
@@ -127,7 +119,6 @@ function stringToJson(prop) {
 }
 
 let receptForAll
-let fetchedReceptCompleted = false;
 
 export default function Overview({ route }) {
     const [title, setTitle] = React.useState("");

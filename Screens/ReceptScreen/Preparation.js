@@ -92,7 +92,7 @@ export async function saveAll(data, inputValues) {
     if (inputValues) {
         await saveMultiple(data, inputValues);
     }
-    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recepts'];
+    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recepts', 'receptTypes'];
     await removeAllExcept(keysToKeep);
 }
 
@@ -179,7 +179,6 @@ export default function PreparationsScreen({ navigation }) {
                         });
                         // Hier könntest du die Werte in den useStates zurücksetzen:
                         saveAll(data, inputValues);
-                        setFetchedReceptCompleted();
                         setDialogSave(false)
                     }}>Ja</Button>
                     <Button onPress={() => { setDialogSave(false) }}>Nein</Button>
