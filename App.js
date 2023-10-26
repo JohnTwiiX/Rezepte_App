@@ -5,6 +5,8 @@ import { StatusBar } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import FullScreen from './utils/FullScreen'; // Import FullScreen module
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { getFromStorage } from './Screens/modals/Bubbles';
+import UsernameInput from './Screens/modals/UsernameInput';
 
 
 // const customTheme = {
@@ -88,18 +90,45 @@ const customTheme = {
 //     backdrop: '#c2cac2',
 //   },
 // };
+async function existUsername() {
+  try {
+    return await getFromStorage('@name');
+  } catch (e) {
+    console.error(e)
+  }
+}
 
 
 export default function App() {
+  const [username, setUsername] = React.useState('');
+  const [update, setUpdate] = React.useState(false);
   React.useEffect(() => {
     FullScreen.enable(); // Enable fullscreen mode when App component mounts
+    existUsername(setUsername);
   }, []);
+  React.useEffect(() => {
+    if (update === true) {
+      async function fetchdata() {
+        const name = await existUsername(setUsername);
+        if (name === null) {
+          setUsername(null);
+        } else {
+          setUsername(name);
+        }
+        setUpdate(false);
+      }
+      fetchdata();
+    }
+  }, [update]);
   return (
     <SafeAreaView style={{ flex: 1, }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <PaperProvider theme={customTheme}>
           <StatusBar hidden={true} />
-          <NavigationBar />
+          {username ?
+            <NavigationBar username={username} />
+            :
+            <UsernameInput setUpdate={setUpdate} />}
         </PaperProvider>
       </GestureHandlerRootView>
     </SafeAreaView>

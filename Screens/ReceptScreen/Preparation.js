@@ -92,7 +92,7 @@ export async function saveAll(data, inputValues) {
     if (inputValues) {
         await saveMultiple(data, inputValues);
     }
-    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recepts', 'receptTypes'];
+    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recepts', 'receptTypes', '@name'];
     await removeAllExcept(keysToKeep);
 }
 

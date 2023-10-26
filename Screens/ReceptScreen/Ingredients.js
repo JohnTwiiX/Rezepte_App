@@ -184,121 +184,121 @@ export default function IngredientsScreen({ navigation }) {
 
     return (
 
-        <View style={{ flex: 1 }}>
-            <ScrollView style={{}}>
-                <View style={styles.container}>
+        <View style={{ height: '100%' }}>
+            <View style={styles.container}>
 
-                    <View style={styles.ingredContainer}>
-                        <ScrollView>
-                            <List.Section >
-                                <List.Accordion
-                                    expanded={true}
-                                    onPress={() => setVisibleDialog(true)}
-                                    title={accordionTitle}
-                                >
-                                    {sections.map((section, i) =>
-                                        <List.Accordion
-                                            key={i}
-                                            expanded={openAccordion === i}
-                                            onPress={() => openAccordion === i ? setOpenAccordion() : setOpenAccordion(i)}
-                                            onLongPress={() => {
-                                                sectionTack = true;
-                                                setSectionIndex(i);
-                                                setSelectedItem(section.title);
-                                                setSectionsTitle(section.title)
-                                                setVisibleDialogM(true)
-                                            }}
-                                            style={styles.pLeft}
-                                            title={section.title}
-                                            left={props => <List.Icon {...props}
-                                            />}>
-                                            {section.items.map((item, index) =>
-                                                <List.Item
-                                                    key={index}
-                                                    title={item}
-                                                    onLongPress={() => {
-                                                        setSectionsTitle(section);
-                                                        setSectionIndex(i);
-                                                        setIngredIndex(index);
-                                                        setSelectedItem(item);
-                                                        setVisibleDialogM(true)
-                                                    }}
-                                                    onPress={() => {
-                                                        setItemArray(true);
-                                                        setSectionIndex(i);
-                                                        setIngredIndex(index);
-                                                        setSelectedItem(item);
-                                                        setInputValue('');
-                                                        setVisibleDialogItem(true)
-                                                    }}
-                                                    left={() => (
-                                                        <Checkbox
-                                                            status={ingredArray.some(ingredientArray => ingredientArray.includes(item)) ? 'checked' : 'unchecked'}
-                                                        />
-                                                    )} />
-                                            )}
+                <View style={styles.ingredContainer}>
+                    <ScrollView style={{ marginBottom: 60 }}>
+                        <List.Section >
+                            <List.Accordion
+                                expanded={true}
+                                onPress={() => setVisibleDialog(true)}
+                                title={accordionTitle}
+                            >
+                                {sections.map((section, i) =>
+                                    <List.Accordion
+                                        key={i}
+                                        expanded={openAccordion === i}
+                                        onPress={() => openAccordion === i ? setOpenAccordion() : setOpenAccordion(i)}
+                                        onLongPress={() => {
+                                            sectionTack = true;
+                                            setSectionIndex(i);
+                                            setSelectedItem(section.title);
+                                            setSectionsTitle(section.title)
+                                            setVisibleDialogM(true)
+                                        }}
+                                        style={styles.pLeft}
+                                        title={section.title}
+                                        left={props => <List.Icon {...props}
+                                        />}>
+                                        {section.items.map((item, index) =>
                                             <List.Item
-                                                style={{}}
-                                                // titleStyle={{ textAlign: 'center' }}
-                                                title='Zutat hinzufügen'
-                                                onPress={() => { setInputValue(''); setSectionsTitle(section); setSectionIndex(i); setVisibleDialogZ(true); }}
-                                                sectionIndex={i}
-                                            />
-                                        </List.Accordion>
+                                                key={index}
+                                                title={item}
+                                                onLongPress={() => {
+                                                    setSectionsTitle(section);
+                                                    setSectionIndex(i);
+                                                    setIngredIndex(index);
+                                                    setSelectedItem(item);
+                                                    setVisibleDialogM(true)
+                                                }}
+                                                onPress={() => {
+                                                    setItemArray(true);
+                                                    setSectionIndex(i);
+                                                    setIngredIndex(index);
+                                                    setSelectedItem(item);
+                                                    setInputValue('');
+                                                    setVisibleDialogItem(true)
+                                                }}
+                                                left={() => (
+                                                    <Checkbox
+                                                        status={ingredArray.some(ingredientArray => ingredientArray.includes(item)) ? 'checked' : 'unchecked'}
+                                                    />
+                                                )} />
+                                        )}
+                                        <List.Item
+                                            style={{}}
+                                            // titleStyle={{ textAlign: 'center' }}
+                                            title='Zutat hinzufügen'
+                                            onPress={() => { setInputValue(''); setSectionsTitle(section); setSectionIndex(i); setVisibleDialogZ(true); }}
+                                            sectionIndex={i}
+                                        />
+                                    </List.Accordion>
+                                )}
+                                <List.Item
+                                    style={{ backgroundColor: 'white' }}
+                                    titleStyle={{ textAlign: 'center' }}
+                                    title='hinzufügen'
+                                    onPress={() => { setInputValue(''); setVisibleDialogK(true) }}
+                                />
+                            </List.Accordion>
+                        </List.Section>
+
+                    </ScrollView>
+                </View>
+
+                <View style={{ width: '40%', marginTop: 8, marginLeft: 4 }}>
+                    <View>
+                        <Text>{accordionTitle}</Text>
+                        <IngredientList ingredients={ingredArray} />
+                    </View>
+
+                    <View style={{ marginTop: 0 }}>
+                        <ScrollView>
+                            {sectionArray?.map((item, index) =>
+                                <View style={{ marginTop: 16, marginRight: 8, marginLeft: 4, padding: 4, borderWidth: 2, borderColor: 'black' }} key={index}>
+                                    <Text style={{ textAlign: 'center' }}>{item.title} </Text>
+                                    {item.ingredients.map((item, index) =>
+                                        <Text key={index}>- {item}</Text>
                                     )}
-                                    <List.Item
-                                        style={{ backgroundColor: 'white' }}
-                                        titleStyle={{ textAlign: 'center' }}
-                                        title='hinzufügen'
-                                        onPress={() => { setInputValue(''); setVisibleDialogK(true) }}
-                                    />
-                                </List.Accordion>
-                            </List.Section>
-                            <TouchableOpacity
-                                // disabled={ingredArray.length <= 0 && accordionTitle === 'Abschnitt ...' ? true : false}
-                                style={[styles.button, { backgroundColor: theme.colors.button }]}
-                                onPress={() => {
-                                    if (ingredArray.length == 0) { alert('Du hast keine Zutaten ausgewählt.') }
-                                    else { saveSectionArray(accordionTitle, setSectionArray); setVisibleDialog(false); setAccordionTitle('Abschnitt ...'), setTitle = false, setItemArray(false) }
-                                }}>
-                                <Text style={{ color: 'white', fontSize: 18 }}>Auswahl speichern</Text>
-                                {/* <Icon name="chevron-back-outline" size={20} color="#fff" /> */}
-                            </TouchableOpacity>
+                                    <TouchableOpacity style={{ alignItems: 'center' }}
+                                        onPress={() => setSectionArray([...sectionArray.slice(0, index), ...sectionArray.slice(index + 1)])}>
+                                        <Icon name="close-circle-outline" size={20} color="black" />
+                                    </TouchableOpacity>
+                                </View>
+                            )}
                         </ScrollView>
                     </View>
 
-                    <View style={{ width: '40%', marginTop: 8, marginLeft: 4 }}>
-                        <View>
-                            <Text>{accordionTitle}</Text>
-                            <IngredientList ingredients={ingredArray} />
-                        </View>
-
-                        <View style={{ marginTop: 0 }}>
-                            <ScrollView>
-                                {sectionArray?.map((item, index) =>
-                                    <View style={{ marginTop: 16, marginRight: 8, marginLeft: 4, padding: 4, borderWidth: 2, borderColor: 'black' }} key={index}>
-                                        <Text style={{ textAlign: 'center' }}>{item.title} </Text>
-                                        {item.ingredients.map((item, index) =>
-                                            <Text key={index}>- {item}</Text>
-                                        )}
-                                        <TouchableOpacity style={{ alignItems: 'center' }}
-                                            onPress={() => setSectionArray([...sectionArray.slice(0, index), ...sectionArray.slice(index + 1)])}>
-                                            <Icon name="close-circle-outline" size={20} color="black" />
-                                        </TouchableOpacity>
-                                    </View>
-                                )}
-                            </ScrollView>
-                        </View>
-
-                    </View>
+                </View>
 
 
 
-                </View >
+            </View >
 
 
 
-            </ScrollView>
+            <TouchableOpacity
+                // disabled={ingredArray.length <= 0 && accordionTitle === 'Abschnitt ...' ? true : false}
+                style={[styles.button, { backgroundColor: theme.colors.button, position: 'absolute', bottom: 8, left: 8, right: 8 }]}
+                onPress={() => {
+                    if (ingredArray.length == 0) { alert('Du hast keine Zutaten ausgewählt.') }
+                    else { saveSectionArray(accordionTitle, setSectionArray); setVisibleDialog(false); setAccordionTitle('Abschnitt ...'), setTitle = false, setItemArray(false) }
+                }}>
+                <Text style={{ color: 'white', fontSize: 18 }}>Auswahl speichern</Text>
+                {/* <Icon name="chevron-back-outline" size={20} color="#fff" /> */}
+            </TouchableOpacity>
+
             {/* Dialog um eine Meldung anzuzeigen ##################################################################### */}
             <Dialog visible={visibleDialogM} onDismiss={() => setVisibleDialogM(false)}>
                 <Dialog.Content>

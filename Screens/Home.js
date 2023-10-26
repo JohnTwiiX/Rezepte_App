@@ -96,6 +96,7 @@ export default function HomeScreen({ navigation }) {
     const [exist, setExist] = React.useState(false);
     const [update, setUpdate] = React.useState(false);
 
+
     const theme = useTheme();
 
     const handleSaveBubble = async () => {
@@ -130,12 +131,13 @@ export default function HomeScreen({ navigation }) {
 
     return (
 
+
         <View style={styles.container}>
             <TouchableOpacity
                 style={[styles.button, { backgroundColor: theme.colors.button }]}
                 onPress={() => { setVisible(true) }}
                 // onPress={() => { getAllKeys() }}
-                onLongPress={() => deleteKey('sizes')}>
+                onLongPress={() => deleteKey('name')}>
                 <Icon name="add" size={20} color="#fff" />
             </TouchableOpacity>
             <View>

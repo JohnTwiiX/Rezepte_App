@@ -22,7 +22,7 @@ const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
 
-export default function NavigationBar() {
+export default function NavigationBar({ username }) {
     const theme = useTheme();
     return (
         <SafeAreaProvider>
@@ -65,7 +65,7 @@ export default function NavigationBar() {
                                         name="Home"
                                         component={HomeScreen}
                                         options={({ route, navigation }) => ({
-                                            title: "Sandra's Awesome Rezepte App",
+                                            title: `${username}'s Rezepte`,
                                             headerRight: () => (
                                                 <EditMode />
                                             ),

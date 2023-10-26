@@ -61,7 +61,7 @@ async function fetchBubbles() {
     return values
 }
 
-async function getFromStorage(key) {
+export async function getFromStorage(key) {
     try {
         let values = await AsyncStorage.getItem(key);
         return values;
@@ -171,7 +171,7 @@ export default function CircleButtons({ update, setUpdate }) {
             <ScrollView >
                 <View style={styles.container}>
                     {receptTypes ? receptTypes.map((bubble, index) =>
-                        <View>
+                        <View key={index}>
                             <CircleButton
                                 key={index}
                                 descr={bubble.title}
@@ -187,7 +187,7 @@ export default function CircleButtons({ update, setUpdate }) {
                                 editMode={data.isEditMode}
                                 selectedItem={selectedItem}
                             />
-                            {data.isEditMode && <Text style={{ textAlign: 'center' }}>Position {index + 1}.</Text>}
+                            {data.isEditMode && <Text key={index} style={{ textAlign: 'center' }}>Position {index + 1}.</Text>}
                         </View>)
                         :
                         <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
