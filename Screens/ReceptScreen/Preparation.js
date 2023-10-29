@@ -66,7 +66,9 @@ async function saveMultiple(data, inputValues) {
             cookingTime: data.cookingTime,
             receptArray: data.receptArray,
             preparation: inputValues,
-            imgUri: data.imgUri,
+            imgUri: data.imgUri.length === 0 ?
+                'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg'
+                : data.imgUri,
         },
     }
     saveRecept(recept);
@@ -92,7 +94,7 @@ export async function saveAll(data, inputValues) {
     if (inputValues) {
         await saveMultiple(data, inputValues);
     }
-    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recepts', 'receptTypes', '@name'];
+    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recepts', 'receptTypes', '@name', '@basket'];
     await removeAllExcept(keysToKeep);
 }
 

@@ -38,14 +38,16 @@ export default function ReceptMinDrawer({ recepts, handleCrow }) {
     );
 
     return (
-        <View >
+        <View style={{ height: '100%' }}>
             {recepts.description.receptArray.map((item, index) => (
                 <View
                     key={index}
                 >
-                    <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'rgba(0,0,0,0.5)' }}><Text style={{ textAlign: 'center', fontSize: 22 }}>{item.title}</Text></View>
+                    <View style={{ borderBottomWidth: 0.5, borderBottomColor: 'rgba(0,0,0,0.5)' }}>
+                        <Text style={{ textAlign: 'center', fontSize: 22 }}>{item.title}</Text>
+                    </View>
                     <ScrollView
-                        style={{ minHeight: 50, maxHeight: 250, width: '100%' }}
+                        style={{ minHeight: openDetailViews[index] ? 250 : 50, maxHeight: 250, width: '100%' }}
                         {...panResponders[index].panHandlers}
                     >
                         <Text style={{ fontSize: 18 }}>{recepts.description.preparation[item.title]}</Text>
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         zIndex: 2,
-        width: '30%',
+        width: '50%',
         padding: 8,
         alignSelf: 'flex-start',
         borderTopRightRadius: 10,

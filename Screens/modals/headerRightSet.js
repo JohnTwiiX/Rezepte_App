@@ -8,9 +8,12 @@ import HeaderRightNav from './HeaderRightNav';
 
 
 
+
 export default function HeaderRightSet({ title, navigation }) {
     const [visible, setVisible] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
+    const [openBasketDialog, setOpenBasketDialog] = useState(false);
+
 
     const openMenu = () => {
         setVisible(true);
@@ -26,6 +29,13 @@ export default function HeaderRightSet({ title, navigation }) {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+    };
+    const handleOpenBasketDialog = () => {
+        setOpenBasketDialog(true);
+    };
+
+    const handleCloseBasketDialog = () => {
+        setOpenBasketDialog(false);
     };
 
 
@@ -51,13 +61,24 @@ export default function HeaderRightSet({ title, navigation }) {
                     title="Löschen"
                     onPress={() => { setOpenDialog(true); closeMenu() }}>
                 </Menu.Item>
+                <Divider />
+                <Menu.Item
+                    leadingIcon='basket'
+                    title="Einkaufsliste"
+                    onPress={() => {
+                        setOpenBasketDialog(true); closeMenu()
+                    }}>
+                </Menu.Item>
             </Menu>
             <HeaderRightNav
                 title={title}
                 navigation={navigation}
                 openDialog={openDialog}
                 handleOpenDialog={handleOpenDialog}
-                handleCloseDialog={handleCloseDialog} />
+                handleCloseDialog={handleCloseDialog}
+                openBasketDialog={openBasketDialog}
+                handleOpenBasketDialog={handleOpenBasketDialog}
+                handleCloseBasketDialog={handleCloseBasketDialog} />
         </View>
     );
 }

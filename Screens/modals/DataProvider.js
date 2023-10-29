@@ -64,6 +64,7 @@ export function DataProvider({ children }) {
         // Settings
         isFetched: false,
         isEditMode: false,
+        inBasket: false,
     });
 
     const setRecept = (recept) => {
@@ -86,6 +87,7 @@ export function DataProvider({ children }) {
                 // Settings
                 isFetched: true,
                 isEditMode: false,
+                inBasket: false,
             });
         });
     }

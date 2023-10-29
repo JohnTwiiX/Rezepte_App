@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Button, Text, SafeAreaView } from 'react-native';
+import { View, Button, Text, SafeAreaView } from 'react-native';
 import NavigationBar from './Screens/NavigationBar';
 import { StatusBar } from 'react-native';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider, ActivityIndicator } from 'react-native-paper';
 import FullScreen from './utils/FullScreen'; // Import FullScreen module
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { getFromStorage } from './Screens/modals/Bubbles';
@@ -102,33 +102,42 @@ async function existUsername() {
 export default function App() {
   const [username, setUsername] = React.useState('');
   const [update, setUpdate] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+
   React.useEffect(() => {
     FullScreen.enable(); // Enable fullscreen mode when App component mounts
-    existUsername(setUsername);
+    handleFetchdata();
   }, []);
   React.useEffect(() => {
     if (update === true) {
-      async function fetchdata() {
-        const name = await existUsername(setUsername);
-        if (name === null) {
-          setUsername(null);
-        } else {
-          setUsername(name);
-        }
-        setUpdate(false);
-      }
-      fetchdata();
+      handleFetchdata();
     }
   }, [update]);
+
+  const handleFetchdata = async () => {
+    const name = await existUsername(setUsername);
+    if (name === null) {
+      setUsername(null);
+    } else {
+      setUsername(name);
+    }
+    setUpdate(false);
+    setLoading(false);
+  }
   return (
     <SafeAreaView style={{ flex: 1, }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <PaperProvider theme={customTheme}>
           <StatusBar hidden={true} />
-          {username ?
-            <NavigationBar username={username} />
+          {loading ?
+            <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+              <ActivityIndicator animating={true} size={240} />
+            </View>
             :
-            <UsernameInput setUpdate={setUpdate} />}
+            username ?
+              <NavigationBar username={username} />
+              :
+              <UsernameInput setUpdate={setUpdate} />}
         </PaperProvider>
       </GestureHandlerRootView>
     </SafeAreaView>

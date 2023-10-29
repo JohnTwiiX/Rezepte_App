@@ -3,11 +3,12 @@ import { View, StyleSheet, Dimensions, ScrollView, Image } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Avatar, Card, Text, Dialog, Button, Chip, ActivityIndicator, useTheme } from 'react-native-paper';
-import { getStorage } from './ReceptScreen/Overview';
+import { getStorage, saveInStorage } from './ReceptScreen/Overview';
 import { ScrollView as GHScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ReceptMinDrawer from './modals/ReceptMinDrawer';
 import ReceptMaxDrawer from './modals/ReceptMaxDrawer';
+import { useData } from './modals/DataProvider';
 
 
 const icons = ['clock-time-two-outline', 'pot-mix-outline']
@@ -67,6 +68,36 @@ export default function ReceptScreen({ route }) {
     const [crowdResult, setCrowdResult] = React.useState(0)
     const [crowd, setCrowd] = React.useState(0);
     const theme = useTheme();
+    const { data, updateData } = useData();
+
+    const handleDataChange = () => {
+        const updatedData = { ...data };
+        updatedData['inBasket'] = false;
+        updateData(updatedData);
+    };
+
+    React.useEffect(() => {
+        if (data.inBasket) {
+            async function saveInBasket() {
+                const basketItem = {
+                    title: recepts.title,
+                    ingred: recepts.description.receptArray,
+                    crowd: crowd,
+                    uri: recepts.description.imgUri
+                };
+                let oldBasketArray = await getStorage('@basket');
+                if (oldBasketArray === null) {
+                    let basketArray = [basketItem]
+                    await saveInStorage('@basket', basketArray);
+                } else {
+                    oldBasketArray.push(basketItem);
+                    await saveInStorage('@basket', oldBasketArray);
+                }
+                handleDataChange();
+            };
+            saveInBasket();
+        }
+    }, [data.inBasket])
 
     const { title } = route.params;
     useFocusEffect(
@@ -112,15 +143,15 @@ export default function ReceptScreen({ route }) {
     }
 
     return (
-        <View style={{ flex: 1, padding: 8, height: '100%' }}>
-            <ScrollView >
+        <View style={{ padding: 8, height: '100%' }}>
+            <ScrollView style={{ height: '100%' }}>
                 {isLoading ?
                     (
                         <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                             <ActivityIndicator animating={true} size={240} color={theme.colors.primary} />
                         </View>
                     ) : (
-                        <View>
+                        <View style={{ height: '100%' }}>
                             <View>
                                 {recepts.description.imgUri?.length >= 1 ?
                                     <Image style={{ width: '100%', height: 240, borderRadius: 10 }} source={{ uri: recepts.description.imgUri }} />
@@ -155,6 +186,7 @@ export default function ReceptScreen({ route }) {
                             ) : (
                                 <ReceptMaxDrawer recepts={recepts} handleCrow={handleCrow} />
                             )}
+
                         </View>
                     )
                 }

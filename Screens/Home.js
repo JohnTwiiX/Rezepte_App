@@ -135,9 +135,10 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.container}>
             <TouchableOpacity
                 style={[styles.button, { backgroundColor: theme.colors.button }]}
-                onPress={() => { setVisible(true) }}
+                // onPress={() => { setVisible(true) }}
+                onPress={() => { deleteKey('@basket') }}
                 // onPress={() => { getAllKeys() }}
-                onLongPress={() => deleteKey('name')}>
+                onLongPress={() => getStorage('@basket')}>
                 <Icon name="add" size={20} color="#fff" />
             </TouchableOpacity>
             <View>
