@@ -21,8 +21,8 @@ function CircleButton({ descr, size, onPress, onLongPress, editMode, selectedIte
             onLongPress={onLongPress}
             onPress={onPress}
             style={[
-                { margin: 8, backgroundColor: theme.colors.color, width: size, height: size, borderRadius: size },
-                editMode && descr === selectedItem ? { borderWidth: 10, borderColor: theme.colors.button } : {}
+                { margin: 8, backgroundColor: theme.color, width: size, height: size, borderRadius: size },
+                editMode && descr === selectedItem ? { borderWidth: 10, borderColor: theme.button } : {}
             ]}>
             <View style={styles.innerView}>
                 <Text style={styles.text}>{descr}</Text>
@@ -148,7 +148,7 @@ export default function CircleButtons({ update, setUpdate }) {
 
     const navigation = useNavigation();
     return (
-        <View style={data.isEditMode ? { borderWidth: 5, borderColor: theme.colors.button } : {}}>
+        <View style={data.isEditMode ? { borderWidth: 5, borderColor: theme.button } : {}}>
             {data && data.isEditMode && <View style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}><Text style={{ textAlign: 'center', fontSize: 18, color: 'rgba(0,0,0,0.8)' }}>Verändere deine Bubbles in der Position/Größe.</Text></View>}
             <ScrollView >
                 <View style={styles.container}>

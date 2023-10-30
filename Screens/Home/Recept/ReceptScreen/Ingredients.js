@@ -270,7 +270,7 @@ export default function IngredientsScreen({ navigation }) {
 
             <TouchableOpacity
                 // disabled={ingredArray.length <= 0 && accordionTitle === 'Abschnitt ...' ? true : false}
-                style={[styles.button, { backgroundColor: theme.colors.button, position: 'absolute', bottom: 8, left: 8, right: 8 }]}
+                style={[styles.button, { backgroundColor: theme.button, position: 'absolute', bottom: 8, left: 8, right: 8 }]}
                 onPress={() => {
                     if (ingredArray.length == 0) { alert('Du hast keine Zutaten ausgewählt.') }
                     else { saveSectionArray(accordionTitle, setSectionArray); setVisibleDialog(false); setAccordionTitle('Abschnitt ...'), setTitle = false, setItemArray(false) }

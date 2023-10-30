@@ -103,7 +103,7 @@ export default function BasketItem({ item, setIsLoading }) {
                     {item.map((recept, index) =>
                         <TouchableRipple
                             key={index}
-                            style={[styles.chipTouch, { backgroundColor: theme.colors.button }]}
+                            style={[styles.chipTouch, { backgroundColor: theme.button }]}
                             onPress={() => { setSelected(recept.title); openDialog(); }}
                         >
                             <View style={styles.chipContainer}>

@@ -82,9 +82,9 @@ function RenderChips({ chips, selectedChips, setSelectedChips, type }) {
         return (
             <Chip
                 key={index}
-                textStyle={selectedChips.includes(item) ? { color: theme.colors.chip.active.color } : 'black'}
+                textStyle={selectedChips.includes(item) ? { color: theme.chip.active.color } : 'black'}
                 mode="outlined"
-                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6, justifyContent: 'center' }, selectedChips.includes(item) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }]}
+                style={[{ width: 'auto', height: 50, borderRadius: 25, margin: 6, justifyContent: 'center' }, selectedChips.includes(item) ? { backgroundColor: theme.chip.active.bgColor } : { backgroundColor: theme.chip.passive }]}
                 selected={false}
                 onPress={() => {
                     if (selectedChips.includes(item)) {
@@ -169,7 +169,7 @@ export default function CategoryScreen({ navigation, route }) {
     }, [route.params?.showDialog]);
 
     return (
-        <View style={{ backgroundColor: theme.colors.color, height: '100%' }}>
+        <View style={{ backgroundColor: theme.color, height: '100%' }}>
             <ScrollView>
                 <View>
                     {selectedChips.length === 0 ? <RenderRecepts recepts={recepts} title={title} /> : <RenderRecepts recepts={filteredRecepts} title={title} />}
@@ -177,7 +177,7 @@ export default function CategoryScreen({ navigation, route }) {
             </ScrollView>
             <FAB
                 icon="plus"
-                style={[styles.fab, { backgroundColor: theme.colors.button }]}
+                style={[styles.fab, { backgroundColor: theme.button }]}
                 onPress={() => navigation.navigate('AddRecept', { title: 'Rezept erstellen', chip: title })}
             />
             {/* Dialog um eine Meldung anzuzeigen ##################################################################### */}

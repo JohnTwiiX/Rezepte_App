@@ -143,7 +143,7 @@ export default function ReceptScreen({ route }) {
                 {isLoading ?
                     (
                         <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                            <ActivityIndicator animating={true} size={240} color={theme.colors.primary} />
+                            <ActivityIndicator animating={true} size={240} color={theme.primary} />
                         </View>
                     ) : (
                         <View style={{ height: '100%' }}>

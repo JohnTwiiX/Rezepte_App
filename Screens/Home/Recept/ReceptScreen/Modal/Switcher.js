@@ -30,7 +30,7 @@ export default function Switcher({ title, setSwitch, prop, many, howMany }) {
     return (
         <View >
             {!expanded &&
-                <View style={[styles.container, { backgroundColor: theme.colors.color }]}>
+                <View style={[styles.container, { backgroundColor: theme.color }]}>
                     <TouchableOpacity style={{ alignItems: 'center' }} onPress={toggleItem} >
                         <Icon name='triangle-down' size={18} color='rgba(0, 0, 0, 0.3)' />
                         <Text>{prop !== 'potion' && title}{prop === 'potion' && togglePotion()}</Text>

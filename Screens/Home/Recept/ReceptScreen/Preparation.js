@@ -104,7 +104,7 @@ export default function PreparationsScreen({ navigation }) {
             </List.Section>
             <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: theme.colors.button }]}
+                    style={[styles.button, { backgroundColor: theme.button }]}
                     onPress={async () => {
                         const values = data;
                         const missings = [];

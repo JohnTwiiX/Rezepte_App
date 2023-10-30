@@ -74,7 +74,7 @@ export default function HomeScreen({ navigation }) {
             <View style={styles.container}>
 
                 <TouchableOpacity
-                    style={[styles.button, { backgroundColor: theme.colors.button }]}
+                    style={[styles.button, { backgroundColor: theme.button }]}
                     // onPress={() => { setVisible(true) }}
                     onPress={() => { deleteKey('receptTypes') }}
                     // onPress={() => { getAllKeys() }}
@@ -104,7 +104,7 @@ export default function HomeScreen({ navigation }) {
                             {alert && (type.length === 0) && <Text style={{ color: 'red', textAlign: 'center' }}>Du must eines der beiden klicken!</Text>}
                         </View>
                         <TextInput
-                            style={{ backgroundColor: theme.colors.color }}
+                            style={{ backgroundColor: theme.color }}
                             label="Bubble"
                             value={text}
                             onChangeText={text => setText(text)}

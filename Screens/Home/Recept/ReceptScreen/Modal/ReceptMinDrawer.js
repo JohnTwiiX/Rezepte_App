@@ -53,7 +53,7 @@ export default function ReceptMinDrawer({ recepts, handleCrow }) {
                         <Text style={{ fontSize: 18 }}>{recepts.description.preparation[item.title]}</Text>
                     </ScrollView>
                     {openDetailViews[index] && (
-                        <View style={[styles.modalContainer, { backgroundColor: theme.colors.color }]}>
+                        <View style={[styles.modalContainer, { backgroundColor: theme.color }]}>
                             <View style={{ maxHeight: 200 }}>
                                 {item.ingredients.map((ingred, ingIndex) => (
                                     <Text key={ingIndex} style={{ fontSize: 18 }}>{handleCrow(ingred)}</Text>

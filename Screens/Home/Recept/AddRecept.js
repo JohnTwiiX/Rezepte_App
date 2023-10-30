@@ -36,7 +36,7 @@ export default function AddReceptScreen({ route }) {
             <TabRecept.Navigator
                 screenOptions={{
                     tabBarIndicatorStyle: {
-                        borderBottomColor: theme.colors.tabColor,
+                        borderBottomColor: theme.tabColor,
                         borderBottomWidth: 3,
                     }
                 }}

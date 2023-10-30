@@ -117,10 +117,10 @@ export default function ReceptChips({ title, handleDataChange, selectedChips }) 
                             key={index}
                             mode='outlined'
                             selected={false}
-                            textStyle={selectedChip.includes(type) ? { color: theme.colors.chip.active.color } : 'black'}
+                            textStyle={selectedChip.includes(type) ? { color: theme.chip.active.color } : 'black'}
                             style={[
                                 styles.chip,
-                                selectedChip.includes(type) ? { backgroundColor: theme.colors.chip.active.bgColor } : { backgroundColor: theme.colors.chip.passive }
+                                selectedChip.includes(type) ? { backgroundColor: theme.chip.active.bgColor } : { backgroundColor: theme.chip.passive }
                             ]}
                         >
                             {type}
