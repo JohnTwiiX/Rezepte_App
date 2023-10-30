@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getArrayFromStorage, multiGetStorage } from './StorageService';
 
 async function fetchData(recept) {
-    const data = await getStorage('recepts');
+    const data = await getArrayFromStorage('recepts');
 
     if (data) {
         const result = data.find(r => r.title === recept);
@@ -11,21 +11,9 @@ async function fetchData(recept) {
     return null;
 }
 
-const getStorage = async (title) => {
-    try {
-        const arrayInString = await AsyncStorage.getItem(title);
-        if (arrayInString != null) {
-            return JSON.parse(arrayInString);
-        }
-        return null;
-    } catch (error) {
-        console.log(`Error retrieving ${title}: ${error}`);
-    }
-}
-
 async function sortChip(chip) {
     try {
-        let values = await AsyncStorage.multiGet(['types', 'collection']);
+        let values = await multiGetStorage(['types', 'collection']);
         let result = null;
 
         values.forEach(([key, value]) => {

@@ -3,20 +3,19 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
-import SettingsScreen from './Settings';
-import HomeScreen from './Home';
-import BasketScreen from './Basket';
-import AddReceptScreen from './AddRecept';
-import CategoryScreen from './Category';
-import ReceptScreen from './Recept';
+import SettingsScreen from './Settings/Settings';
+import HomeScreen from './Home/Home';
+import BasketScreen from './Basket/Basket';
+import AddReceptScreen from './Home/Recept/AddRecept';
+import CategoryScreen from './Home/Recept/Category';
+import ReceptScreen from './/Home/Recept/Recept';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HeaderRightSet from './modals/HeaderRightSet';
-import CategoryFilter from './modals/CategoryFilter';
+import HeaderRightSet from './Home/Recept/ReceptScreen/Modal/HeaderRightSet';
+import CategoryFilter from './Home/Recept/CategoryFilter';
 import { useTheme } from 'react-native-paper';
-import AddReceptBtn from './modals/AddReceptBtn';
-import ImagePickerIcon from './modals/ImagePicker';
+import ImagePickerIcon from './Home/Recept/ReceptScreen/Modal/ImagePicker'
 import { DataProvider } from './modals/DataProvider';
-import EditMode from './modals/EditMode';
+import EditMode from './Home/Bubbles/EditMode'
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -32,7 +31,7 @@ export default function NavigationBar({ username }) {
                     screenOptions={{
                         headerShown: false,
                         tabBarShowLabel: false,
-                        tabBarActiveBackgroundColor: theme.colors.color,
+                        tabBarActiveBackgroundColor: theme.colors.nav,
                         tabBarItemStyle: { borderRadius: 100, height: 50 },
                         tabBarStyle: { height: 50 }
                     }}>
@@ -65,6 +64,8 @@ export default function NavigationBar({ username }) {
                                         name="Home"
                                         component={HomeScreen}
                                         options={({ route, navigation }) => ({
+                                            headerTransparent: true,
+                                            headerStyle: { backgroundColor: 'rgba(255,255,255,0.5)' },
                                             title: `${username}'s Rezepte`,
                                             headerRight: () => (
                                                 <EditMode />
@@ -113,7 +114,7 @@ export default function NavigationBar({ username }) {
                         options={{
                             tabBarIcon: ({ tintColor }) => (
                                 // Hier das Icon ändern
-                                <Icon name="settings-outline" size={25} color={tintColor} />
+                                <Icon name="settings" size={25} color={tintColor} />
                             )
                         }} />
                 </Tab.Navigator>

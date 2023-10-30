@@ -5,8 +5,8 @@ import { StatusBar } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider, ActivityIndicator } from 'react-native-paper';
 import FullScreen from './utils/FullScreen'; // Import FullScreen module
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { getFromStorage } from './Screens/modals/Bubbles';
-import UsernameInput from './Screens/modals/UsernameInput';
+import UsernameInput from './Screens/UsernameInput'
+import { getTextFromStorage } from './Screens/modals/StorageService';
 
 
 // const customTheme = {
@@ -45,9 +45,12 @@ const customTheme = {
       },
       passive: "white"
     },
-    color: "#e1e1e1",
+    // color: "#e1e1e1",
+    color: "#B2B1B6",
     tabColor: "#9a998c",
-    button: "#9a998c"
+    button: "#f3f3f3",
+    // button: "#9a998c",
+    nav: '#905E55'
 
   }
 }
@@ -92,7 +95,7 @@ const customTheme = {
 // };
 async function existUsername() {
   try {
-    return await getFromStorage('@name');
+    return await getTextFromStorage('@name');
   } catch (e) {
     console.error(e)
   }
