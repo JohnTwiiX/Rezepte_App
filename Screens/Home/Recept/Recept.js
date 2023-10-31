@@ -77,6 +77,7 @@ export default function ReceptScreen({ route }) {
                 const basketItem = {
                     title: recepts.title,
                     ingred: recepts.description.receptArray,
+                    potion: recepts.description.potionSize,
                     crowd: crowd,
                     uri: recepts.description.imgUri
                 };
@@ -103,37 +104,30 @@ export default function ReceptScreen({ route }) {
 
     const plusCrowd = () => {
         const newCrowd = crowd + 1;
-        console.log(newCrowd);
         setCrowd(newCrowd);
         setCrowdResult(newCrowd);
     }
 
     const minusCrowd = () => {
         const newCrowd = crowd - 1;
-        console.log(newCrowd);
         setCrowd(newCrowd);
         setCrowdResult(newCrowd);
     }
 
     const handleCrow = (crows) => {
+        const stringPotion = JSON.parse(recepts.description.potionSize).crowd
+        const newPotion = parseInt(stringPotion) + crowd;
         let filterCrowd = crows[0];
+        let result = (filterCrowd / parseInt(stringPotion) * newPotion).toFixed(2).replace(".", ",");
+
+        if (result.endsWith(",00")) {
+            result = result.replace(",00", "");
+        }
         if (typeof filterCrowd === Number) filterCrowd = parseInt(crows[0]);
         if (crows[1] === ' ') {
-            if (crowdResult === 0) {
-                return `${filterCrowd} ${crows[2]} ${crows[4]}`
-            } else if (crowd === -1) {
-                return `${filterCrowd / 2} ${crows[2]} ${crows[4]}`
-            } else {
-                return `${filterCrowd * (crowd + 1)} ${crows[2]} ${crows[4]}`
-            }
+            return `${result} ${crows[2]} ${crows[4]}`
         } else {
-            if (crowdResult === 0) {
-                return `${filterCrowd} ${crows[1]} ${crows[3]}`
-            } else if (crowd === -1) {
-                return `${filterCrowd / 2} ${crows[1]} ${crows[3]}`
-            } else {
-                return `${filterCrowd * (crowd + 1)} ${crows[1]} ${crows[3]}`
-            }
+            return `${result}${crows[1]} ${crows[3]}`
         }
     }
 

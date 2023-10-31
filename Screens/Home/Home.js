@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Keyboard, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { Dialog, Button, RadioButton, TextInput, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Entypo';
 import CircleButtons from './Bubbles/Bubbles';
@@ -52,10 +52,6 @@ export default function HomeScreen({ navigation }) {
         setUpdate(true);
         setVisible(false);
     };
-    const handleBackgroundPress = () => {
-        // Minimiere das Keyboard, wenn irgendwo anders auf dem Bildschirm geklickt wird
-        Keyboard.dismiss();
-    };
 
     React.useEffect(() => {
         setAlert(false);
@@ -72,11 +68,10 @@ export default function HomeScreen({ navigation }) {
 
         <ImageBackground source={require('../../assets/images/bg.jpg')} >
             <View style={styles.container}>
-
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: theme.button }]}
                     // onPress={() => { setVisible(true) }}
-                    onPress={() => { deleteKey('receptTypes') }}
+                    onPress={() => { deleteKey('@name') }}
                     // onPress={() => { getAllKeys() }}
                     onLongPress={() => console.log(getArrayFromStorage('receptTypes'))}>
                     <Icon name="plus" size={26} color="black" />
@@ -84,7 +79,6 @@ export default function HomeScreen({ navigation }) {
                 <View style={{ backgroundColor: 'transparent' }}>
                     <CircleButtons update={update} setUpdate={setUpdate} />
                 </View>
-
                 <Dialog visible={visible} onDismiss={() => setVisible(false)} style={{ paddingBottom: 50 }}>
                     <Dialog.Content>
                         <Text style={{ fontSize: 22 }}>Was für eine Bubble möchtest du erstellen?</Text>
@@ -118,7 +112,6 @@ export default function HomeScreen({ navigation }) {
                         <Button onPress={() => { setVisible(false) }}>Abbrechen</Button>
                     </Dialog.Actions>
                 </Dialog>
-
             </View>
         </ImageBackground>
     );

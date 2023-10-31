@@ -23,34 +23,17 @@ function mergeIngredients(recept) {
                 }
 
                 const existingIngredient = mergedIngredients.find((item) => item.name === name && item.unit === unit);
+                let adjustedQuantity = parseFloat(quantity);
+                const newPotion = parseInt(JSON.parse(recipe.potion).crowd) + parseInt(recipe.crowd)
+                let result = (adjustedQuantity / parseFloat(JSON.parse(recipe.potion).crowd) * newPotion)
 
                 if (existingIngredient) {
                     // Wenn die Zutat bereits in mergedIngredients ist, aktualisiere die Menge
-                    let adjustedQuantity = parseFloat(quantity);
-
-                    if (recipe.crowd === -1) {
-                        adjustedQuantity *= 0.5;
-                    } else if (recipe.crowd < -1) {
-                        adjustedQuantity /= Math.abs(recipe.crowd) + 1;
-                    } else if (recipe.crowd > 1) {
-                        adjustedQuantity *= recipe.crowd + 1;
-                    }
-
-                    existingIngredient.quantity += adjustedQuantity;
+                    existingIngredient.quantity += result;
                 } else {
                     // Andernfalls füge eine neue Zutat hinzu
-                    let adjustedQuantity = parseFloat(quantity);
-
-                    if (recipe.crowd === -1) {
-                        adjustedQuantity *= 0.5;
-                    } else if (recipe.crowd < -1) {
-                        adjustedQuantity /= Math.abs(recipe.crowd) + 1;
-                    } else if (recipe.crowd > 1) {
-                        adjustedQuantity *= recipe.crowd + 1;
-                    }
-
                     mergedIngredients.push({
-                        quantity: adjustedQuantity,
+                        quantity: result,
                         unit,
                         name,
                     });
@@ -58,10 +41,8 @@ function mergeIngredients(recept) {
             }
         }
     }
-
     return mergedIngredients;
 }
-
 
 export default function BasketItem({ item, setIsLoading }) {
     const [ingredients, setIngredients] = React.useState([]);
@@ -72,8 +53,17 @@ export default function BasketItem({ item, setIsLoading }) {
 
     React.useEffect(() => {
         handleIngred();
+        handleFinished();
     }, [item]);
 
+    React.useEffect(() => {
+        saveArrayStorage('@basketFinished', finished);
+    }, [finished.length]);
+
+    const handleFinished = async () => {
+        const result = await getArrayFromStorage('@basketFinished');
+        setFinished(result || []); // Setze auf ein leeres Array, wenn result null ist
+    };
     const handleIngred = () => {
         const ingreds = mergeIngredients(item);
         setIngredients(ingreds);
@@ -95,52 +85,53 @@ export default function BasketItem({ item, setIsLoading }) {
     }
 
     return (
-        <View style={{ height: '100%' }}>
+        <View style={{ height: '100%', }}>
             <Text style={styles.title}>Deine Einkaufsliste</Text>
-            <List.Section>
-                <List.Subheader style={styles.subHeader}>Ausgewählte Rezepte:</List.Subheader>
-                <View style={styles.chipView}>
-                    {item.map((recept, index) =>
-                        <TouchableRipple
-                            key={index}
-                            style={[styles.chipTouch, { backgroundColor: theme.button }]}
-                            onPress={() => { setSelected(recept.title); openDialog(); }}
-                        >
-                            <View style={styles.chipContainer}>
-                                {recept.uri > 0 ?
-                                    <Avatar.Image size={36} source={{ uri: recept.uri }} />
-                                    :
-                                    <Avatar.Image size={36} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
-                                }
-                                <Text style={styles.chipText}>{recept.title} </Text>
-                            </View>
-                        </TouchableRipple>
-                    )}
-                </View>
-                <List.Subheader style={styles.subHeader}>Zutaten:</List.Subheader>
-                <ScrollView>
-                    {ingredients.map((recept, index) =>
-                        <TouchableRipple key={index} style={styles.itemTouch} onPress={() => {
-                            if (finished.includes(recept.name)) {
-                                // Das Element ist bereits im Array, also entfernen wir es
-                                setFinished((prevFinished) => prevFinished.filter((item) => item !== recept.name));
-                            } else {
-                                // Das Element ist nicht im Array, also fügen wir es hinzu
-                                setFinished([...finished, recept.name]);
+            <List.Subheader style={styles.subHeader}>Ausgewählte Rezepte:</List.Subheader>
+            <View style={styles.chipView}>
+                {item.map((recept, index) =>
+                    <TouchableRipple
+                        key={index}
+                        style={[styles.chipTouch, { backgroundColor: theme.button }]}
+                        onPress={() => { setSelected(recept.title); openDialog(); }}
+                    >
+                        <View style={styles.chipContainer}>
+                            {recept.uri > 0 ?
+                                <Avatar.Image size={36} source={{ uri: recept.uri }} />
+                                :
+                                <Avatar.Image size={36} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
                             }
-                        }} >
-                            <View style={styles.itemContainer}>
-                                {/* <View style={[finished.includes(recept.name) ? styles.strikethrough : {}]} /> */}
-                                <View style={styles.itemCheck}>
-                                    <Checkbox color='rgba(0,0,0,0.5)' status={finished.includes(recept.name) ?
-                                        'checked' : 'unchecked'} />
-                                </View>
-                                <Text style={[styles.itemText, finished.includes(recept.name) ? styles.textColor : {}]}>{recept.quantity}{recept.unit} {recept.name}</Text>
+                            <Text style={styles.chipText}>{recept.title} </Text>
+                        </View>
+                    </TouchableRipple>
+                )}
+            </View>
+            <List.Subheader style={styles.subHeader}>Zutaten:</List.Subheader>
+            <ScrollView style={{}}>
+                {ingredients.map((recept, index) =>
+                    <TouchableRipple key={index} style={styles.itemTouch} onPress={() => {
+                        if (finished.includes(recept.name)) {
+                            // Das Element ist bereits im Array, also entfernen wir es
+                            setFinished((prevFinished) => prevFinished.filter((item) => item !== recept.name));
+                        } else {
+                            // Das Element ist nicht im Array, also fügen wir es hinzu
+                            setFinished([...finished, recept.name]);
+                        }
+                    }} >
+                        <View style={styles.itemContainer}>
+                            {/* <View style={[finished.includes(recept.name) ? styles.strikethrough : {}]} /> */}
+                            <View style={styles.itemCheck}>
+                                <Checkbox color='rgba(0,0,0,0.5)' status={finished.includes(recept.name) ?
+                                    'checked' : 'unchecked'} />
                             </View>
-                        </TouchableRipple>
-                    )}
-                </ScrollView>
-            </List.Section>
+                            <Text
+                                style={[styles.itemText, finished.includes(recept.name) ? styles.textColor : {}]}>
+                                {Number.isInteger(recept.quantity) ? recept.quantity : recept.quantity.toFixed(2).replace(".", ",")}{recept.unit} {recept.name}
+                            </Text>
+                        </View>
+                    </TouchableRipple>
+                )}
+            </ScrollView>
             <Dialog visible={visible} onDismiss={closeDialog}>
                 <Dialog.Title>Du möchtest Recept {selected} löschen?</Dialog.Title>
                 <Dialog.Actions>
@@ -152,70 +143,71 @@ export default function BasketItem({ item, setIsLoading }) {
     );
 }
 
-const styles = StyleSheet.create({
-    itemTouch: {
-        backgroundColor: 'rgba(0,0,0,0.05)',
-        marginTop: 8,
-        marginBottom: 8,
-        marginRight: 24,
-        marginLeft: 24,
-        borderRadius: 10
-    },
-    itemContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 60,
-    },
-    itemText: {
-        flex: 1,
-        textAlign: 'center',
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
-    itemCheck: {
-        marginLeft: 16
-    },
-    strikethrough: {
-        position: 'absolute',
-        top: '50%', // Vertikal zentrieren
-        left: 16,
-        right: 16,
-        height: 1.5, // Höhe des Strichs
-        backgroundColor: 'rgba(0,0,0,0.5)', // Farbe des Strichs
-        zIndex: 1, // Damit der Strich unter dem Text und der Checkbox liegt
-    },
-    textColor: {
-        color: 'rgba(0,0,0,0.5)', // Strich sichtbar machen
-        textDecorationLine: 'line-through'
-    },
-    chipTouch: {
-        margin: 8,
-        borderRadius: 10
-    },
-    chipContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: 8,
-    },
-    chipText: {
-        marginLeft: 16,
-        fontSize: 16,
-        fontWeight: '700'
-    },
-    chipView: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginBottom: 32
-    },
-    title: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        margin: 8,
-        textDecorationLine: 'underline',
-        textDecorationStyle: 'double'
-    },
-    subHeader: {
-        fontSize: 18
-    }
-})
+const styles = StyleSheet.create(
+    {
+        itemTouch: {
+            backgroundColor: 'rgba(0,0,0,0.05)',
+            marginTop: 8,
+            marginBottom: 8,
+            marginRight: 24,
+            marginLeft: 24,
+            borderRadius: 10
+        },
+        itemContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: 60,
+        },
+        itemText: {
+            flex: 1,
+            textAlign: 'center',
+            fontSize: 16,
+            fontWeight: 'bold'
+        },
+        itemCheck: {
+            marginLeft: 16
+        },
+        strikethrough: {
+            position: 'absolute',
+            top: '50%', // Vertikal zentrieren
+            left: 16,
+            right: 16,
+            height: 1.5, // Höhe des Strichs
+            backgroundColor: 'rgba(0,0,0,0.5)', // Farbe des Strichs
+            zIndex: 1, // Damit der Strich unter dem Text und der Checkbox liegt
+        },
+        textColor: {
+            color: 'rgba(0,0,0,0.5)', // Strich sichtbar machen
+            textDecorationLine: 'line-through'
+        },
+        chipTouch: {
+            margin: 8,
+            borderRadius: 10
+        },
+        chipContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            margin: 8,
+        },
+        chipText: {
+            marginLeft: 16,
+            fontSize: 16,
+            fontWeight: '700'
+        },
+        chipView: {
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            marginBottom: 32
+        },
+        title: {
+            fontSize: 32,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            margin: 8,
+            textDecorationLine: 'underline',
+            textDecorationStyle: 'double'
+        },
+        subHeader: {
+            fontSize: 18
+        }
+    })

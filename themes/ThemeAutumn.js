@@ -13,6 +13,7 @@ export const ThemeAutumn = {
         elevation: {
             ...DefaultTheme.colors.elevation,
             level1: "white",
+            level2: "#f3f3f3",
             level3: "#e0e5df",
             level4: "black"
         },
@@ -24,10 +25,10 @@ export const ThemeAutumn = {
         },
         passive: "white"
     },
-    // color: "#e1e1e1",
-    color: "#B2B1B6",
+    color: "#B2B1B6",  //"#e1e1e1",
     tabColor: "#9a998c",
-    button: "#f3f3f3",
-    // button: "#9a998c",
-    nav: '#905E55'
+    button: "#f3f3f3",  // "#9a998c",
+    nav: "#905E55",
+    background: "#B2B1B6",
+    input: "#f3f3f3",
 }

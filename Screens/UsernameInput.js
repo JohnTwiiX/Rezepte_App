@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
-import { saveInStorage } from './modals/StorageService';
+import { saveInStorage, saveTextStorage } from './modals/StorageService';
 
 export default function UsernameInput({ setUpdate }) {
     const [text, setText] = React.useState('');
@@ -13,7 +13,7 @@ export default function UsernameInput({ setUpdate }) {
     };
 
     const handleSaveUsername = async () => {
-        await saveInStorage('@name', text);
+        await saveTextStorage('@name', text);
         setUpdate(true)
     }
 

@@ -126,8 +126,6 @@ function filterRecepts(recepts, selectedChips) {
     return filteredRecepts;
 }
 
-let openDialog = false;
-
 export function setDialogVisible() {
 
     openDialog = true

@@ -47,11 +47,9 @@ export default function App() {
   }
 
   const handleTheme = async () => {
-    console.log('------')
     const theme = await getTextFromStorage('@theme');
     switch (theme) {
-      case null:
-        console.log('----- ', theme)
+      case 'ThemeAutumn':
         return ThemeAutumn;
       default:
         return ThemeAutumn;
