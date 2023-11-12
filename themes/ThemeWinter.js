@@ -1,6 +1,6 @@
 import { DefaultTheme } from "react-native-paper";
 
-export const ThemeAutumn = {
+export const ThemeWinter = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
@@ -8,7 +8,7 @@ export const ThemeAutumn = {
         // primary: "#c2cac2",
         primaryContainer: "#c2cac2",
         onPrimaryContainer: "black",
-        primary: "#9a998c",
+        primary: "black",
         backdrop: 'transparent',
         elevation: {
             ...DefaultTheme.colors.elevation,
@@ -31,5 +31,4 @@ export const ThemeAutumn = {
     nav: "#905E55",
     background: "#B2B1B6",
     input: "#f3f3f3",
-    backgroundImage: require('../assets/images/authumn-bg.jpg')
 }

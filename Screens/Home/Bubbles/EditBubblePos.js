@@ -13,7 +13,7 @@ async function moveToStartEnd(arr, item, isStart, setUpdate) {
         // Move item to end
         arr.push(element);
     }
-    await saveArrayStorage('receptTypes', arr);
+    await saveArrayStorage('recipeTypes', arr);
     setUpdate(true);
 }
 
@@ -36,7 +36,7 @@ async function moveUpDown(arr, item, isUp, setUpdate) {
         arr[index] = arr[index + 1];
         arr[index + 1] = temp;
     }
-    await saveArrayStorage('receptTypes', arr)
+    await saveArrayStorage('recipeTypes', arr)
     setUpdate(true);
 }
 

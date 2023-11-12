@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react
 import { Dialog, Button, RadioButton, TextInput, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Entypo';
 import CircleButtons from './Bubbles/Bubbles';
-import { saveAll } from './Recept/ReceptScreen/Preparation';
+import { saveAll } from './Recipe/RecipeScreen/Preparation';
 import { useFocusEffect } from '@react-navigation/native';
 import { deleteKey, getAllKeys, getArrayFromStorage, saveArrayStorage } from '../modals/StorageService';
 
@@ -66,14 +66,14 @@ export default function HomeScreen({ navigation }) {
 
     return (
 
-        <ImageBackground source={require('../../assets/images/bg.jpg')} >
+        <ImageBackground source={theme.backgroundImage} >
             <View style={styles.container}>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: theme.button }]}
                     // onPress={() => { setVisible(true) }}
-                    onPress={() => { deleteKey('@name') }}
-                    // onPress={() => { getAllKeys() }}
-                    onLongPress={() => console.log(getArrayFromStorage('receptTypes'))}>
+                    onPress={() => { deleteKey('@checkedRecipes') }}
+                    // onPress={async () => { console.log(await getAllKeys()) }}
+                    onLongPress={() => console.log(getArrayFromStorage('recipeTypes'))}>
                     <Icon name="plus" size={26} color="black" />
                 </TouchableOpacity>
                 <View style={{ backgroundColor: 'transparent' }}>

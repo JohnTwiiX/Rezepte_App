@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState } from 'react';
 import { getArrayFromStorage, multiGetStorage } from './StorageService';
 
-async function fetchData(recept) {
-    const data = await getArrayFromStorage('recepts');
+async function fetchData(recipe) {
+    const data = await getArrayFromStorage('recipes');
 
     if (data) {
-        const result = data.find(r => r.title === recept);
+        const result = data.find(r => r.title === recipe);
         return result;
     }
     return null;
@@ -47,7 +47,7 @@ export function DataProvider({ children }) {
         collection: [],
         imgUri: '',
         // Ingredients
-        receptArray: [],
+        recipeArray: [],
         // preparation
         // Settings
         isFetched: false,
@@ -55,21 +55,21 @@ export function DataProvider({ children }) {
         inBasket: false,
     });
 
-    const setRecept = (recept) => {
-        fetchData(recept).then((data) => {
-            // setFetchedRecept(data);
+    const setRecipe = (recipe) => {
+        fetchData(recipe).then((data) => {
+            // setFetchedRecipe(data);
             setData({
                 // Overview
                 title: data.title,
                 potionSize: data.description.potionSize,
                 workTime: data.description.workTime,
                 cookingTime: data.description.cookingTime,
-                types: data.description.receptType,
+                types: data.description.recipeType,
                 category: data.description.category,
                 collection: data.description.collection,
                 imgUri: data.description.imgUri,
                 // Ingredients
-                receptArray: data.description.receptArray,
+                recipeArray: data.description.recipeArray,
                 // preparation
                 preparation: data.description.preparation,
                 // Settings
@@ -104,7 +104,7 @@ export function DataProvider({ children }) {
             collection: [],
             imgUri: '',
             // Ingredients
-            receptArray: [],
+            recipeArray: [],
             // preparation
             // Settings
             isFetched: false,
@@ -112,7 +112,7 @@ export function DataProvider({ children }) {
     }
 
     return (
-        <DataContext.Provider value={{ data, updateData, setRecept, setChip, deleteData }}>
+        <DataContext.Provider value={{ data, updateData, setRecipe, setChip, deleteData }}>
             {children}
         </DataContext.Provider>
     );

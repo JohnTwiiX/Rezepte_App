@@ -3,19 +3,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
-import SettingsScreen from './Settings/Settings';
+import SettingsScreen from './Home/Settings/Settings';
 import HomeScreen from './Home/Home';
 import BasketScreen from './Basket/Basket';
-import AddReceptScreen from './Home/Recept/AddRecept';
-import CategoryScreen from './Home/Recept/Category';
-import ReceptScreen from './/Home/Recept/Recept';
+import AddRecipeScreen from './Home/Recipe/AddRecipe';
+import CategoryScreen from './Home/Recipe/Category';
+import RecipeScreen from './/Home/Recipe/Recipe';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HeaderRightSet from './Home/Recept/ReceptScreen/Modal/HeaderRightSet';
-import CategoryFilter from './Home/Recept/CategoryFilter';
+import HeaderRightSet from './Home/Recipe/RecipeScreen/Modal/HeaderRightSet';
+import CategoryFilter from './Home/Recipe/CategoryFilter';
 import { useTheme } from 'react-native-paper';
-import ImagePickerIcon from './Home/Recept/ReceptScreen/Modal/ImagePicker'
+import ImagePickerIcon from './Home/Recipe/RecipeScreen/Modal/ImagePicker'
 import { DataProvider } from './modals/DataProvider';
-import EditMode from './Home/Bubbles/EditMode'
+import HomeMenu from './Home/HomeMenu';
+import WeekOrgScreen from './WeekOrg/WeekOrgScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -68,13 +69,18 @@ export default function NavigationBar({ username }) {
                                             headerStyle: { backgroundColor: 'rgba(255,255,255,0.5)' },
                                             title: `${username}'s Rezepte`,
                                             headerRight: () => (
-                                                <EditMode />
+                                                <HomeMenu navigation={navigation} />
                                             ),
                                         })}>
                                     </HomeStack.Screen>
                                     <HomeStack.Screen
-                                        name="AddRecept"
-                                        component={AddReceptScreen}
+                                        name="Settings"
+                                        component={SettingsScreen}
+                                    >
+                                    </HomeStack.Screen>
+                                    <HomeStack.Screen
+                                        name="AddRecipe"
+                                        component={AddRecipeScreen}
                                         options={({ route }) => ({
                                             title: route.params.title,
                                             headerRight: () => (
@@ -94,8 +100,8 @@ export default function NavigationBar({ username }) {
                                         })}  >
                                     </HomeStack.Screen>
                                     <HomeStack.Screen
-                                        name="Recept"
-                                        component={ReceptScreen}
+                                        name="Recipe"
+                                        component={RecipeScreen}
                                         options={({ route, navigation }) => ({
                                             title: route.params.title,
                                             headerTitleAlign: 'center',
@@ -110,11 +116,11 @@ export default function NavigationBar({ username }) {
                     </Tab.Screen>
                     <Tab.Screen
                         name="Settings"
-                        component={SettingsScreen}
+                        component={WeekOrgScreen}
                         options={{
                             tabBarIcon: ({ tintColor }) => (
                                 // Hier das Icon ändern
-                                <Icon name="settings" size={25} color={tintColor} />
+                                <Icon name="calendar-outline" size={25} color={tintColor} />
                             )
                         }} />
                 </Tab.Navigator>
@@ -123,10 +129,10 @@ export default function NavigationBar({ username }) {
     )
 }
 
-// function AddReceptScreenWrapper() {
+// function AddRecipeScreenWrapper() {
 //     return (
-//         <DataProvider recept={recept} chip={chip}>
-//             <AddReceptScreen />
+//         <DataProvider recipe={recipe} chip={chip}>
+//             <AddRecipeScreen />
 //         </DataProvider>
 //     );
 // }

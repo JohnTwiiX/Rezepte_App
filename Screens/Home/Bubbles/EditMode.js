@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from 'react-nati
 import { Dialog, Button } from 'react-native-paper';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { defaultCollection, defaultTypes } from './ReceptChips';
+import { defaultCollection, defaultTypes } from './RecipeChips';
 import { useData } from '../../modals/DataProvider';
 import Icon from 'react-native-vector-icons/Ionicons';
 

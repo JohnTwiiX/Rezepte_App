@@ -3,11 +3,11 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Checkbox, Dialog, List, Text, TouchableRipple, useTheme } from 'react-native-paper';
 import { getArrayFromStorage, saveArrayStorage } from '../modals/StorageService';
 
-function mergeIngredients(recept) {
+export function mergeIngredients(recipes) {
     const mergedIngredients = [];
 
     // Durchlaufe jedes Rezept
-    for (const recipe of recept) {
+    for (const recipe of recipes) {
         // Durchlaufe jedes "ingred" im Rezept
         for (const ingredientGroup of recipe.ingred) {
             // Durchlaufe jedes "ingredients" im "ingred"
@@ -77,7 +77,7 @@ export default function BasketItem({ item, setIsLoading }) {
         setVisible(true);
     };
 
-    const deleteRecept = async () => {
+    const deleteRecipe = async () => {
         const basketArray = await getArrayFromStorage('@basket');
         const newBasketArray = basketArray.filter((prevItem) => prevItem.title !== selected);
         await saveArrayStorage('@basket', newBasketArray);
@@ -86,56 +86,56 @@ export default function BasketItem({ item, setIsLoading }) {
 
     return (
         <View style={{ height: '100%', }}>
-            <Text style={styles.title}>Deine Einkaufsliste</Text>
+            <Text variant="displaySmall" style={styles.title}>Deine Einkaufsliste</Text>
             <List.Subheader style={styles.subHeader}>Ausgewählte Rezepte:</List.Subheader>
             <View style={styles.chipView}>
-                {item.map((recept, index) =>
+                {item.map((recipe, index) =>
                     <TouchableRipple
                         key={index}
                         style={[styles.chipTouch, { backgroundColor: theme.button }]}
-                        onPress={() => { setSelected(recept.title); openDialog(); }}
+                        onPress={() => { setSelected(recipe.title); openDialog(); }}
                     >
                         <View style={styles.chipContainer}>
-                            {recept.uri > 0 ?
-                                <Avatar.Image size={36} source={{ uri: recept.uri }} />
+                            {recipe.uri > 0 ?
+                                <Avatar.Image size={36} source={{ uri: recipe.uri }} />
                                 :
                                 <Avatar.Image size={36} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
                             }
-                            <Text style={styles.chipText}>{recept.title} </Text>
+                            <Text style={styles.chipText}>{recipe.title} </Text>
                         </View>
                     </TouchableRipple>
                 )}
             </View>
             <List.Subheader style={styles.subHeader}>Zutaten:</List.Subheader>
             <ScrollView style={{}}>
-                {ingredients.map((recept, index) =>
+                {ingredients.map((recipe, index) =>
                     <TouchableRipple key={index} style={styles.itemTouch} onPress={() => {
-                        if (finished.includes(recept.name)) {
+                        if (finished.includes(recipe.name)) {
                             // Das Element ist bereits im Array, also entfernen wir es
-                            setFinished((prevFinished) => prevFinished.filter((item) => item !== recept.name));
+                            setFinished((prevFinished) => prevFinished.filter((item) => item !== recipe.name));
                         } else {
                             // Das Element ist nicht im Array, also fügen wir es hinzu
-                            setFinished([...finished, recept.name]);
+                            setFinished([...finished, recipe.name]);
                         }
                     }} >
                         <View style={styles.itemContainer}>
-                            {/* <View style={[finished.includes(recept.name) ? styles.strikethrough : {}]} /> */}
+                            {/* <View style={[finished.includes(recipe.name) ? styles.strikethrough : {}]} /> */}
                             <View style={styles.itemCheck}>
-                                <Checkbox color='rgba(0,0,0,0.5)' status={finished.includes(recept.name) ?
+                                <Checkbox color='rgba(0,0,0,0.5)' status={finished.includes(recipe.name) ?
                                     'checked' : 'unchecked'} />
                             </View>
                             <Text
-                                style={[styles.itemText, finished.includes(recept.name) ? styles.textColor : {}]}>
-                                {Number.isInteger(recept.quantity) ? recept.quantity : recept.quantity.toFixed(2).replace(".", ",")}{recept.unit} {recept.name}
+                                style={[styles.itemText, finished.includes(recipe.name) ? styles.textColor : {}]}>
+                                {Number.isInteger(recipe.quantity) ? recipe.quantity : recipe.quantity.toFixed(2).replace(".", ",")}{recipe.unit} {recipe.name}
                             </Text>
                         </View>
                     </TouchableRipple>
                 )}
             </ScrollView>
             <Dialog visible={visible} onDismiss={closeDialog}>
-                <Dialog.Title>Du möchtest Recept {selected} löschen?</Dialog.Title>
+                <Dialog.Title>Du möchtest Recipe {selected} löschen?</Dialog.Title>
                 <Dialog.Actions>
-                    <Button onPress={() => { deleteRecept(); setIsLoading(true); }}>Ja</Button>
+                    <Button onPress={() => { deleteRecipe(); setIsLoading(true); }}>Ja</Button>
                     <Button onPress={() => { closeDialog() }}>Nein</Button>
                 </Dialog.Actions>
             </Dialog>
@@ -200,7 +200,6 @@ const styles = StyleSheet.create(
             marginBottom: 32
         },
         title: {
-            fontSize: 32,
             fontWeight: 'bold',
             textAlign: 'center',
             margin: 8,

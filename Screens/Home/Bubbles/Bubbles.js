@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from 'react-native';
 import { Dialog, Button, ActivityIndicator, useTheme } from 'react-native-paper';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { defaultCollection, defaultTypes } from '../../Home/Recept/ReceptScreen/Modal/ReceptChips';
+import { defaultCollection, defaultTypes } from '../../Home/Recipe/RecipeScreen/Modal/RecipeChips';
 import { useData } from '../../modals/DataProvider';
 import EditBubblePos, { getIndex } from './EditBubblePos';
 import { getArrayFromStorage, multiGetStorage, saveArrayStorage } from '../../modals/StorageService';
@@ -52,20 +52,20 @@ async function fetchBubbles() {
     return values
 }
 
-async function changeBubbleSize(size, receptTypes, item, setUpdate) {
-    const index = getIndex(receptTypes, item);
-    const newSizeArray = receptTypes.map((element, i) => {
+async function changeBubbleSize(size, recipeTypes, item, setUpdate) {
+    const index = getIndex(recipeTypes, item);
+    const newSizeArray = recipeTypes.map((element, i) => {
         if (i === index) {
             return { ...element, size: size };
         } else {
             return element;
         }
     });
-    await saveArrayStorage('receptTypes', newSizeArray);
+    await saveArrayStorage('recipeTypes', newSizeArray);
     setUpdate(true);
 }
 
-async function fetchData(setReceptTypes) {
+async function fetchData(setRecipeTypes) {
     try {
         fetchBubbles().then(async (data) => {
             let bubbles = [];
@@ -81,7 +81,7 @@ async function fetchData(setReceptTypes) {
                     bubbles.push(...JSON.parse(value))
                 });
             }
-            let fetchedTypes = await getArrayFromStorage('receptTypes');
+            let fetchedTypes = await getArrayFromStorage('recipeTypes');
             if (fetchedTypes === null) {
                 const bubbleArray = []
                 for (let i = 0; i < bubbles.length; i++) {
@@ -91,14 +91,14 @@ async function fetchData(setReceptTypes) {
                     }
                     bubbleArray.push(bubble);
                 }
-                saveArrayStorage('receptTypes', bubbleArray);
-                setReceptTypes(bubbleArray);
+                saveArrayStorage('recipeTypes', bubbleArray);
+                setRecipeTypes(bubbleArray);
                 return;
             }
             fetchedTypes = fetchedTypes;
             if (bubbles.length === fetchBubbles.length && bubbles.every(item => fetchedTypes.some(bubble => bubble.title === item))) {
                 // All items are in the same order
-                setReceptTypes(fetchedTypes);
+                setRecipeTypes(fetchedTypes);
             } else {
                 if (fetchedTypes.length > bubbles.length) {
                     // Remove items from fetchedTypes that are not in bubbles
@@ -116,8 +116,8 @@ async function fetchData(setReceptTypes) {
                     });
                 }
                 // console.log('bin hier da ein neues Item drin ist... ', fetchedTypes);
-                saveArrayStorage('receptTypes', fetchedTypes);
-                setReceptTypes(fetchedTypes);
+                saveArrayStorage('recipeTypes', fetchedTypes);
+                setRecipeTypes(fetchedTypes);
             }
         })
     } catch (e) {
@@ -127,7 +127,7 @@ async function fetchData(setReceptTypes) {
 }
 
 export default function CircleButtons({ update, setUpdate }) {
-    const [receptTypes, setReceptTypes] = React.useState([]);
+    const [recipeTypes, setRecipeTypes] = React.useState([]);
     const [selectedItem, setSelectedItem] = React.useState('');
     const [visible, setVisible] = React.useState(false);
     const [visibleSize, setVisibleSize] = React.useState(false);
@@ -135,13 +135,13 @@ export default function CircleButtons({ update, setUpdate }) {
     const theme = useTheme();
     useFocusEffect(
         React.useCallback(() => {
-            fetchData(setReceptTypes);
+            fetchData(setRecipeTypes);
         }, []),
     );
 
     React.useEffect(() => {
         if (update === true) {
-            fetchData(setReceptTypes);
+            fetchData(setRecipeTypes);
             setUpdate(false);
         }
     }, [update]);
@@ -152,7 +152,7 @@ export default function CircleButtons({ update, setUpdate }) {
             {data && data.isEditMode && <View style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}><Text style={{ textAlign: 'center', fontSize: 18, color: 'rgba(0,0,0,0.8)' }}>Verändere deine Bubbles in der Position/Größe.</Text></View>}
             <ScrollView >
                 <View style={styles.container}>
-                    {receptTypes ? receptTypes.map((bubble, index) =>
+                    {recipeTypes ? recipeTypes.map((bubble, index) =>
                         <View key={index}>
                             <CircleButton
                                 descr={bubble.title}
@@ -176,7 +176,7 @@ export default function CircleButtons({ update, setUpdate }) {
                         </View>}
                 </View>
             </ScrollView>
-            {data.isEditMode && selectedItem && <EditBubblePos arr={receptTypes} setUpdate={setUpdate} item={selectedItem} />}
+            {data.isEditMode && selectedItem && <EditBubblePos arr={recipeTypes} setUpdate={setUpdate} item={selectedItem} />}
             <Dialog visible={visible} onDismiss={() => setVisible(false)}>
                 <Dialog.Content>
                     <Text style={{ fontSize: 22 }}>Bist du sicher, dass "{selectedItem}" gelöscht werden soll?</Text>
@@ -191,9 +191,9 @@ export default function CircleButtons({ update, setUpdate }) {
                     <Text style={{ fontSize: 22 }}>Wähle eine Größe</Text>
                 </Dialog.Content>
                 <Dialog.Actions style={{ justifyContent: 'space-around' }}>
-                    <Button mode='outlined' onPress={() => { changeBubbleSize(130, receptTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Klein</Button>
-                    <Button mode='outlined' onPress={() => { changeBubbleSize(160, receptTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Mittel</Button>
-                    <Button mode='outlined' onPress={() => { changeBubbleSize(200, receptTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Groß</Button>
+                    <Button mode='outlined' onPress={() => { changeBubbleSize(130, recipeTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Klein</Button>
+                    <Button mode='outlined' onPress={() => { changeBubbleSize(160, recipeTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Mittel</Button>
+                    <Button mode='outlined' onPress={() => { changeBubbleSize(200, recipeTypes, selectedItem, setUpdate); setVisibleSize(false) }}>Groß</Button>
                 </Dialog.Actions>
             </Dialog>
         </View>
@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        fontFamily: 'Playfair_9pt_SemiCondensed-BlackItalic'
     },
     innerView: {
         flex: 1,
@@ -214,8 +213,8 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: 'center',
-        fontSize: 21,
-        fontFamily: 'spinwerad'
+        fontSize: 40,
+        fontFamily: 'Perfect_Beloved'
     }
 });
 
