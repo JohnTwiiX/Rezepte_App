@@ -175,7 +175,6 @@ export default function RecipeScreen({ route }) {
                             ) : (
                                 <RecipeMaxDrawer recipes={recipes} handleCrow={handleCrow} />
                             )}
-
                         </View>
                     )
                 }

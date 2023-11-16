@@ -71,9 +71,9 @@ export default function HomeScreen({ navigation }) {
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: theme.button }]}
                     // onPress={() => { setVisible(true) }}
-                    onPress={() => { deleteKey('@checkedRecipes') }}
+                    // onPress={() => { deleteKey('@checkedRecipes') }}
                     // onPress={async () => { console.log(await getAllKeys()) }}
-                    onLongPress={() => console.log(getArrayFromStorage('recipeTypes'))}>
+                    onLongPress={() => getArrayFromStorage('@checkedRecipes')}>
                     <Icon name="plus" size={26} color="black" />
                 </TouchableOpacity>
                 <View style={{ backgroundColor: 'transparent' }}>

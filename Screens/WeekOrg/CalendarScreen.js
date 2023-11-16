@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { Agenda, LocaleConfig } from 'react-native-calendars';
+import { Calendar, Agenda, LocaleConfig } from 'react-native-calendars';
 import { getArrayFromStorage, saveArrayStorage } from '../modals/StorageService';
-import { Modal, Text, Button, Divider } from 'react-native-paper';
+import { Card, Modal, Text, Button } from 'react-native-paper';
 import WeekOrgCard from './modals/WeekOrgCard';
-import WeekOrgFilter from './modals/WeekOrgFilter';
+import WeekOrgFilter, { SubtitleLine } from './modals/WeekOrgFilter';
 import { useFocusEffect } from '@react-navigation/core';
+import RecipeScreen from '../Home/Recipe/Recipe';
 
 LocaleConfig.locales['de'] = {
     monthNames: [
@@ -66,42 +67,14 @@ const deleteOldRecipes = (recipeJson) => {
     return result;
 };
 
-function getCurrentWeekDates() {
-    const today = new Date();
-    const currentDay = today.getDay(); // 0 (Sonntag) bis 6 (Samstag)
-
-    // Um die Differenz zwischen dem aktuellen Tag und Montag zu berechnen
-    const diff = currentDay - 1 + (currentDay === 0 ? 6 : 0);
-
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - diff); // Montag der aktuellen Woche
-
-    const weekDates = [];
-    for (let i = 0; i < 7; i++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(startDate.getDate() + i);
-        weekDates.push(formatDate(currentDate));
-    }
-
-    return weekDates;
-}
-function formatDate(date) {
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const day = ('0' + date.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-}
-
-export default function WeekOrgScreen({ navigation }) {
-    const [recipes, setRecipes] = React.useState([]);
-    const [currentWeek, setCurrentWeek] = React.useState([]);
+export default function CalendarScreen({ navigation }) {
+    const [recipes, setRecipes] = React.useState([])
     const [items, setItems] = React.useState({});
     const [selectedDay, setSelectedDay] = React.useState(getToday());
     const [visible, setVisible] = React.useState(false);
     const [card, setCard] = React.useState(false);
     const [selectedRecipe, setSelectedRecipe] = React.useState({});
     const [recipeChanged, setRecipeChanged] = React.useState(false);
-    const weekArray = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 
     useFocusEffect(
         React.useCallback(() => {
@@ -119,7 +92,6 @@ export default function WeekOrgScreen({ navigation }) {
             }
             setSelectedDay(getToday());
             fetchData();
-            setCurrentWeek(getCurrentWeekDates());
         }, []),);
 
     React.useEffect(() => {
@@ -170,45 +142,62 @@ export default function WeekOrgScreen({ navigation }) {
         setVisible(true)
     }
 
-    const transformDate = (date) => {
-        const dateParts = date.split('-');
-        const viewDate = `${dateParts[2]}.${dateParts[1]}`;
-        return viewDate
-    }
-
     const goToRecipeScreen = (recipe) => {
         // Hier navigieren wir zur "Recipe" Seite
-        navigation.navigate('Recipe', { title: recipe, category: recipe })
+        navigation.navigate('Recipe', { title: recipe.title })
     };
 
-    return (
-        <View style={styles.viewContainer}>
-            {currentWeek.map((day, index) => (
-                <View key={index}>
-                    <View style={styles.dayView}>
-                        <View style={styles.dateView}>
-                            <Text variant="headlineSmall">{weekArray[index]}:</Text>
-                            <Text variant="headlineSmall">{transformDate(day)}</Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            {items[day] ?
-                                <View style={styles.itemView}>
-                                    <TouchableWithoutFeedback onPress={() => goToRecipeScreen(items[day]?.recipe.title)}>
-                                        <Text variant="headlineSmall" style={styles.recipeText}>{items[day]?.recipe.title}</Text>
-                                    </TouchableWithoutFeedback>
-                                    <Button onPress={() => deleteRecipe(day)}>Löschen</Button>
-                                </View>
-                                :
-                                <View style={styles.emptyItem}>
-                                    <Button onPress={() => { setSelectedDay(day); openModal() }}>Hinzufügen</Button>
-                                </View>
-                            }
-                        </View>
-                    </View>
-                    <Divider bold />
-                </View>
-            ))}
+    const markedDates = React.useMemo(() => {
+        // Hier die Markierungen für jedes Datum in items erstellen
+        const marked = {};
+        Object.keys(items).forEach(key => {
+            marked[key] = { marked: true };
+        });
+        return marked;
+    }, [items]);
 
+
+    return (
+        <View style={{ flex: 1 }}>
+            <Agenda
+                firstDay={1}
+                selected={getToday()}
+                // Die zu zeigenden Elemente
+                items={items}
+
+                // Callback, wenn ein Tag geändert wird
+                onDayPress={onDayPress}
+
+                // Callback zur Darstellung eines Elements
+                // renderItem={(item) => {
+                //     console.log(item)
+                //     return (<View style={{ backgroundColor: 'red' }}><Text> hiii</Text></View>);
+                // }}
+                showOnlySelectedDayItems
+                markedDates={markedDates}  // Verwenden Sie die markierten Daten
+                // Callback zur Darstellung eines leeren Datums
+                renderEmptyData={() => {
+                    return (
+                        <View>
+                            <Text variant="headlineLarge" style={styles.recipeText}>Kein Rezept ausgewählt </Text>
+                            <Button onPress={() => openModal()} >Rezept hinzufügen</Button>
+                        </View>
+                    );
+                }}
+                renderDay={() => {
+                    const recipe = items[selectedDay];
+                    console.log(recipe.recipe.description.imgUri)
+                    return (
+                        <View style={{ width: '100%' }}>
+                            <Card onPress={() => goToRecipeScreen(recipe.recipe)}>
+                                <Text variant="headlineLarge" style={styles.recipeText}>{recipe.recipe.title}</Text>
+                                <Card.Cover style={styles.cardImg} source={{ uri: recipe.recipe.description.imgUri }} />
+                                <Button onPress={() => deleteRecipe(selectedDay)} >Rezept löschen</Button>
+                            </Card>
+                        </View>
+                    );
+                }}
+            />
             <Modal style={{ backgroundColor: 'rgba(0,0,0,0.8)' }} visible={visible} onDismiss={closeModal}>
                 <WeekOrgFilter recipes={recipes} setSelectedRecipe={setSelectedRecipe} setCard={setCard} />
             </Modal>
@@ -220,32 +209,13 @@ export default function WeekOrgScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    viewContainer: {
-        padding: 16,
-        height: '100%'
-    },
-    dayView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        margin: 12
-    },
-    itemView: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginLeft: 16,
-    },
-    dateView: {
-        width: '20%'
+    calendarView: {
+        height: '40%'
     },
     recipeText: {
-        textAlign: 'center',
-        flex: 1
+        textAlign: 'center'
     },
-    emptyItem: {
-        flex: 1,
-        alignItems: 'flex-end'
+    cardImg: {
+        margin: 16
     }
 })

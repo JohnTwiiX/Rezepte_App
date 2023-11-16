@@ -16,7 +16,7 @@ import { useTheme } from 'react-native-paper';
 import ImagePickerIcon from './Home/Recipe/RecipeScreen/Modal/ImagePicker'
 import { DataProvider } from './modals/DataProvider';
 import HomeMenu from './Home/HomeMenu';
-import WeekOrgScreen from './WeekOrg/WeekOrgScreen';
+import WeekOrgNav from './WeekOrg/WeekOrgNav';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -59,7 +59,7 @@ export default function NavigationBar({ username }) {
                                 <HomeStack.Navigator screenOptions={{
                                     // headerShown: false,
                                     tabBarShowLabel: false,
-                                    headerTitleAlign: 'center'
+                                    headerTitleAlign: 'center',
                                 }}>
                                     <HomeStack.Screen
                                         name="Home"
@@ -115,14 +115,14 @@ export default function NavigationBar({ username }) {
                         )}
                     </Tab.Screen>
                     <Tab.Screen
-                        name="Settings"
-                        component={WeekOrgScreen}
-                        options={{
+                        name="WeekOrg"
+                        component={WeekOrgNav}
+                        options={({ route, navigation }) => ({
                             tabBarIcon: ({ tintColor }) => (
                                 // Hier das Icon ändern
                                 <Icon name="calendar-outline" size={25} color={tintColor} />
                             )
-                        }} />
+                        })} />
                 </Tab.Navigator>
             </NavigationContainer>
         </SafeAreaProvider>

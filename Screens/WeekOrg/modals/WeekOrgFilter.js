@@ -106,6 +106,7 @@ export default function WeekOrgFilter({ recipes, setSelectedRecipe, setCard }) {
 
 const styles = StyleSheet.create({
     modalView: {
+        borderRadius: 10,
         padding: 16,
         backgroundColor: "white",
         height: '80%'
@@ -118,9 +119,6 @@ const styles = StyleSheet.create({
         margin: 8,
     },
     cardContainer: {
-        // display:'flex',
-        // flexDirection: 'row',
-        // flexWrap: 'wrap',
         margin: 16,
         marginTop: 16
     },
