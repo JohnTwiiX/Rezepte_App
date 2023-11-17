@@ -6,6 +6,7 @@ import CircleButtons from './Bubbles/Bubbles';
 import { saveAll } from './Recipe/RecipeScreen/Preparation';
 import { useFocusEffect } from '@react-navigation/native';
 import { deleteKey, getAllKeys, getArrayFromStorage, saveArrayStorage } from '../modals/StorageService';
+import { useData } from '../modals/DataProvider';
 
 saveInStorage = async (type, text) => {
     try {
@@ -34,6 +35,7 @@ export default function HomeScreen({ navigation }) {
     const [alert, setAlert] = React.useState(false);
     const [exist, setExist] = React.useState(false);
     const [update, setUpdate] = React.useState(false);
+    const { data, updateData } = useData();
 
 
     const theme = useTheme();
@@ -64,17 +66,38 @@ export default function HomeScreen({ navigation }) {
             saveAll();
         }, []),);
 
+    const handleDataChange = () => {
+        if (data.isEditMode) {
+            const updatedData = { ...data };
+            updatedData['isEditMode'] = false;
+            updateData(updatedData);
+        } else {
+            const updatedData = { ...data };
+            updatedData['isEditMode'] = true;
+            updateData(updatedData);
+        }
+    };
+
     return (
 
         <ImageBackground source={theme.backgroundImage} >
             <View style={styles.container}>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: theme.button }]}
-                    // onPress={() => { setVisible(true) }}
+                    onPress={() => {
+                        data.isEditMode ?
+                            handleDataChange()
+                            :
+                            setVisible(true);
+                    }}
                     // onPress={() => { deleteKey('@checkedRecipes') }}
                     // onPress={async () => { console.log(await getAllKeys()) }}
                     onLongPress={() => getArrayFromStorage('@checkedRecipes')}>
-                    <Icon name="plus" size={26} color="black" />
+                    {data.isEditMode ?
+                        <Icon name="cross" size={26} color="black" />
+                        :
+                        <Icon name="plus" size={26} color="black" />
+                    }
                 </TouchableOpacity>
                 <View style={{ backgroundColor: 'transparent' }}>
                     <CircleButtons update={update} setUpdate={setUpdate} />
@@ -101,6 +124,7 @@ export default function HomeScreen({ navigation }) {
                             style={{ backgroundColor: theme.color }}
                             label="Bubble"
                             value={text}
+                            maxLength={15}
                             onChangeText={text => setText(text)}
                             error={alert && text.length === 0}
                         />

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
 import { getArrayFromStorage, saveArrayStorage } from '../modals/StorageService';
-import { Modal, Text, Button, Divider } from 'react-native-paper';
+import { Modal, Text, Button, Divider, Avatar } from 'react-native-paper';
 import WeekOrgCard from './modals/WeekOrgCard';
 import WeekOrgFilter from './modals/WeekOrgFilter';
 import { useFocusEffect } from '@react-navigation/core';
@@ -194,7 +194,10 @@ export default function WeekOrgScreen({ navigation }) {
                             {items[day] ?
                                 <View style={styles.itemView}>
                                     <TouchableWithoutFeedback onPress={() => goToRecipeScreen(items[day]?.recipe.title)}>
-                                        <Text variant="headlineSmall" style={styles.recipeText}>{items[day]?.recipe.title}</Text>
+                                        <View style={styles.item}>
+                                            <Avatar.Image source={{ uri: items[day]?.recipe.description.imgUri }} />
+                                            <Text variant="headlineSmall" style={styles.recipeText}>{items[day]?.recipe.title}</Text>
+                                        </View>
                                     </TouchableWithoutFeedback>
                                     <Button onPress={() => deleteRecipe(day)}>Löschen</Button>
                                 </View>
@@ -222,7 +225,8 @@ export default function WeekOrgScreen({ navigation }) {
 const styles = StyleSheet.create({
     viewContainer: {
         padding: 16,
-        height: '100%'
+        height: '90%',
+        justifyContent: 'space-between'
     },
     dayView: {
         flexDirection: 'row',
@@ -235,17 +239,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginLeft: 16,
     },
     dateView: {
         width: '20%'
     },
     recipeText: {
-        textAlign: 'center',
-        flex: 1
+        marginLeft: 16
     },
     emptyItem: {
         flex: 1,
         alignItems: 'flex-end'
+    },
+    item: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

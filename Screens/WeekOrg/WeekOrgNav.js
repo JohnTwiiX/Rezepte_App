@@ -16,15 +16,17 @@ export default function WeekOrgNav({ navigation }) {
     };
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ height: '100%' }}>
             <Text variant="displaySmall" style={styles.title}>Wochen Planer</Text>
             {/* Ihre Tab-Leiste mit dem Wechsel-Button */}
             <View style={styles.buttonBar}>
                 {currentScreen === 'CalendarScreen' && <Button onPress={switchToWeekOrgScreen}>zur Wochenansicht</Button>}
                 {currentScreen === 'WeekOrgScreen' && <Button onPress={switchToCalendarScreen}>zur Kalenderansicht</Button>}
             </View>
-            {currentScreen === 'WeekOrgScreen' && <WeekOrgScreen navigation={navigation} />}
-            {currentScreen === 'CalendarScreen' && <CalendarScreen navigation={navigation} />}
+            <View style={{ height: '100%' }}>
+                {currentScreen === 'WeekOrgScreen' && <WeekOrgScreen navigation={navigation} />}
+                {currentScreen === 'CalendarScreen' && <CalendarScreen navigation={navigation} />}
+            </View>
         </View>
     );
 };

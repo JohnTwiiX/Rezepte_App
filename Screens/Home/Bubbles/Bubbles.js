@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, ScrollView } from 'react-native';
-import { Dialog, Button, ActivityIndicator, useTheme } from 'react-native-paper';
+import { Dialog, Button, ActivityIndicator, useTheme, Avatar } from 'react-native-paper';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { defaultCollection, defaultTypes } from '../../Home/Recipe/RecipeScreen/Modal/RecipeChips';
 import { useData } from '../../modals/DataProvider';
@@ -21,12 +21,14 @@ function CircleButton({ descr, size, onPress, onLongPress, editMode, selectedIte
             onLongPress={onLongPress}
             onPress={onPress}
             style={[
-                { margin: 8, backgroundColor: theme.color, width: size, height: size, borderRadius: size },
+                { margin: 8, backgroundColor: theme.color, borderRadius: size },
                 editMode && descr === selectedItem ? { borderWidth: 10, borderColor: theme.button } : {}
-            ]}>
-            <View style={styles.innerView}>
-                <Text style={styles.text}>{descr}</Text>
-            </View>
+            ]}
+        >
+            <Avatar.Text size={size} label={descr} labelStyle={styles.text} />
+            {/* //     <View style={styles.innerView}>
+        //         <Text style={styles.text}>{descr}</Text>
+        //     </View> */}
         </TouchableOpacity>
     );
 }
@@ -148,7 +150,7 @@ export default function CircleButtons({ update, setUpdate }) {
 
     const navigation = useNavigation();
     return (
-        <View style={data.isEditMode ? { borderWidth: 5, borderColor: theme.button } : {}}>
+        <View >
             {data && data.isEditMode && <View style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}><Text style={{ textAlign: 'center', fontSize: 18, color: 'rgba(0,0,0,0.8)' }}>Verändere deine Bubbles in der Position/Größe.</Text></View>}
             <ScrollView >
                 <View style={styles.container}>
