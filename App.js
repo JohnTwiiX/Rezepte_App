@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { View, Button, Text, SafeAreaView } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import NavigationBar from './Screens/NavigationBar';
 import { StatusBar } from 'react-native';
-import { DefaultTheme, Provider as PaperProvider, ActivityIndicator } from 'react-native-paper';
+import { Provider as PaperProvider, ActivityIndicator } from 'react-native-paper';
 import FullScreen from './utils/FullScreen'; // Import FullScreen module
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import UsernameInput from './Screens/UsernameInput'
 import { getTextFromStorage, saveTextStorage } from './Screens/modals/StorageService';
 import { ThemeAutumn } from './themes/ThemeAutumn';
 import { ThemeWinter } from './themes/ThemeWinter';
+import { ThemeSpring } from './themes/ThemeSpring';
 
 
 export default function App() {
@@ -54,6 +55,8 @@ export default function App() {
         return ThemeAutumn;
       case 'ThemeWinter':
         return ThemeWinter;
+      case 'ThemeSpring':
+        return ThemeSpring;
       default:
         saveTextStorage('@theme', 'ThemeAutumn')
         return ThemeAutumn;

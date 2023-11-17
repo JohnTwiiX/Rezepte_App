@@ -1,20 +1,21 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Chip, TextInput, Text, Snackbar } from 'react-native-paper';
+import { Button, Chip, TextInput, Text } from 'react-native-paper';
 import { getTextFromStorage, saveTextStorage } from '../../modals/StorageService';
 import { useFocusEffect } from '@react-navigation/core';
 
 
-const themes = ['ThemeAutumn', 'ThemeWinter']
+const themes = ['ThemeAutumn', 'ThemeWinter', 'ThemeSpring']
 export default function SettingsScreen({ navigation, setUpdate }) {
     const [text, setText] = React.useState('');
     const [chip, setChip] = React.useState('');
-    const [visible, setVisible] = React.useState(false);
+    const [edit, setEdit] = React.useState(true);
 
     useFocusEffect(
         React.useCallback(() => {
             loadThemeChip();
             loadName();
+            setEdit(true);
         }, []),);
 
     const loadThemeChip = async () => {
@@ -28,6 +29,7 @@ export default function SettingsScreen({ navigation, setUpdate }) {
     };
 
     const handleTextChange = (text) => {
+        setEdit(false);
         // remove non-letter characters except German and Norwegian umlauts
         const filteredText = text.replace(/[^a-zA-ZäöüÄÖÜßæøåÆØÅ]/g, '');
         setText(filteredText);
@@ -46,9 +48,6 @@ export default function SettingsScreen({ navigation, setUpdate }) {
         setUpdate(true);
     }
 
-    const onToggleSnackBar = () => setVisible(!visible);
-
-    const onDismissSnackBar = () => setVisible(false);
     return (
         <View style={{}}>
             <View style={styles.m16}>
@@ -69,21 +68,16 @@ export default function SettingsScreen({ navigation, setUpdate }) {
                         <Chip key={i}
                             style={styles.m16}
                             selected={chip === theme}
-                            onPress={() => setChip(theme)}
+                            onPress={() => { setChip(theme); setEdit(false); }}
                         >
                             {theme}
                         </Chip>
                     ))}
                 </View>
             </View>
-            <Button onPress={saveSettings}>Speichern</Button>
-            <Snackbar
-                visible={visible}
-                onDismiss={onDismissSnackBar}
-                duration={3000}
-            >
-                Deine Einstellungen wurden gespeichert
-            </Snackbar>
+            <View style={styles.buttonContainer}>
+                <Button disabled={edit} mode='outlined' onPress={saveSettings}>Speichern</Button>
+            </View>
         </View>
     );
 }
@@ -91,5 +85,9 @@ export default function SettingsScreen({ navigation, setUpdate }) {
 const styles = StyleSheet.create({
     m16: {
         margin: 16
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center'
     }
 })

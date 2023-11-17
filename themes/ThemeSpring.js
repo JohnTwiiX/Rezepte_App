@@ -1,6 +1,6 @@
 import { DefaultTheme } from "react-native-paper";
 
-export const ThemeWinter = {
+export const ThemeSpring = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
@@ -32,5 +32,5 @@ export const ThemeWinter = {
     nav: "#905E55",
     background: "#B2B1B6",
     input: "#f3f3f3",
-    backgroundImage: require('../assets/images/winter-bg.jpg')
+    backgroundImage: require('../assets/images/spring-bg.jpg')
 }
