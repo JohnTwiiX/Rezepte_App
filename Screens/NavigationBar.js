@@ -22,8 +22,9 @@ const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
 
-export default function NavigationBar({ username }) {
+export default function NavigationBar({ username, setUpdate }) {
     const theme = useTheme();
+    const SettingsScreenComponent = () => <SettingsScreen setUpdate={setUpdate} />;
     return (
         <SafeAreaProvider>
             <NavigationContainer>
@@ -75,7 +76,7 @@ export default function NavigationBar({ username }) {
                                     </HomeStack.Screen>
                                     <HomeStack.Screen
                                         name="Settings"
-                                        component={SettingsScreen}
+                                        component={SettingsScreenComponent}
                                     >
                                     </HomeStack.Screen>
                                     <HomeStack.Screen
@@ -128,11 +129,3 @@ export default function NavigationBar({ username }) {
         </SafeAreaProvider>
     )
 }
-
-// function AddRecipeScreenWrapper() {
-//     return (
-//         <DataProvider recipe={recipe} chip={chip}>
-//             <AddRecipeScreen />
-//         </DataProvider>
-//     );
-// }

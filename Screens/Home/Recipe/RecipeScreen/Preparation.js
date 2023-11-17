@@ -59,7 +59,7 @@ export async function saveAll(data, inputValues) {
     if (inputValues) {
         await saveMultiple(data, inputValues);
     }
-    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recipes', 'recipeTypes', '@name', '@basket', '@basketFinished', '@checkedRecipes'];
+    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recipes', 'recipeTypes', '@name', '@basket', '@basketFinished', '@checkedRecipes', '@theme'];
     await removeAllExcept(keysToKeep);
 }
 

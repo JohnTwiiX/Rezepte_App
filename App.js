@@ -6,8 +6,9 @@ import { DefaultTheme, Provider as PaperProvider, ActivityIndicator } from 'reac
 import FullScreen from './utils/FullScreen'; // Import FullScreen module
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import UsernameInput from './Screens/UsernameInput'
-import { getTextFromStorage } from './Screens/modals/StorageService';
+import { getTextFromStorage, saveTextStorage } from './Screens/modals/StorageService';
 import { ThemeAutumn } from './themes/ThemeAutumn';
+import { ThemeWinter } from './themes/ThemeWinter';
 
 
 export default function App() {
@@ -51,7 +52,10 @@ export default function App() {
     switch (theme) {
       case 'ThemeAutumn':
         return ThemeAutumn;
+      case 'ThemeWinter':
+        return ThemeWinter;
       default:
+        saveTextStorage('@theme', 'ThemeAutumn')
         return ThemeAutumn;
     }
   }
@@ -67,7 +71,7 @@ export default function App() {
             </View>
             :
             username ?
-              <NavigationBar username={username} />
+              <NavigationBar username={username} setUpdate={setUpdate} />
               :
               <UsernameInput setUpdate={setUpdate} />}
         </PaperProvider>

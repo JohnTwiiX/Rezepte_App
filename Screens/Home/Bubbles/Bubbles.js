@@ -21,11 +21,11 @@ function CircleButton({ descr, size, onPress, onLongPress, editMode, selectedIte
             onLongPress={onLongPress}
             onPress={onPress}
             style={[
-                { margin: 8, backgroundColor: theme.color, borderRadius: size },
+                { margin: 8, borderRadius: size },
                 editMode && descr === selectedItem ? { borderWidth: 10, borderColor: theme.button } : {}
             ]}
         >
-            <Avatar.Text size={size} label={descr} labelStyle={styles.text} />
+            <Avatar.Text style={{ backgroundColor: theme.color }} size={size} label={descr} labelStyle={styles.text} />
             {/* //     <View style={styles.innerView}>
         //         <Text style={styles.text}>{descr}</Text>
         //     </View> */}
