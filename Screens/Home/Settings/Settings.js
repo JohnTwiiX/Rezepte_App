@@ -48,6 +48,12 @@ export default function SettingsScreen({ navigation, setUpdate }) {
         setUpdate(true);
     }
 
+    const handleThemetext = (theme) => {
+        if (theme === 'ThemeWinter') return 'Winterliches Theme'
+        if (theme === 'ThemeAutumn') return 'Herbstliches Theme'
+        if (theme === 'ThemeSpring') return 'Frühlingshaftes Theme'
+    }
+
     return (
         <View style={{}}>
             <View style={styles.m16}>
@@ -63,14 +69,14 @@ export default function SettingsScreen({ navigation, setUpdate }) {
 
             <View style={styles.m16}>
                 <Text variant="headlineMedium">Wähle dein Theme</Text>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                     {themes.map((theme, i) => (
                         <Chip key={i}
                             style={styles.m16}
                             selected={chip === theme}
                             onPress={() => { setChip(theme); setEdit(false); }}
                         >
-                            {theme}
+                            {handleThemetext(theme)}
                         </Chip>
                     ))}
                 </View>

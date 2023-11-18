@@ -199,11 +199,11 @@ export default function WeekOrgScreen({ navigation }) {
                                             <Text variant="headlineSmall" style={styles.recipeText}>{items[day]?.recipe.title}</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <Button onPress={() => deleteRecipe(day)}>Löschen</Button>
+                                    <Button labelStyle={styles.buttonIcon} onPress={() => deleteRecipe(day)} icon={'trash-can-outline'}></Button>
                                 </View>
                                 :
                                 <View style={styles.emptyItem}>
-                                    <Button onPress={() => { setSelectedDay(day); openModal() }}>Hinzufügen</Button>
+                                    <Button labelStyle={styles.buttonIcon} onPress={() => { setSelectedDay(day); openModal() }} icon={'plus-circle-outline'}></Button>
                                 </View>
                             }
                         </View>
@@ -211,7 +211,6 @@ export default function WeekOrgScreen({ navigation }) {
                     <Divider bold />
                 </View>
             ))}
-
             <Modal style={{ backgroundColor: 'rgba(0,0,0,0.8)' }} visible={visible} onDismiss={closeModal}>
                 <WeekOrgFilter recipes={recipes} setSelectedRecipe={setSelectedRecipe} setCard={setCard} />
             </Modal>
@@ -248,12 +247,17 @@ const styles = StyleSheet.create({
     },
     emptyItem: {
         flex: 1,
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        justifyContent: 'center'
     },
     item: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    buttonIcon: {
+        fontSize: 26,
+        color: 'rgba(0,0,0,0.5)'
     }
 })

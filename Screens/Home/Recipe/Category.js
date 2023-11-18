@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image, } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Avatar, Card, Text, Dialog, Chip, useTheme, FAB } from 'react-native-paper';
@@ -166,41 +166,44 @@ export default function CategoryScreen({ navigation, route }) {
     }, [route.params?.showDialog]);
 
     return (
-        <View style={{ backgroundColor: theme.background, height: '100%' }}>
-            <ScrollView>
-                <View>
-                    {selectedChips.length === 0 ? <RenderRecipes recipes={recipes} title={title} /> : <RenderRecipes recipes={filteredRecipes} title={title} />}
-                </View>
-            </ScrollView>
-            <FAB
-                icon="plus"
-                style={[styles.fab, { backgroundColor: theme.button }]}
-                onPress={() => navigation.navigate('AddRecipe', { title: 'Rezept erstellen', chip: title })}
-            />
-            {/* Dialog um eine Meldung anzuzeigen ##################################################################### */}
-            <Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(false)}>
-                <Dialog.Content>
-                    <View >
-                        <Text>Kategorie: </Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={categoryChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} type={true} />
-                        </View>
-                        <Text>Arbeitszeit: </Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={workChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} />
-                        </View>
-                        <Text>Kochzeit: </Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={cookChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} />
-                        </View>
-                        <Text>Portionsgröße: </Text>
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <RenderChips chips={sizeChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} />
-                        </View>
+        <ImageBackground blurRadius={10} source={theme.backgroundImage} >
+            <View style={{ height: '100%', }}>
+                {/* <Image style={styles.img} blurRadius={10} source={theme.backgroundImage} /> */}
+                <ScrollView>
+                    <View>
+                        {selectedChips.length === 0 ? <RenderRecipes recipes={recipes} title={title} /> : <RenderRecipes recipes={filteredRecipes} title={title} />}
                     </View>
-                </Dialog.Content>
-            </Dialog>
-        </View>
+                </ScrollView>
+                <FAB
+                    icon="plus"
+                    style={[styles.fab, { backgroundColor: theme.button }]}
+                    onPress={() => navigation.navigate('AddRecipe', { title: 'Rezept erstellen', chip: title })}
+                />
+                {/* Dialog um eine Meldung anzuzeigen ##################################################################### */}
+                <Dialog visible={visibleDialog} onDismiss={() => setVisibleDialog(false)}>
+                    <Dialog.Content>
+                        <View >
+                            <Text>Kategorie: </Text>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                <RenderChips chips={categoryChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} type={true} />
+                            </View>
+                            <Text>Arbeitszeit: </Text>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                <RenderChips chips={workChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} />
+                            </View>
+                            <Text>Kochzeit: </Text>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                <RenderChips chips={cookChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} />
+                            </View>
+                            <Text>Portionsgröße: </Text>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                                <RenderChips chips={sizeChips} selectedChips={selectedChips} setSelectedChips={setSelectedChips} />
+                            </View>
+                        </View>
+                    </Dialog.Content>
+                </Dialog>
+            </View>
+        </ImageBackground>
     );
 }
 
@@ -237,5 +240,9 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: 'spinwerad'
+    },
+    img: {
+        height: '100%',
+        width: '100%'
     }
 });

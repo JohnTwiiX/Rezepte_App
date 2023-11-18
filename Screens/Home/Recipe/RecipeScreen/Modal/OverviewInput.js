@@ -37,7 +37,7 @@ export default function OverviewInput({ title, titleValue, setValue, inputRef })
             <TextInput
                 style={[
                     styles.input,
-                    { backgroundColor: theme.color },
+                    { backgroundColor: theme.input },
                     title === 'title' && { textAlign: 'left' } // Füge textAlign hinzu, wenn title === 'Titel'
                 ]}
                 label={

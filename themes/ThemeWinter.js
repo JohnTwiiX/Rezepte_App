@@ -21,16 +21,16 @@ export const ThemeWinter = {
     chip: {
         active: {
             color: "white",
-            bgColor: "#9a998c",
+            bgColor: "#ADA2A1",
         },
         passive: "white"
     },
-    color: "#B2B1B6",  //"#e1e1e1",
-    tabColor: "#9a998c",
+    color: "#ADA2A1",  //"#e1e1e1",
+    tabColor: "#d1c9c9",
     button: "#f3f3f3",  // "#9a998c",
-    button2: "#9a998c",
-    nav: "#905E55",
+    button2: "#ADA2A1",
+    nav: "#6A4E46",
     background: "#B2B1B6",
-    input: "#f3f3f3",
+    input: "#d1c9c9",
     backgroundImage: require('../assets/images/winter-bg.jpg')
 }

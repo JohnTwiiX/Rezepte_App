@@ -21,16 +21,16 @@ export const ThemeSpring = {
     chip: {
         active: {
             color: "white",
-            bgColor: "#9a998c",
+            bgColor: "#AAB0D1",
         },
         passive: "white"
     },
-    color: "#B2B1B6",  //"#e1e1e1",
-    tabColor: "#9a998c",
+    color: "#AAB0D1",  //"#e1e1e1",
+    tabColor: "#ced3f0",
     button: "#f3f3f3",  // "#9a998c",
-    button2: "#9a998c",
-    nav: "#905E55",
+    button2: "#AAB0D1",
+    nav: "#9E949E",
     background: "#B2B1B6",
-    input: "#f3f3f3",
+    input: "#ced3f0",
     backgroundImage: require('../assets/images/spring-bg.jpg')
 }
