@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Chip, TextInput, Text } from 'react-native-paper';
+import { Button, Chip, TextInput, Text, useTheme } from 'react-native-paper';
 import { getTextFromStorage, saveTextStorage } from '../../modals/StorageService';
 import { useFocusEffect } from '@react-navigation/core';
 
 
-const themes = ['ThemeAutumn', 'ThemeWinter', 'ThemeSpring', 'ThemeSummer']
+const themes = ['ThemeAutumn', 'ThemeWinter', 'ThemeSpring', 'ThemeSummer', 'ThemePurple']
 export default function SettingsScreen({ navigation, setUpdate }) {
     const [text, setText] = React.useState('');
     const [chip, setChip] = React.useState('');
     const [edit, setEdit] = React.useState(true);
+    const theme = useTheme();
 
     useFocusEffect(
         React.useCallback(() => {
@@ -53,6 +54,7 @@ export default function SettingsScreen({ navigation, setUpdate }) {
         if (theme === 'ThemeAutumn') return 'Herbstliches Theme'
         if (theme === 'ThemeSpring') return 'Frühlingshaftes Theme'
         if (theme === 'ThemeSummer') return 'Sommerliches Theme'
+        if (theme === 'ThemePurple') return 'Lilahaftes Theme'
     }
 
     return (
@@ -60,7 +62,7 @@ export default function SettingsScreen({ navigation, setUpdate }) {
             <View style={styles.m16}>
                 <Text variant="headlineMedium" >Ändere deinen Namen</Text>
                 <TextInput
-                    style={styles.m16}
+                    style={[styles.m16, { backgroundColor: theme.input }]}
                     label={'Ändere den Namen'}
                     maxLength={10}
                     value={text}
@@ -71,13 +73,13 @@ export default function SettingsScreen({ navigation, setUpdate }) {
             <View style={styles.m16}>
                 <Text variant="headlineMedium">Wähle dein Theme</Text>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                    {themes.map((theme, i) => (
+                    {themes.map((themeItem, i) => (
                         <Chip key={i}
-                            style={styles.m16}
-                            selected={chip === theme}
-                            onPress={() => { setChip(theme); setEdit(false); }}
+                            style={[styles.m16, { backgroundColor: theme.chip.active.bgColor }]}
+                            selected={chip === themeItem}
+                            onPress={() => { setChip(themeItem); setEdit(false); }}
                         >
-                            {handleThemetext(theme)}
+                            {handleThemetext(themeItem)}
                         </Chip>
                     ))}
                 </View>
@@ -91,7 +93,7 @@ export default function SettingsScreen({ navigation, setUpdate }) {
 
 const styles = StyleSheet.create({
     m16: {
-        margin: 16
+        margin: 10
     },
     buttonContainer: {
         flexDirection: 'row',

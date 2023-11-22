@@ -11,6 +11,7 @@ import { ThemeAutumn } from './themes/ThemeAutumn';
 import { ThemeWinter } from './themes/ThemeWinter';
 import { ThemeSpring } from './themes/ThemeSpring';
 import { ThemeSummer } from './themes/ThemeSummer';
+import { ThemePurple } from './themes/ThemePurple';
 
 
 export default function App() {
@@ -60,6 +61,8 @@ export default function App() {
         return ThemeSpring;
       case 'ThemeSummer':
         return ThemeSummer;
+      case 'ThemePurple':
+        return ThemePurple;
       default:
         saveTextStorage('@theme', 'ThemeAutumn')
         return ThemeAutumn;
