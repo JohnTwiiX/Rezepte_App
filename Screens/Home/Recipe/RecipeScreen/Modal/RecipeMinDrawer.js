@@ -18,7 +18,7 @@ export default function RecipeMinDrawer({ recipes, handleCrow }) {
                 },
                 onPanResponderMove: (e, gestureState) => {
                     // Scroll lock threshold (adjust as needed)
-                    const scrollLockThreshold = 20;
+                    const scrollLockThreshold = 30;
                     if (Math.abs(gestureState.dy) > scrollLockThreshold) {
                         // Allow vertical scrolling
                         return false;

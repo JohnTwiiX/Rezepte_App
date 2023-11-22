@@ -35,7 +35,6 @@ export default function NavigationBar({ username, setUpdate }) {
                         tabBarShowLabel: false,
                         tabBarActiveBackgroundColor: theme.nav,
                         tabBarItemStyle: { borderRadius: 100, height: 50 },
-                        tabBarStyle: { height: 50 }
                     }}>
                     <Tab.Screen
                         name="Basket"

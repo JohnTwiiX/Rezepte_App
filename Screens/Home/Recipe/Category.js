@@ -48,15 +48,15 @@ function RenderRecipes(props) {
                 onPress={() => navigation.navigate('Recipe', { title: recipe.title, category: props.title })}>
                 <Card >
                     <Card.Content>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.contentView}>
                             {recipe.description.imgUri?.length >= 1
                                 ?
                                 <Avatar.Image size={50} source={{ uri: recipe.description.imgUri }} />
                                 :
                                 <Avatar.Image size={50} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
                             }
-                            <View style={{ marginLeft: 15 }}>
-                                <Text style={[styles.text, { fontSize: 28 }]}>{recipe.title}</Text>
+                            <View style={styles.contentItem}>
+                                <Text numberOfLines={1} style={[styles.text, { fontSize: 28 }]}>{recipe.title}</Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Icon name='account-outline' size={18} style={{ marginRight: 4 }} />
                                     <Text>{potionSize.crowd} {potionSize.unit}</Text>
@@ -245,5 +245,13 @@ const styles = StyleSheet.create({
     img: {
         height: '100%',
         width: '100%'
+    },
+    contentView: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    contentItem: {
+        marginLeft: 15,
+        flex: 1
     }
 });

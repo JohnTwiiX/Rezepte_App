@@ -19,6 +19,7 @@ async function fetchData(title, setRecipes, setIsLoading) {
     }
 }
 function RenderChips({ chips, type, crowd }) {
+    const theme = useTheme();
     if (typeof chips === 'string') {
         let value = JSON.parse(chips).crowd
         let valueInt = parseInt(value)
@@ -30,7 +31,7 @@ function RenderChips({ chips, type, crowd }) {
             <Chip
                 // key={index}
                 mode="outlined"
-                style={[{ width: 'auto', height: 34, borderRadius: 25, margin: 6 }, { backgroundColor: 'rgb(232,225,237)' }]}>
+                style={[{ width: 'auto', height: 34, borderRadius: 25, margin: 6 }, { backgroundColor: theme.chip.active.bgColor }]}>
                 <View style={{ flexDirection: 'row' }}>
                     {type === 'work' && <Icon name={'clock-time-two-outline'} size={20} color='rgba(0, 0, 0, 0.3)' style={{ marginRight: 8 }} />}
                     {type === 'cook' && <Icon name={'pot-mix-outline'} size={20} color='rgba(0, 0, 0, 0.3)' style={{ marginRight: 8 }} />}
