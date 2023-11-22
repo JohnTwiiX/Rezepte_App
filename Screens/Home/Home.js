@@ -61,6 +61,12 @@ export default function HomeScreen({ navigation }) {
         setType('');
     }, [visible === false]);
 
+    React.useEffect(() => {
+        if (data.createCategoryModal === true) {
+            setVisible(true);
+        }
+    }, [data.createCategoryModal === true]);
+
     useFocusEffect(
         React.useCallback(() => {
             saveAll();
@@ -82,23 +88,19 @@ export default function HomeScreen({ navigation }) {
 
         <ImageBackground source={theme.backgroundImage} >
             <View style={styles.container}>
-                <TouchableOpacity
-                    style={[styles.button, { backgroundColor: theme.button }]}
-                    onPress={() => {
-                        data.isEditMode ?
-                            handleDataChange()
-                            :
-                            setVisible(true);
-                    }}
-                    // onPress={() => { deleteKey('@checkedRecipes') }}
-                    // onPress={async () => { console.log(await getAllKeys()) }}
-                    onLongPress={() => getArrayFromStorage('@checkedRecipes')}>
-                    {data.isEditMode ?
+                {data.isEditMode &&
+                    <TouchableOpacity
+                        style={[styles.button, { backgroundColor: theme.button }]}
+                        onPress={() => {
+                            handleDataChange();
+                        }}
+                        // onPress={() => { deleteKey('@checkedRecipes') }}
+                        // onPress={async () => { console.log(await getAllKeys()) }}
+                        onLongPress={() => getArrayFromStorage('@checkedRecipes')}>
                         <Icon name="cross" size={26} color="black" />
-                        :
-                        <Icon name="plus" size={26} color="black" />
-                    }
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                }
+
                 <View style={{ backgroundColor: 'transparent' }}>
                     <CircleButtons update={update} setUpdate={setUpdate} />
                 </View>

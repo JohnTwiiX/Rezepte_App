@@ -53,6 +53,7 @@ export function DataProvider({ children }) {
         isFetched: false,
         isEditMode: false,
         inBasket: false,
+        createCategoryModal: false,
     });
 
     const setRecipe = (recipe) => {
@@ -76,6 +77,7 @@ export function DataProvider({ children }) {
                 isFetched: true,
                 isEditMode: false,
                 inBasket: false,
+                createCategoryModal: false,
             });
         });
     }

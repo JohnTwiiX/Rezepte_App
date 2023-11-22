@@ -10,6 +10,7 @@ import { getTextFromStorage, saveTextStorage } from './Screens/modals/StorageSer
 import { ThemeAutumn } from './themes/ThemeAutumn';
 import { ThemeWinter } from './themes/ThemeWinter';
 import { ThemeSpring } from './themes/ThemeSpring';
+import { ThemeSummer } from './themes/ThemeSummer';
 
 
 export default function App() {
@@ -57,6 +58,8 @@ export default function App() {
         return ThemeWinter;
       case 'ThemeSpring':
         return ThemeSpring;
+      case 'ThemeSummer':
+        return ThemeSummer;
       default:
         saveTextStorage('@theme', 'ThemeAutumn')
         return ThemeAutumn;

@@ -20,6 +20,294 @@
     {
       "path": "assets/fonts/Perfect_Beloved/Perfect_Beloved.otf",
       "sha1": "f2158499cebaa267ac909a05b31441c3a7f9559b"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnet Regular.ttf",
+      "sha1": "cc092be25c6e84fb3d5f01b8f503d0e9dbe7fa4b"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Black.ttf",
+      "sha1": "ee5183a429561616d3914cc409c88b789dfb8982"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Black.woff",
+      "sha1": "ab8b045ab5cb050c344c6ecfc4ea976a15d2f68f"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-BlackItalic.ttf",
+      "sha1": "f81d933f401cd54023055608e4c5a561b2b50493"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-BlackItalic.woff",
+      "sha1": "a9ca470ba127861dd24706fa99c66f5f239ae7e9"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Bold.ttf",
+      "sha1": "4eed4a5ef9e621104949a2b8491075194b314e9a"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Bold.woff",
+      "sha1": "851eaf520966cbbc01162ffa2c6532e1ab6d0416"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-BoldItalic.ttf",
+      "sha1": "54b3004d3b535758700660c94d42e340089cf8e9"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-BoldItalic.woff",
+      "sha1": "f2491973437458837dc9190f491521e4c4f1eb50"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Light.ttf",
+      "sha1": "aa643ddf022fdd6e8bb88f861dcfe86383472eca"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Light.woff",
+      "sha1": "f8dcef066bb4f47580c0abecdfaa8a2d22fa7552"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-LightItalic.ttf",
+      "sha1": "1a1899a15b2a53d90b12c53d8269fc6e6e053ff3"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-LightItalic.woff",
+      "sha1": "1639a2cc7b18e580ad54a4199ba5d38cdb390282"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Medium.ttf",
+      "sha1": "d36b3cae4840a6c1cd526d99fc2edcc2a6052b3e"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Medium.woff",
+      "sha1": "f8b63e18c2934efa591e64206ae2c7f6fd717789"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-MediumItalic.ttf",
+      "sha1": "654ee83416765654d52ddc57e46f773cd3f95939"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-MediumItalic.woff",
+      "sha1": "c5bd35ec7b0464bd86c085b1039482ab5f605036"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Regular.ttf",
+      "sha1": "bf74742bea334538b088d57041a7711f9e4f76a2"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Regular.woff",
+      "sha1": "0f0861315e9ba3ae5ef487b0fb2ee3af709f3a1d"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-RegularItalic.ttf",
+      "sha1": "673e476fe6779cff90b907f4014bbaa943aabfad"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-RegularItalic.woff",
+      "sha1": "374ccc70faf0350404ca601bd19a0977b75173b9"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Semibold.ttf",
+      "sha1": "d433d7321fcb6a2677d04013460c5acc00617130"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-Semibold.woff",
+      "sha1": "f54fc92867242214574c96902050e1698da4cc44"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-SemiboldItalic.ttf",
+      "sha1": "83a6c78f8bcab66ded445b9215a0690eafc67ddd"
+    },
+    {
+      "path": "assets/fonts/Garnett/Garnett-SemiboldItalic.woff",
+      "sha1": "67e69092929c0fa9666351045f987e0981a445cb"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-Black.ttf",
+      "sha1": "ad9c434705a52d90ac5a770e591c2325fb48c2dc"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-BlackItalic.ttf",
+      "sha1": "88f974aa3e6d5e3d1fd563345be9e513809bb143"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-Bold.ttf",
+      "sha1": "98c66622226025f539568865af96df5175e2979c"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-BoldItalic.ttf",
+      "sha1": "516e381cb5824e976db5cfb69d630a24f27a9ba6"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-ExtraBold.ttf",
+      "sha1": "1e3298f51b4766e2810a4a2c09a2c75c323d5e7e"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf",
+      "sha1": "bf0e072950871eeb704e74f49605847db7ff3a02"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-ExtraLight.ttf",
+      "sha1": "9437f01c62e4f0c1d42b5cf3e244997aafbea70d"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf",
+      "sha1": "6dd4c350b2549a902852ed91cbc2ed87e98f60d7"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf",
+      "sha1": "92d0e87485dff4f41184e3ae9497c5d1795c1827"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-Italic.ttf",
+      "sha1": "9b14c390a8b40d941f62a971cb6d7d152e59154a"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-Light.ttf",
+      "sha1": "9dfbddad5025d8d224b4939e54c1a4ac8ac6015b"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-LightItalic.ttf",
+      "sha1": "c7b6a26d9e3e165d3a079c669f374a4a7e01c0a7"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-Medium.ttf",
+      "sha1": "25c429296b9d6eb242cba92d1ee7fae484b019cb"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-MediumItalic.ttf",
+      "sha1": "0670c90adbabf7dd8a9e4428dced5e0f2a54e97d"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-Regular.ttf",
+      "sha1": "bb895d19b8a1fbe1c57fc89cac5da82fdc8fdef4"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-SemiBold.ttf",
+      "sha1": "0754a3a23d8d68b0f0558df3109e0df86e968f24"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf",
+      "sha1": "ca6ae187de8e41e8c82d282202d5ed98173a5176"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-Thin.ttf",
+      "sha1": "7061ef5f2b5aef62263dbe728114ccd25014aa4e"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-ThinItalic.ttf",
+      "sha1": "9455ac7542b843c9bf96db3dd59302d7da39fa3c"
+    },
+    {
+      "path": "assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf",
+      "sha1": "debd10e57fb07dd24187c41679885129449c1435"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-Black.ttf",
+      "sha1": "8397f169a9573c27e082d5100fdaa197d8045e4c"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-BlackItalic.ttf",
+      "sha1": "a737f4e3e8edb9b3302e0fee115bf08681338b5b"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-Bold.ttf",
+      "sha1": "2e83f4712e2b1d4300b314d8fd1f2ee06d941f97"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-BoldItalic.ttf",
+      "sha1": "fe3c04dc4304d09872dfc44f7271bab8332a2e65"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-Book.ttf",
+      "sha1": "7ce937feab30d0beee6578d45dda6d6775839367"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-BookItalic.ttf",
+      "sha1": "1c76fe4e6af80afbe8f3263a30a3c0e1a39e90b4"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-ExtraBold.ttf",
+      "sha1": "8bd9b935098dc899f15d31be0bbb490363958613"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-ExtraBoldItalic.ttf",
+      "sha1": "2aed5688cc6c4b4695be452dc7a0126d42a53d07"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-ExtraLight.ttf",
+      "sha1": "d77875049117bed3b66578aced9198280587f74d"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-ExtraLightItalic.ttf",
+      "sha1": "6e7176d82c2c7701f406ba6dd17fb5dd4cfad5ef"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-Light.ttf",
+      "sha1": "42b65cb442588dd11e6239eba850363a44274fc4"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-LightItalic.ttf",
+      "sha1": "164f31c00ed1ec0fc513d921f4b59b9f6f6fe1c5"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-Medium.ttf",
+      "sha1": "78f3ee3ec88f7f168617250825d29a6c7b5770c2"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-MediumItalic.ttf",
+      "sha1": "a7248fd90f2e04a28c3b53d5ae0f2c8eca796228"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-SemiBold.ttf",
+      "sha1": "baabf40ce87a97490af2860d1921667ab910e135"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-SemiBoldItalic.ttf",
+      "sha1": "ef0daceab3b7b49990737603f69d838ff79cf499"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-Thin.ttf",
+      "sha1": "16dd5308450090fff13306147233622171f6d0dc"
+    },
+    {
+      "path": "assets/fonts/Morganite/Morganite-ThinItalic.ttf",
+      "sha1": "bc136dd5c75793622d6452ac8c6ee2c5e2ebbf2a"
+    },
+    {
+      "path": "assets/fonts/Brilliant/Brilliant - Personal Use.ttf",
+      "sha1": "04cb153eb2127fa5d1634808133a511816054ffd"
+    },
+    {
+      "path": "assets/fonts/Optima/FontsFree-Net-OPTIMA.ttf",
+      "sha1": "0d0affbd9e882f6b2a5b3cac2bc711ce08e24823"
+    },
+    {
+      "path": "assets/fonts/Southern_Janni/SouthernJannie.ttf",
+      "sha1": "5a0c0d448fcf6a3528cb74b1cd23f0de7fcfe95d"
+    },
+    {
+      "path": "assets/fonts/August_Script/August Script Bold Free.ttf",
+      "sha1": "5be87eaa27e5fe2f2d68ca240568ac4342daae6c"
+    },
+    {
+      "path": "assets/fonts/Benedict/Benedict.otf",
+      "sha1": "ca192da3549a3321b2bee70c63041ec965d8ef19"
+    },
+    {
+      "path": "assets/fonts/Benedict/Benedict.ttf",
+      "sha1": "e1f99f1b575b0b4a5ac74e2cc75c806c2357f606"
+    },
+    {
+      "path": "assets/fonts/Benedict/Mistress Benedict.otf",
+      "sha1": "af874a5e73ea3e2e9ffb7728c2349a848255bf15"
+    },
+    {
+      "path": "assets/fonts/Benedict/Mistress Benedict.ttf",
+      "sha1": "393a6f2eeead7761b0b7afcd0a12c715b49b1210"
+    },
+    {
+      "path": "assets/fonts/Mirabella/Mirabella Demo.otf",
+      "sha1": "780a22fc3f0f39486b56ed964e160c2b06aed74d"
     }
   ]
 }

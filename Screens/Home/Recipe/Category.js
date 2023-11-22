@@ -56,7 +56,7 @@ function RenderRecipes(props) {
                                 <Avatar.Image size={50} source={{ uri: 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg' }} />
                             }
                             <View style={{ marginLeft: 15 }}>
-                                <Text style={[styles.text, { fontSize: 24 }]}>{recipe.title}</Text>
+                                <Text style={[styles.text, { fontSize: 28 }]}>{recipe.title}</Text>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Icon name='account-outline' size={18} style={{ marginRight: 4 }} />
                                     <Text>{potionSize.crowd} {potionSize.unit}</Text>
@@ -166,8 +166,8 @@ export default function CategoryScreen({ navigation, route }) {
     }, [route.params?.showDialog]);
 
     return (
-        <ImageBackground blurRadius={10} source={theme.backgroundImage} >
-            <View style={{ height: '100%', }}>
+        <ImageBackground style={{ paddingTop: 55 }} resizeMode="cover" blurRadius={10} source={theme.backgroundImage} >
+            <View style={{ height: '100%' }}>
                 {/* <Image style={styles.img} blurRadius={10} source={theme.backgroundImage} /> */}
                 <ScrollView>
                     <View>
@@ -239,7 +239,8 @@ const styles = StyleSheet.create({
         bottom: 0,
     },
     text: {
-        fontFamily: 'spinwerad'
+        marginBottom: 8,
+        fontFamily: 'Garnet Regular'
     },
     img: {
         height: '100%',

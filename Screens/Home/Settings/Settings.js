@@ -5,7 +5,7 @@ import { getTextFromStorage, saveTextStorage } from '../../modals/StorageService
 import { useFocusEffect } from '@react-navigation/core';
 
 
-const themes = ['ThemeAutumn', 'ThemeWinter', 'ThemeSpring']
+const themes = ['ThemeAutumn', 'ThemeWinter', 'ThemeSpring', 'ThemeSummer']
 export default function SettingsScreen({ navigation, setUpdate }) {
     const [text, setText] = React.useState('');
     const [chip, setChip] = React.useState('');
@@ -52,6 +52,7 @@ export default function SettingsScreen({ navigation, setUpdate }) {
         if (theme === 'ThemeWinter') return 'Winterliches Theme'
         if (theme === 'ThemeAutumn') return 'Herbstliches Theme'
         if (theme === 'ThemeSpring') return 'Frühlingshaftes Theme'
+        if (theme === 'ThemeSummer') return 'Sommerliches Theme'
     }
 
     return (

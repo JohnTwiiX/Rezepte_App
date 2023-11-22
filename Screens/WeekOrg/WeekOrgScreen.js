@@ -101,7 +101,7 @@ export default function WeekOrgScreen({ navigation }) {
     const [card, setCard] = React.useState(false);
     const [selectedRecipe, setSelectedRecipe] = React.useState({});
     const [recipeChanged, setRecipeChanged] = React.useState(false);
-    const weekArray = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+    const weekArray = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']
 
     useFocusEffect(
         React.useCallback(() => {
@@ -172,7 +172,7 @@ export default function WeekOrgScreen({ navigation }) {
 
     const transformDate = (date) => {
         const dateParts = date.split('-');
-        const viewDate = `${dateParts[2]}.${dateParts[1]}`;
+        const viewDate = `${dateParts[2]}.${dateParts[1]}.`;
         return viewDate
     }
 
@@ -187,16 +187,16 @@ export default function WeekOrgScreen({ navigation }) {
                 <View key={index}>
                     <View style={styles.dayView}>
                         <View style={styles.dateView}>
-                            <Text variant="headlineSmall">{weekArray[index]}:</Text>
-                            <Text variant="headlineSmall">{transformDate(day)}</Text>
+                            <Text style={styles.fontSize}>{weekArray[index]}</Text>
+                            <Text variant="titleMedium">{transformDate(day)}</Text>
                         </View>
                         <View style={{ flex: 1 }}>
                             {items[day] ?
                                 <View style={styles.itemView}>
                                     <TouchableWithoutFeedback onPress={() => goToRecipeScreen(items[day]?.recipe.title)}>
                                         <View style={styles.item}>
-                                            <Avatar.Image source={{ uri: items[day]?.recipe.description.imgUri }} />
-                                            <Text variant="headlineSmall" style={styles.recipeText}>{items[day]?.recipe.title}</Text>
+                                            <Avatar.Image size={40} source={{ uri: items[day]?.recipe.description.imgUri }} />
+                                            <Text numberOfLines={1} style={[styles.recipeText, styles.fontSize]}>{items[day]?.recipe.title}</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <Button labelStyle={styles.buttonIcon} onPress={() => deleteRecipe(day)} icon={'trash-can-outline'}></Button>
@@ -231,19 +231,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        margin: 12
+        margin: 12,
     },
     itemView: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+        paddingLeft: 8,
     },
     dateView: {
-        width: '20%'
+        width: '30%',
     },
     recipeText: {
-        marginLeft: 16
+        marginLeft: 16,
+        marginRight: 16
     },
     emptyItem: {
         flex: 1,
@@ -253,11 +255,14 @@ const styles = StyleSheet.create({
     item: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center'
     },
     buttonIcon: {
         fontSize: 26,
         color: 'rgba(0,0,0,0.5)'
+    },
+    fontSize: {
+        fontSize: 20
     }
 })

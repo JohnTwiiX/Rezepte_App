@@ -58,6 +58,66 @@
 		<string>Please write me a song.ttf</string>
 		<string>spinwerad.ttf</string>
 		<string>Perfect_Beloved.otf</string>
+		<string>Garnett-Black.ttf</string>
+		<string>Garnett-BlackItalic.ttf</string>
+		<string>Garnett-Bold.ttf</string>
+		<string>Garnett-BoldItalic.ttf</string>
+		<string>Garnett-Light.ttf</string>
+		<string>Garnett-LightItalic.ttf</string>
+		<string>Garnett-Medium.ttf</string>
+		<string>Garnett-MediumItalic.ttf</string>
+		<string>Garnett-Regular.ttf</string>
+		<string>Garnett-RegularItalic.ttf</string>
+		<string>Garnett-Semibold.ttf</string>
+		<string>Garnett-SemiboldItalic.ttf</string>
+		<string>Montserrat-Italic-VariableFont_wght.ttf</string>
+		<string>Montserrat-VariableFont_wght.ttf</string>
+		<string>Morganite-Black.ttf</string>
+		<string>Morganite-BlackItalic.ttf</string>
+		<string>Morganite-Bold.ttf</string>
+		<string>Morganite-BoldItalic.ttf</string>
+		<string>Morganite-Book.ttf</string>
+		<string>Morganite-BookItalic.ttf</string>
+		<string>Morganite-ExtraBold.ttf</string>
+		<string>Morganite-ExtraBoldItalic.ttf</string>
+		<string>Morganite-ExtraLight.ttf</string>
+		<string>Morganite-ExtraLightItalic.ttf</string>
+		<string>Morganite-Light.ttf</string>
+		<string>Morganite-LightItalic.ttf</string>
+		<string>Morganite-Medium.ttf</string>
+		<string>Morganite-MediumItalic.ttf</string>
+		<string>Morganite-SemiBold.ttf</string>
+		<string>Morganite-SemiBoldItalic.ttf</string>
+		<string>Morganite-Thin.ttf</string>
+		<string>Morganite-ThinItalic.ttf</string>
+		<string>Brilliant - Personal Use.ttf</string>
+		<string>FontsFree-Net-OPTIMA.ttf</string>
+		<string>Montserrat-Black.ttf</string>
+		<string>Montserrat-BlackItalic.ttf</string>
+		<string>Montserrat-Bold.ttf</string>
+		<string>Montserrat-BoldItalic.ttf</string>
+		<string>Montserrat-ExtraBold.ttf</string>
+		<string>Montserrat-ExtraBoldItalic.ttf</string>
+		<string>Montserrat-ExtraLight.ttf</string>
+		<string>Montserrat-ExtraLightItalic.ttf</string>
+		<string>Montserrat-Italic.ttf</string>
+		<string>Montserrat-Light.ttf</string>
+		<string>Montserrat-LightItalic.ttf</string>
+		<string>Montserrat-Medium.ttf</string>
+		<string>Montserrat-MediumItalic.ttf</string>
+		<string>Montserrat-Regular.ttf</string>
+		<string>Montserrat-SemiBold.ttf</string>
+		<string>Montserrat-SemiBoldItalic.ttf</string>
+		<string>Montserrat-Thin.ttf</string>
+		<string>Montserrat-ThinItalic.ttf</string>
+		<string>Garnet Regular.ttf</string>
+		<string>SouthernJannie.ttf</string>
+		<string>August Script Bold Free.ttf</string>
+		<string>Benedict.otf</string>
+		<string>Mistress Benedict.otf</string>
+		<string>Benedict.ttf</string>
+		<string>Mistress Benedict.ttf</string>
+		<string>Mirabella Demo.otf</string>
 	</array>
 </dict>
 </plist>
