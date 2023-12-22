@@ -35,6 +35,8 @@ let defaultSections = [
 const saveSections = async (sections) => {
     try {
         await saveArrayStorage('sections', sections);
+
+        console.log(sections[0]);
     } catch (error) {
         console.log(`Error saving sections: ${error}`);
     }

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import { getArrayFromStorage, multiGetStorage } from './StorageService';
+import { getAllKeys, getArrayFromStorage, multiGetStorage } from './StorageService';
+import { subItemDB } from './firestoreService';
 
 async function fetchData(recipe) {
     const data = await getArrayFromStorage('recipes');
@@ -13,9 +14,10 @@ async function fetchData(recipe) {
 
 async function sortChip(chip) {
     try {
+        // let values = await getAllKeys();
         let values = await multiGetStorage(['types', 'collection']);
         let result = null;
-
+        console.log(chip);
         values.forEach(([key, value]) => {
             if (JSON.parse(value).includes(chip)) {
                 result = key;
@@ -35,7 +37,7 @@ export function useData() {
 }
 
 
-export function DataProvider({ children }) {
+export function DataProvider({ children, user }) {
     const [data, setData] = useState({
         // Overview
         title: '',
@@ -54,6 +56,15 @@ export function DataProvider({ children }) {
         isEditMode: false,
         inBasket: false,
         createCategoryModal: false,
+    });
+
+    subItemDB(user.username, 'recipes')
+
+    const [fbData, setFbData] = useState({
+        recipes: [],
+        types: [],
+        collection: [],
+        category: [],
     });
 
     const setRecipe = (recipe) => {
@@ -94,6 +105,10 @@ export function DataProvider({ children }) {
         setData(newData);
     };
 
+    const updateFbData = (newData) => {
+        setFbData(newData);
+    };
+
     const deleteData = () => {
         setData({
             // Overview
@@ -114,7 +129,7 @@ export function DataProvider({ children }) {
     }
 
     return (
-        <DataContext.Provider value={{ data, updateData, setRecipe, setChip, deleteData }}>
+        <DataContext.Provider value={{ data, updateData, setRecipe, setChip, deleteData, updateFbData, fbData }}>
             {children}
         </DataContext.Provider>
     );

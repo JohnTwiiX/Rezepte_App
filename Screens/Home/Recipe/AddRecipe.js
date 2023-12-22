@@ -20,6 +20,7 @@ export default function AddRecipeScreen({ route }) {
     const { setRecipe, setChip } = useData();
     const recipe = route.params.recipe;
     const chip = route.params.chip;
+    const { user } = route.params;
     React.useEffect(() => {
         if (recipe) {
             setRecipe(recipe);
@@ -44,6 +45,7 @@ export default function AddRecipeScreen({ route }) {
                 <TabRecipe.Screen
                     name='Overview'
                     component={Overview}
+                    initialParams={{ user }}
                     options={{
                         title: 'Überblick',
                     }} />
@@ -56,6 +58,7 @@ export default function AddRecipeScreen({ route }) {
                 <TabRecipe.Screen
                     name='Preparation'
                     component={PreparationsScreen}
+                    initialParams={{ user }}
                     options={{
                         title: 'Zubereitung',
                     }} />

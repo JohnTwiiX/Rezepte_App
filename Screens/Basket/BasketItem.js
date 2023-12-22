@@ -44,26 +44,27 @@ export function mergeIngredients(recipes) {
     return mergedIngredients;
 }
 
-export default function BasketItem({ item, setIsLoading }) {
+export default function BasketItem({ item, setIsLoading, user }) {
     const [ingredients, setIngredients] = React.useState([]);
-    const [finished, setFinished] = React.useState([]);
+    // const [finished, setFinished] = React.useState([]);
     const [selected, setSelected] = React.useState('');
     const [visible, setVisible] = React.useState(false);
     const theme = useTheme();
 
     React.useEffect(() => {
         handleIngred();
-        handleFinished();
+        // handleFinished();
     }, [item]);
 
-    React.useEffect(() => {
-        saveArrayStorage('@basketFinished', finished);
-    }, [finished.length]);
 
-    const handleFinished = async () => {
-        const result = await getArrayFromStorage('@basketFinished');
-        setFinished(result || []); // Setze auf ein leeres Array, wenn result null ist
-    };
+    // React.useEffect(() => {
+    //     saveArrayStorage('@basketFinished', finished);
+    // }, [finished.length]);
+
+    // const handleFinished = async () => {
+    //     const result = await getArrayFromStorage('@basketFinished');
+    //     setFinished(result || []); // Setze auf ein leeres Array, wenn result null ist
+    // };
     const handleIngred = () => {
         const ingreds = mergeIngredients(item);
         setIngredients(ingreds);

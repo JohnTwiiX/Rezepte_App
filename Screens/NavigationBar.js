@@ -22,40 +22,42 @@ const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
 
-export default function NavigationBar({ username, setUpdate }) {
+export default function NavigationBar({ user, setUpdate }) {
     const theme = useTheme();
     const SettingsScreenComponent = () => <SettingsScreen setUpdate={setUpdate} />;
     return (
         <SafeAreaProvider>
             <NavigationContainer>
-                <Tab.Navigator
-                    initialRouteName='HomeTab'
-                    screenOptions={{
-                        headerShown: false,
-                        tabBarShowLabel: false,
-                        tabBarActiveBackgroundColor: theme.nav,
-                        tabBarItemStyle: { borderRadius: 100, height: 50 },
-                    }}>
-                    <Tab.Screen
-                        name="Basket"
-                        component={BasketScreen}
-                        options={{
-                            tabBarIcon: ({ tintColor }) => (
-                                // Hier das Icon ändern
-                                <Icon name="basket" size={25} color={tintColor} />
-                            )
-                        }} />
-                    <Tab.Screen
-                        name="HomeTab"
-                        // component={HomeScreen}
-                        options={{
-                            tabBarIcon: ({ tintColor }) => (
-                                // Hier das Icon ändern
-                                <Icon name="home" size={25} color={tintColor} />
-                            )
+                <DataProvider user={user}>
+                    <Tab.Navigator
+                        initialRouteName='HomeTab'
+                        screenOptions={{
+                            headerShown: false,
+                            tabBarShowLabel: false,
+                            tabBarActiveBackgroundColor: theme.nav,
+                            tabBarItemStyle: { borderRadius: 100, height: 50 },
+                            tabBarStyle: { height: 50 }
                         }}>
-                        {() => (
-                            <DataProvider>
+                        <Tab.Screen
+                            name="Basket"
+                            component={BasketScreen}
+                            initialParams={{ user }}
+                            options={{
+                                tabBarIcon: ({ tintColor }) => (
+                                    // Hier das Icon ändern
+                                    <Icon name="basket" size={25} color={tintColor} />
+                                )
+                            }} />
+                        <Tab.Screen
+                            name="HomeTab"
+                            // component={HomeScreen}
+                            options={{
+                                tabBarIcon: ({ tintColor }) => (
+                                    // Hier das Icon ändern
+                                    <Icon name="home" size={25} color={tintColor} />
+                                )
+                            }}>
+                            {() => (
                                 <HomeStack.Navigator screenOptions={{
                                     // headerShown: false,
                                     tabBarShowLabel: false,
@@ -67,7 +69,7 @@ export default function NavigationBar({ username, setUpdate }) {
                                         options={({ route, navigation }) => ({
                                             headerTransparent: true,
                                             headerStyle: { backgroundColor: 'rgba(255,255,255,0.5)' },
-                                            title: `${username}'s Rezepte`,
+                                            title: `${user.username}'s Rezepte`,
                                             headerRight: () => (
                                                 <HomeMenu navigation={navigation} />
                                             ),
@@ -81,6 +83,7 @@ export default function NavigationBar({ username, setUpdate }) {
                                     <HomeStack.Screen
                                         name="AddRecipe"
                                         component={AddRecipeScreen}
+                                        initialParams={{ user }}
                                         options={({ route }) => ({
                                             title: route.params.title,
                                             headerRight: () => (
@@ -105,6 +108,7 @@ export default function NavigationBar({ username, setUpdate }) {
                                     <HomeStack.Screen
                                         name="Recipe"
                                         component={RecipeScreen}
+                                        initialParams={{ user }}
                                         options={({ route, navigation }) => ({
                                             title: route.params.title,
                                             headerTitleAlign: 'center',
@@ -114,19 +118,19 @@ export default function NavigationBar({ username, setUpdate }) {
                                         })}>
                                     </HomeStack.Screen>
                                 </HomeStack.Navigator>
-                            </DataProvider>
-                        )}
-                    </Tab.Screen>
-                    <Tab.Screen
-                        name="WeekOrg"
-                        component={WeekOrgNav}
-                        options={({ route, navigation }) => ({
-                            tabBarIcon: ({ tintColor }) => (
-                                // Hier das Icon ändern
-                                <Icon name="calendar-outline" size={25} color={tintColor} />
-                            )
-                        })} />
-                </Tab.Navigator>
+                            )}
+                        </Tab.Screen>
+                        <Tab.Screen
+                            name="WeekOrg"
+                            component={WeekOrgNav}
+                            options={({ route, navigation }) => ({
+                                tabBarIcon: ({ tintColor }) => (
+                                    // Hier das Icon ändern
+                                    <Icon name="calendar-outline" size={25} color={tintColor} />
+                                )
+                            })} />
+                    </Tab.Navigator>
+                </DataProvider>
             </NavigationContainer>
         </SafeAreaProvider>
     )

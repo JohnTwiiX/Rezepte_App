@@ -7,6 +7,7 @@ import RecipeMinDrawer from './RecipeScreen/Modal/RecipeMinDrawer';
 import RecipeMaxDrawer from './RecipeScreen/Modal/RecipeMaxDrawer';
 import { useData } from '../../modals/DataProvider';
 import { getArrayFromStorage, saveArrayStorage } from '../../modals/StorageService';
+import { createBasketDB } from '../../modals/firestoreService';
 
 async function fetchData(title, setRecipes, setIsLoading) {
     setIsLoading(true);
@@ -65,31 +66,25 @@ export default function RecipeScreen({ route }) {
     const [crowd, setCrowd] = React.useState(0);
     const theme = useTheme();
     const { data, updateData } = useData();
+    const { user } = route.params;
 
     const handleDataChange = () => {
         const updatedData = { ...data };
         updatedData['inBasket'] = false;
         updateData(updatedData);
     };
-
     React.useEffect(() => {
         if (data.inBasket) {
             async function saveInBasket() {
                 const basketItem = {
                     title: recipes.title,
-                    ingred: recipes.description.recipeArray,
+                    ingred: JSON.stringify(recipes.description.recipeArray),
                     potion: recipes.description.potionSize,
                     crowd: crowd,
-                    uri: recipes.description.imgUri
+                    uri: recipes.description.imgUri,
+                    isFinished: false
                 };
-                let oldBasketArray = await getArrayFromStorage('@basket');
-                if (oldBasketArray === null) {
-                    let basketArray = [basketItem]
-                    await saveArrayStorage('@basket', basketArray);
-                } else {
-                    oldBasketArray.push(basketItem);
-                    await saveArrayStorage('@basket', oldBasketArray);
-                }
+                createBasketDB(basketItem.title, user.username, basketItem)
                 handleDataChange();
             };
             saveInBasket();

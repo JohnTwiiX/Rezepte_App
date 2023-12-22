@@ -3,12 +3,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import BasketItem from './BasketItem';
 import { useFocusEffect } from '@react-navigation/native';
-import { getArrayFromStorage } from '../modals/StorageService';
+import { readDB } from '../modals/firestoreService';
 
 
-export default function BasketScreen({ navigation }) {
+export default function BasketScreen({ route }) {
     const [isLoading, setIsLoading] = React.useState(true);
     const [basketArray, setBasket] = React.useState([]);
+    const { user } = route.params
 
     useFocusEffect(
         React.useCallback(() => {
@@ -17,9 +18,10 @@ export default function BasketScreen({ navigation }) {
 
     React.useEffect(() => {
         async function fetchData() {
-            const basketStorage = await getArrayFromStorage('@basket');
-            if (basketStorage !== null) {
-                setBasket(basketStorage);
+            const basketStorage = await readDB('@basket', user.username);
+            if (basketStorage.data() !== undefined) {
+                console.log('bin drin');
+                setBasket(basketStorage.data());
             }
             setIsLoading(false);
         };
@@ -38,7 +40,7 @@ export default function BasketScreen({ navigation }) {
                         <Text style={styles.smallText}>Füge Rezepte hinzu.</Text>
                     </View>
                     :
-                    <BasketItem item={basketArray} setIsLoading={setIsLoading} />
+                    <BasketItem item={basketArray} setIsLoading={setIsLoading} user={user} />
             }
         </View >
 

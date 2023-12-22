@@ -44,7 +44,10 @@ export async function multiRemoveKeys(keys) {
 
 export async function getAllKeys() {
     try {
-        return AsyncStorage.getAllKeys();
+        const result = await AsyncStorage.getAllKeys();
+        console.log(result);
+        return result
+
     } catch (e) {
         // remove error
     }

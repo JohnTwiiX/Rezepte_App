@@ -1,21 +1,38 @@
 import * as React from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, AppRegistry } from 'react-native';
 import NavigationBar from './Screens/NavigationBar';
 import { StatusBar } from 'react-native';
 import { Provider as PaperProvider, ActivityIndicator } from 'react-native-paper';
 import FullScreen from './utils/FullScreen'; // Import FullScreen module
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import UsernameInput from './Screens/UsernameInput'
-import { getTextFromStorage, saveTextStorage } from './Screens/modals/StorageService';
+import { getArrayFromStorage, getTextFromStorage, saveTextStorage } from './Screens/modals/StorageService';
 import { ThemeAutumn } from './themes/ThemeAutumn';
 import { ThemeWinter } from './themes/ThemeWinter';
 import { ThemeSpring } from './themes/ThemeSpring';
 import { ThemeSummer } from './themes/ThemeSummer';
 import { ThemePurple } from './themes/ThemePurple';
+import Login from './Screens/Auth';
+import { name as appName } from './app.json';
+import { initializeApp } from '@react-native-firebase/app';
+import Auth from './Screens/Auth';
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyB7WPBj78NaaRzCpPuNBtfAVqJMWhDWEE4",
+//   authDomain: "rezepte-app-4a230.firebaseapp.com",
+//   projectId: "rezepte-app-4a230",
+//   storageBucket: "rezepte-app-4a230.appspot.com",
+//   messagingSenderId: "1:382231183022:android:97b395494966343a29b73f",
+//   appId: "1:382231183022:android:97b395494966343a29b73f",
+// };
+// const app = initializeApp(firebaseConfig);
+
+// AppRegistry.registerComponent(appName, () => App);
+
 
 
 export default function App() {
-  const [username, setUsername] = React.useState('');
+  const [user, setUser] = React.useState('');
   const [theme, setTheme] = React.useState('');
   const [update, setUpdate] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
@@ -40,11 +57,11 @@ export default function App() {
   }, [update]);
 
   const handleFetchdata = async () => {
-    const name = await getTextFromStorage('@name');
+    const name = await getArrayFromStorage('@user');
     if (name === null) {
-      setUsername(null);
+      setUser(null);
     } else {
-      setUsername(name);
+      setUser(name);
     }
     setUpdate(false);
     setLoading(false);
@@ -79,10 +96,11 @@ export default function App() {
               <ActivityIndicator animating={true} size={240} />
             </View>
             :
-            username ?
-              <NavigationBar username={username} setUpdate={setUpdate} />
+            user ?
+              <NavigationBar user={user} setUpdate={setUpdate} />
               :
-              <UsernameInput setUpdate={setUpdate} />}
+              <Auth setUpdate={setUpdate} />
+          }
         </PaperProvider>
       </GestureHandlerRootView>
     </SafeAreaView>

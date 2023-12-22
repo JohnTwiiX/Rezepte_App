@@ -2,30 +2,10 @@ import * as React from 'react';
 import { TextInput, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { List, Dialog, Button, useTheme } from 'react-native-paper';
 import { useData } from '../../../modals/DataProvider';
-import { getAllKeys, getArrayFromStorage, multiRemoveKeys, saveArrayStorage } from '../../../modals/StorageService';
+import { createItemDB } from '../../../modals/firestoreService';
 
-async function saveRecipe(recipe) {
-    try {
-        let recipes = await getArrayFromStorage('recipes');
-        if (recipes) {
-            for (let i = 0; i < recipes.length; i++) {
-                if (recipes[i].title === recipe.title) {
-                    recipes[i] = recipe;
-                    await saveArrayStorage('recipes', recipes);
-                    return;
-                }
-            }
-        } else {
-            recipes = [];
-        }
-        recipes.push(recipe);
-        await saveArrayStorage('recipes', recipes);
-    } catch (error) {
-        console.log(`Error saving recipe: ${error}`);
-    }
-}
 
-async function saveMultiple(data, inputValues) {
+async function saveMultiple(data, inputValues, user) {
     const recipe = {
         title: data.title,
         description: {
@@ -35,43 +15,27 @@ async function saveMultiple(data, inputValues) {
             potionSize: data.potionSize,
             workTime: data.workTime,
             cookingTime: data.cookingTime,
-            recipeArray: data.recipeArray,
+            recipeArray: JSON.stringify(data.recipeArray),
             preparation: inputValues,
             imgUri: data.imgUri.length === 0 ?
                 'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg'
                 : data.imgUri,
+            inBasket: false,
+            crowd: 0,
         },
     }
-    saveRecipe(recipe);
-}
-
-async function removeAllExcept(keysToKeep) {
-    try {
-        const allKeys = await getAllKeys();
-        const keysToRemove = allKeys.filter(key => !keysToKeep.includes(key));
-        await multiRemoveKeys(keysToRemove);
-    } catch (error) {
-        console.error(`Error removing keys: ${error}`);
-    }
-}
-
-export async function saveAll(data, inputValues) {
-    if (inputValues) {
-        await saveMultiple(data, inputValues);
-    }
-    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recipes', 'recipeTypes', '@name', '@basket', '@basketFinished', '@checkedRecipes', '@theme'];
-    await removeAllExcept(keysToKeep);
+    createItemDB(user.username, 'recipes', recipe);
 }
 
 
-
-export default function PreparationsScreen({ navigation }) {
+export default function PreparationsScreen({ navigation, route }) {
     const [inputValues, setInputValues] = React.useState([]);
     const [missingValues, setMissingValues] = React.useState([]);
     const [visibleDialog, setVisibleDialog] = React.useState(false);
     const [dialogSave, setDialogSave] = React.useState(false);
     const theme = useTheme();
     const { data } = useData();
+    const { user } = route.params;
 
     React.useEffect(() => {
         if (data.isFetched) {
@@ -145,7 +109,7 @@ export default function PreparationsScreen({ navigation }) {
                             routes: [{ name: 'Home' }],
                         });
                         // Hier könntest du die Werte in den useStates zurücksetzen:
-                        saveAll(data, inputValues);
+                        saveMultiple(data, inputValues, user);
                         setDialogSave(false)
                     }}>Ja</Button>
                     <Button onPress={() => { setDialogSave(false) }}>Nein</Button>

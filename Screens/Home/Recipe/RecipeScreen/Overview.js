@@ -30,6 +30,7 @@ export default function Overview({ route }) {
     const [potionSwitch, setPotionSwitch] = React.useState("Person");
     const inputRef = React.useRef(null);
     const { data, updateData } = useData();
+    const { user } = route.params
 
     const handleBackgroundPress = () => {
         // Minimiere das Keyboard, wenn irgendwo anders auf dem Bildschirm geklickt wird
@@ -119,15 +120,15 @@ export default function Overview({ route }) {
                         <OverviewInput title={'title'} titleValue={title} setValue={setTitle} inputRef={inputRef} />
                         <View style={styles.chipContainer} >
                             <Text>Rezeptart:</Text>
-                            <RecipeChips title={'types'} handleDataChange={handleDataChange} selectedChips={data?.types} />
+                            <RecipeChips title={'types'} handleDataChange={handleDataChange} selectedChips={data?.types} user={user} />
                         </View>
                         <View style={styles.chipContainer}>
                             <Text>Kategorie:</Text>
-                            <RecipeChips title={'category'} handleDataChange={handleDataChange} selectedChips={data?.category} />
+                            <RecipeChips title={'category'} handleDataChange={handleDataChange} selectedChips={data?.category} user={user} />
                         </View>
                         <View style={styles.chipContainer}>
                             <Text>Sammlungen:</Text>
-                            <RecipeChips title={'collection'} handleDataChange={handleDataChange} selectedChips={data?.collection} />
+                            <RecipeChips title={'collection'} handleDataChange={handleDataChange} selectedChips={data?.collection} user={user} />
                         </View>
                         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', marginTop: 12 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

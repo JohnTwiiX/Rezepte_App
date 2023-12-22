@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react
 import { Dialog, Button, RadioButton, TextInput, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Entypo';
 import CircleButtons from './Bubbles/Bubbles';
-import { saveAll } from './Recipe/RecipeScreen/Preparation';
 import { useFocusEffect } from '@react-navigation/native';
 import { deleteKey, getAllKeys, getArrayFromStorage, saveArrayStorage } from '../modals/StorageService';
 import { useData } from '../modals/DataProvider';
@@ -69,7 +68,7 @@ export default function HomeScreen({ navigation }) {
 
     useFocusEffect(
         React.useCallback(() => {
-            saveAll();
+
         }, []),);
 
     const handleDataChange = () => {
@@ -91,10 +90,10 @@ export default function HomeScreen({ navigation }) {
                 {data.isEditMode &&
                     <TouchableOpacity
                         style={[styles.button, { backgroundColor: theme.button }]}
-                        onPress={() => {
-                            handleDataChange();
-                        }}
-                        // onPress={() => { deleteKey('@checkedRecipes') }}
+                        // onPress={() => {
+                        //     handleDataChange();
+                        // }}
+                        onPress={() => { deleteKey('@user') }}
                         // onPress={async () => { console.log(await getAllKeys()) }}
                         onLongPress={() => getArrayFromStorage('@checkedRecipes')}>
                         <Icon name="cross" size={26} color="black" />

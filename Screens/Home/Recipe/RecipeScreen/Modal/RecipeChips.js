@@ -4,6 +4,7 @@ import { Chip, useTheme } from 'react-native-paper';
 import AddChip from './AddChip';
 import DeleteChip from './DeleteChip';
 import { getArrayFromStorage, saveArrayStorage } from '../../../../modals/StorageService';
+import { createItemDB, readDB, updateDB } from '../../../../modals/firestoreService';
 
 
 export let defaultTypes = ["Vorspeise", "Hauptspeise", "Aperitif", "Dessert", "Getränke"];
@@ -23,7 +24,7 @@ function selectedDefault(title) {
     }
 }
 
-export default function RecipeChips({ title, handleDataChange, selectedChips }) {
+export default function RecipeChips({ title, handleDataChange, selectedChips, user }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [selectedChip, setSelectedChip] = React.useState([]);
     const [chips, setChips] = React.useState(selectedDefault(title));
@@ -39,12 +40,13 @@ export default function RecipeChips({ title, handleDataChange, selectedChips }) 
         }
     }, [selectedChips]);
 
-    React.useEffect(() => {
-        if (chips.length !== previousLength.current) {
-            previousLength.current = chips.length;
-            saveArrayStorage(title, chips);
-        }
-    }, [chips]);
+
+    // React.useEffect(() => {
+    //     if (chips.length !== previousLength.current) {
+    //         previousLength.current = chips.length;
+    //         updateDB(user.username, '@chips', { title: title, section: selectedDefault(title) })
+    //     }
+    // }, [chips]);
 
     React.useEffect(() => {
         if (title === 'types') {
@@ -64,12 +66,21 @@ export default function RecipeChips({ title, handleDataChange, selectedChips }) 
 
     React.useEffect(() => {
         const loadTypes = async () => {
-            const storedSections = await getArrayFromStorage(title);
+            let storedSections = await getArrayFromStorage(title);
             if (storedSections) {
                 setChips(storedSections);
             } else {
-                setChips(selectedDefault(title));
-                saveArrayStorage(title, selectedDefault(title));
+                const storedSections = await readDB(user.username, '@chips')
+
+                console.log('------> ', title);
+                console.log('------> ', storedSections);
+                if (storedSections) {
+                    setChips(storedSections);
+                } else {
+                    setChips(selectedDefault(title));
+                    createItemDB(user.username, '@chips', { title: selectedDefault(title) });
+                    saveArrayStorage(title, section)
+                }
             }
         }
         loadTypes();
