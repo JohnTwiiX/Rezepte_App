@@ -32,9 +32,9 @@ export default function HomeMenu({ navigation }) {
             >
                 <Menu.Item leadingIcon='pencil' onPress={() => { handleDataChange(); closeMenu() }} title="Bubbles bearbeiten" />
                 <Divider />
-                <Menu.Item leadingIcon='cog' onPress={() => { navigation.navigate('Settings'); closeMenu() }} title="Zu den Einstellungen" />
-                <Divider />
                 <Menu.Item leadingIcon='plus' onPress={() => { handleModalChange(); closeMenu() }} title="Kategorie erstellen" />
+                <Divider />
+                <Menu.Item leadingIcon='cog' onPress={() => { navigation.navigate('Settings'); closeMenu() }} title="Zu den Einstellungen" />
             </Menu>
         </View>
     );

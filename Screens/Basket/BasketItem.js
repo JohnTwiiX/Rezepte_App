@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Avatar, Button, Checkbox, Dialog, List, Text, TouchableRipple, useTheme } from 'react-native-paper';
+import { Avatar, Button, Checkbox, Dialog, IconButton, List, Text, TouchableRipple, useTheme } from 'react-native-paper';
 import { getArrayFromStorage, saveArrayStorage } from '../modals/StorageService';
 
 export function mergeIngredients(recipes) {
@@ -44,11 +44,12 @@ export function mergeIngredients(recipes) {
     return mergedIngredients;
 }
 
-export default function BasketItem({ item, setIsLoading }) {
+export default function BasketItem({ item, setIsLoading, basketItems }) {
     const [ingredients, setIngredients] = React.useState([]);
     const [finished, setFinished] = React.useState([]);
     const [selected, setSelected] = React.useState('');
     const [visible, setVisible] = React.useState(false);
+    const [visibleDelete, setVisibleDelete] = React.useState(false);
     const theme = useTheme();
 
     React.useEffect(() => {
@@ -84,6 +85,11 @@ export default function BasketItem({ item, setIsLoading }) {
         closeDialog();
     }
 
+    const deleteAll = async () => {
+        await saveArrayStorage('@basket', []);
+        await saveArrayStorage('@basketItems', []);
+    }
+
     return (
         <View style={{ height: '100%', }}>
             <Text variant="displaySmall" style={styles.title}>Deine Einkaufsliste</Text>
@@ -106,7 +112,7 @@ export default function BasketItem({ item, setIsLoading }) {
                     </TouchableRipple>
                 )}
             </View>
-            <List.Subheader style={styles.subHeader}>Zutaten:</List.Subheader>
+            <List.Subheader style={styles.subHeader}>Zu kaufen ist:</List.Subheader>
             <ScrollView style={{}}>
                 {ingredients.map((recipe, index) =>
                     <TouchableRipple key={index} style={styles.itemTouch} onPress={() => {
@@ -131,12 +137,53 @@ export default function BasketItem({ item, setIsLoading }) {
                         </View>
                     </TouchableRipple>
                 )}
+                {basketItems.map((recipe, index) =>
+                    <TouchableRipple key={index}
+                        style={styles.itemTouch}
+                        onPress={() => {
+                            if (finished.includes(recipe)) {
+                                // Das Element ist bereits im Array, also entfernen wir es
+                                setFinished((prevFinished) => prevFinished.filter((item) => item !== recipe));
+                            } else {
+                                // Das Element ist nicht im Array, also fügen wir es hinzu
+                                setFinished([...finished, recipe]);
+                            }
+                        }}
+                    >
+                        <View style={styles.itemContainer}>
+                            <View style={styles.itemCheck}>
+                                <Checkbox color='rgba(0,0,0,0.5)' status={finished.includes(recipe) ?
+                                    'checked' : 'unchecked'} />
+                            </View>
+                            <Text
+                                style={[styles.itemText, finished.includes(recipe) ? styles.textColor : {}]}>
+                                {recipe}
+                            </Text>
+                        </View>
+                    </TouchableRipple>
+                )}
+                <View style={styles.deleteIcon}>
+                    <IconButton
+                        icon="delete-circle-outline"
+                        size={36}
+                        iconColor='red'
+                        onPress={() => setVisibleDelete(true)}
+                    />
+                </View>
             </ScrollView>
+
             <Dialog visible={visible} onDismiss={closeDialog}>
-                <Dialog.Title>Du möchtest Recipe {selected} löschen?</Dialog.Title>
+                <Dialog.Title>Du möchtest das Rezept {selected} löschen?</Dialog.Title>
                 <Dialog.Actions>
                     <Button onPress={() => { deleteRecipe(); setIsLoading(true); }}>Ja</Button>
                     <Button onPress={() => { closeDialog() }}>Nein</Button>
+                </Dialog.Actions>
+            </Dialog>
+            <Dialog visible={visibleDelete} onDismiss={() => setVisibleDelete(!visibleDelete)}>
+                <Dialog.Title>Du möchtest deine komplette Einkaufsliste löschen?</Dialog.Title>
+                <Dialog.Actions>
+                    <Button onPress={() => { deleteAll(); setIsLoading(true); }}>Ja</Button>
+                    <Button onPress={() => { setVisibleDelete(!visibleDelete) }}>Nein</Button>
                 </Dialog.Actions>
             </Dialog>
         </View>
@@ -208,5 +255,10 @@ const styles = StyleSheet.create(
         },
         subHeader: {
             fontSize: 18
+        },
+        deleteIcon: {
+            alignItems: 'center',
+            marginLeft: 24,
+            marginRight: 24,
         }
     })

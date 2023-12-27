@@ -91,12 +91,13 @@ export default function WeekOrgFilter({ recipes, setSelectedRecipe, setCard }) {
             <ScrollView style={styles.cardContainer}>
                 {filteredRecipes.map((recipe, index) => (
                     <Card key={index} style={[styles.card, { backgroundColor: theme.color }]} onPress={() => { setSelectedRecipe(recipe); setCard(true) }}>
-                        <Card.Title
-                            title={recipe.title}
-                            titleStyle={styles.cardText}
-                            subtitle={<SubtitleLine recipe={recipe} />}
-                            left={() => <Avatar.Image size={50} source={{ uri: recipe.description.imgUri }} />}
-                        />
+                        <View style={styles.cardView}>
+                            <Avatar.Image size={50} source={{ uri: recipe.description.imgUri }} />
+                            <View style={styles.textContainer}>
+                                <Text style={styles.cardText}>{recipe.title}</Text>
+                                <SubtitleLine recipe={recipe} />
+                            </View>
+                        </View>
                     </Card>
                 ))}
             </ScrollView>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 16,
         backgroundColor: "white",
-        height: '80%'
+        maxHeight: '80%'
     },
     modaltext: {
         fontSize: 24,
@@ -124,5 +125,12 @@ const styles = StyleSheet.create({
     },
     cardText: {
         fontSize: 24,
+    },
+    cardView: {
+        flexDirection: 'row',
+        padding: 8
+    },
+    textContainer: {
+        marginLeft: 8
     }
 })

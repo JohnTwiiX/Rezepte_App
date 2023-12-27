@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Platform } from 'react-native';
 import NavigationBar from './Screens/NavigationBar';
 import { StatusBar } from 'react-native';
 import { Provider as PaperProvider, ActivityIndicator } from 'react-native-paper';
@@ -70,21 +70,21 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, }}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <PaperProvider theme={theme}>
-          <StatusBar hidden={true} />
-          {loading ?
-            <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-              <ActivityIndicator animating={true} size={240} />
-            </View>
+    // <SafeAreaView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PaperProvider theme={theme}>
+        <StatusBar hidden={true} />
+        {loading ?
+          <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <ActivityIndicator animating={true} size={240} />
+          </View>
+          :
+          username ?
+            <NavigationBar username={username} setUpdate={setUpdate} />
             :
-            username ?
-              <NavigationBar username={username} setUpdate={setUpdate} />
-              :
-              <UsernameInput setUpdate={setUpdate} />}
-        </PaperProvider>
-      </GestureHandlerRootView>
-    </SafeAreaView>
+            <UsernameInput setUpdate={setUpdate} />}
+      </PaperProvider>
+    </GestureHandlerRootView>
+    // </SafeAreaView>
   );
 }

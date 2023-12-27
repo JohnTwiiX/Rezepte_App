@@ -164,7 +164,6 @@ export default function CalendarScreen({ navigation }) {
                 selected={getToday()}
                 // Die zu zeigenden Elemente
                 items={items}
-
                 // Callback, wenn ein Tag geändert wird
                 onDayPress={onDayPress}
 

@@ -35,6 +35,7 @@ export default function NavigationBar({ username, setUpdate }) {
                         tabBarShowLabel: false,
                         tabBarActiveBackgroundColor: theme.nav,
                         tabBarItemStyle: { borderRadius: 100, height: 50 },
+                        tabBarStyle: { height: 50 }
                     }}>
                     <Tab.Screen
                         name="Basket"
@@ -96,7 +97,7 @@ export default function NavigationBar({ username, setUpdate }) {
                                             title: route.params.title,
                                             headerTransparent: true,
                                             headerStyle: { backgroundColor: 'rgba(255,255,255,0.5)' },
-                                            headerTitleStyle: { fontFamily: 'Mirabella Demo', fontSize: 36 },
+                                            headerTitleStyle: { fontFamily: 'Mirabella Demo', fontSize: 32 },
                                             headerRight: () => (
                                                 <CategoryFilter openDialog={() => navigation.setParams({ showDialog: true })} />
                                             ),

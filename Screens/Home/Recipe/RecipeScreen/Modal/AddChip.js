@@ -11,6 +11,18 @@ function addToArray(setArray, variable, title) {
     setArray([...variable, title]);
 }
 
+function switchTitle(title) {
+    if (title === 'collection') {
+        return 'Sammlung'
+    }
+    if (title === 'types') {
+        return 'Rezeptart'
+    }
+    if (title === 'category') {
+        return 'Kategorie'
+    }
+}
+
 export default function AddChip({ setArray, variable, title }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [inputValue, setInputValue] = React.useState('');
@@ -29,10 +41,10 @@ export default function AddChip({ setArray, variable, title }) {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Füge eine {title} hinzu:</Text>
+                        <Text style={styles.modalText}>Füge eine {switchTitle(title)} hinzu:</Text>
                         <TextInput
                             style={{ marginTop: 16, color: 'black' }}
-                            placeholder={title + ' ...'}
+                            placeholder={switchTitle(title) + ' ...'}
                             placeholderTextColor={'black'}
                             onChangeText={text => setInputValue(text)}
                         />
@@ -48,13 +60,9 @@ export default function AddChip({ setArray, variable, title }) {
                 mode="outlined"
                 style={[{ width: 'auto', height: 40, borderRadius: 25, margin: 6, justifyContent: 'center' }, { backgroundColor: '#e1e1e1' }]}
                 selected={false}
-            // onPress={() => { }}
+                onPress={() => { setModalVisible(true) }}
             >
-                <TouchableOpacity
-                    style={{}}
-                    onPress={() => { setModalVisible(true) }}>
-                    <Icon name="add" size={20} color="black" />
-                </TouchableOpacity>
+                <Icon name="add" size={20} color="black" />
             </Chip>
         </View>
     );

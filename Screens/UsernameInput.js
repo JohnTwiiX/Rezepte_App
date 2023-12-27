@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Button, TextInput, useTheme } from 'react-native-paper';
 import { saveInStorage, saveTextStorage } from './modals/StorageService';
 
 export default function UsernameInput({ setUpdate }) {
     const [text, setText] = React.useState('');
+    const theme = useTheme()
 
     const handleTextChange = (text) => {
         // remove non-letter characters except German and Norwegian umlauts
@@ -17,24 +18,47 @@ export default function UsernameInput({ setUpdate }) {
         setUpdate(true)
     }
 
-    return (
-        <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-            <View>
-                <Text style={{ marginBottom: 8 }}>Gib zuerst deinen Namen an:</Text>
-                <TextInput
-                    label={'Name'}
-                    maxLength={10}
-                    value={text}
-                    onChangeText={handleTextChange}
-                    onSubmitEditing={handleSaveUsername}
-                />
-                <Button mode='elevated' onPress={handleSaveUsername}>OK</Button>
-            </View>
+    const handleBackgroundPress = () => {
+        // Minimiere das Keyboard, wenn irgendwo anders auf dem Bildschirm geklickt wird
+        Keyboard.dismiss();
+    };
 
-        </View>
+    return (
+        <TouchableWithoutFeedback onPress={handleBackgroundPress}>
+            <View style={styles.container}>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.text}>Gib zuerst deinen Namen an:</Text>
+                    <TextInput
+                        label={'Name'}
+                        maxLength={10}
+                        value={text}
+                        onChangeText={handleTextChange}
+                        onSubmitEditing={handleSaveUsername}
+                        style={[styles.input, { backgroundColor: theme.input }]}
+                    />
+                    <Button mode='elevated' onPress={handleSaveUsername}>OK</Button>
+                </View>
+            </View>
+        </TouchableWithoutFeedback>
     );
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputContainer: {
+        backgroundColor: '#edebe4',
+        padding: 32,
+        borderRadius: 10
+    },
+    text: {
+        marginBottom: 8
+    },
+    input: {
+        marginTop: 8,
+        marginBottom: 32
+    }
 });

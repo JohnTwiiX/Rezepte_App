@@ -1,11 +1,12 @@
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
-import { Card, Button, Text } from "react-native-paper";
+import { Card, Button, Text, useTheme } from "react-native-paper";
 import { SubtitleLine } from "./WeekOrgFilter";
 import { mergeIngredients } from "../../Basket/BasketItem";
 import React from "react";
 
 export default function WeekOrgCard({ recipe, addRecipe, setCard, setVisible }) {
     const [ingredients, setIngredients] = React.useState([]);
+    const theme = useTheme();
 
     React.useEffect(() => {
         handleIngred();
@@ -24,9 +25,9 @@ export default function WeekOrgCard({ recipe, addRecipe, setCard, setVisible }) 
 
     return (
         <TouchableWithoutFeedback onPress={() => setCard(false)}>
-            <View style={{ backgroundColor: 'rgba(0,0,0,0.8)', height: '80%' }}>
+            <View >
                 <TouchableWithoutFeedback>
-                    <Card style={{ padding: 8 }}>
+                    <Card style={{ padding: 8, backgroundColor: theme.color }}>
                         <Card.Title titleStyle={styles.cardTitle} title={recipe.title} />
                         <Card.Cover source={{ uri: recipe.description.imgUri }} />
                         <Card.Content>
