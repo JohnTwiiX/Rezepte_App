@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 16,
         backgroundColor: "white",
-        maxHeight: '80%'
+        height: '80%'
     },
     modaltext: {
         fontSize: 24,

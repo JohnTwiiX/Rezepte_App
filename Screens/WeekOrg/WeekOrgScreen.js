@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
         paddingLeft: 8,
     },
     dateView: {
-        width: '30%',
+        width: '34%',
     },
     recipeText: {
         marginLeft: 16,
@@ -263,6 +263,6 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,0.5)'
     },
     fontSize: {
-        fontSize: 20
+        fontSize: 18
     }
 })

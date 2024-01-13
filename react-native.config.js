@@ -18,5 +18,6 @@ module.exports = {
         './assets/fonts/August_Script',
         './assets/fonts/Benedict',
         './assets/fonts/Mirabella',
+        './assets/fonts/Autography',
     ],
 }

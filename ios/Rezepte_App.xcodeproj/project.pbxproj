@@ -91,6 +91,7 @@
 		5E56D7B3F5F34757B173C7CE /* Benedict.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1E48ED074E340FD80339239 /* Benedict.ttf */; };
 		8ECF13F2A0F04AA784A1200D /* Mistress Benedict.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5EFE6A97B2C94C90A23A4FD4 /* Mistress Benedict.ttf */; };
 		8DDCBAE3F02143EEB88A65AD /* Mirabella Demo.otf in Resources */ = {isa = PBXBuildFile; fileRef = A98C8585611B4A5982410177 /* Mirabella Demo.otf */; };
+		577B7DE548AF44989C3D15F2 /* Autography-DOLnW.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5B537D1FE351429CA3B7633D /* Autography-DOLnW.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -198,6 +199,7 @@
 		D1E48ED074E340FD80339239 /* Benedict.ttf */ = {isa = PBXFileReference; name = "Benedict.ttf"; path = "../assets/fonts/Benedict/Benedict.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		5EFE6A97B2C94C90A23A4FD4 /* Mistress Benedict.ttf */ = {isa = PBXFileReference; name = "Mistress Benedict.ttf"; path = "../assets/fonts/Benedict/Mistress Benedict.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		A98C8585611B4A5982410177 /* Mirabella Demo.otf */ = {isa = PBXFileReference; name = "Mirabella Demo.otf"; path = "../assets/fonts/Mirabella/Mirabella Demo.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5B537D1FE351429CA3B7633D /* Autography-DOLnW.otf */ = {isa = PBXFileReference; name = "Autography-DOLnW.otf"; path = "../assets/fonts/Autography/Autography-DOLnW.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -383,6 +385,7 @@
 				D1E48ED074E340FD80339239 /* Benedict.ttf */,
 				5EFE6A97B2C94C90A23A4FD4 /* Mistress Benedict.ttf */,
 				A98C8585611B4A5982410177 /* Mirabella Demo.otf */,
+				5B537D1FE351429CA3B7633D /* Autography-DOLnW.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -561,6 +564,7 @@
 				5E56D7B3F5F34757B173C7CE /* Benedict.ttf in Resources */,
 				8ECF13F2A0F04AA784A1200D /* Mistress Benedict.ttf in Resources */,
 				8DDCBAE3F02143EEB88A65AD /* Mirabella Demo.otf in Resources */,
+				577B7DE548AF44989C3D15F2 /* Autography-DOLnW.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

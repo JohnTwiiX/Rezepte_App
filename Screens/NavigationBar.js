@@ -97,7 +97,7 @@ export default function NavigationBar({ username, setUpdate }) {
                                             title: route.params.title,
                                             headerTransparent: true,
                                             headerStyle: { backgroundColor: 'rgba(255,255,255,0.5)' },
-                                            headerTitleStyle: { fontFamily: 'Mirabella Demo', fontSize: 32 },
+                                            headerTitleStyle: { fontFamily: 'Autography-DOLnW', fontSize: 36 },
                                             headerRight: () => (
                                                 <CategoryFilter openDialog={() => navigation.setParams({ showDialog: true })} />
                                             ),

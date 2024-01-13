@@ -152,7 +152,7 @@ export default function CircleButtons({ update, setUpdate }) {
     return (
         <View >
             {data && data.isEditMode && <View style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}><Text style={{ textAlign: 'center', fontSize: 18, color: 'rgba(0,0,0,0.8)' }}>Verändere deine Bubbles in der Position/Größe.</Text></View>}
-            <ScrollView >
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
                     {recipeTypes ? recipeTypes.map((bubble, index) =>
                         <View key={index}>
@@ -216,7 +216,8 @@ const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
         fontSize: 40,
-        fontFamily: 'Perfect_Beloved'
+        fontFamily: 'Autography-DOLnW'
+        // fontFamily: 'Perfect_Beloved'
     }
 });
 

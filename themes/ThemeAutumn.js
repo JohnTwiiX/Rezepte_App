@@ -28,6 +28,7 @@ export const ThemeAutumn = {
     color: "#B2B1B6",  //"#e1e1e1",
     tabColor: "#9a998c",
     button: "#f3f3f3",  // "#9a998c",
+    button2: "#ADA2A1",
     nav: "#905E55",
     background: "#B2B1B6",
     input: "#f3f3f3",

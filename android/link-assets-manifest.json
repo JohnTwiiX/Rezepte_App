@@ -308,6 +308,10 @@
     {
       "path": "assets/fonts/Mirabella/Mirabella Demo.otf",
       "sha1": "780a22fc3f0f39486b56ed964e160c2b06aed74d"
+    },
+    {
+      "path": "assets/fonts/Autography/Autography-DOLnW.otf",
+      "sha1": "7a08db680c1c500d9da0934fec8cf0dceee1ff2e"
     }
   ]
 }
