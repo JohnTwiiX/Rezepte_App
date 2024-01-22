@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TextInput, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { List, Dialog, Button, useTheme } from 'react-native-paper';
 import { useData } from '../../../modals/DataProvider';
-import { getAllKeys, getArrayFromStorage, multiRemoveKeys, saveArrayStorage } from '../../../modals/StorageService';
+import { getAllKeys, getArrayFromStorage, getKeysToKeep, multiRemoveKeys, saveArrayStorage } from '../../../modals/StorageService';
 
 async function saveRecipe(recipe) {
     try {
@@ -59,7 +59,7 @@ export async function saveAll(data, inputValues) {
     if (inputValues) {
         await saveMultiple(data, inputValues);
     }
-    const keysToKeep = ['types', 'category', 'collection', 'sections', 'recipes', 'recipeTypes', '@name', '@basket', '@basketFinished', '@basketItems', '@checkedRecipes', '@theme'];
+    const keysToKeep = getKeysToKeep();
     await removeAllExcept(keysToKeep);
 }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Button, TextInput, useTheme } from 'react-native-paper';
-import { saveInStorage, saveTextStorage } from './modals/StorageService';
+import { saveTextStorage } from './modals/StorageService';
 
 export default function UsernameInput({ setUpdate }) {
     const [text, setText] = React.useState('');

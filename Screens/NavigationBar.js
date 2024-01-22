@@ -17,6 +17,10 @@ import ImagePickerIcon from './Home/Recipe/RecipeScreen/Modal/ImagePicker'
 import { DataProvider } from './modals/DataProvider';
 import HomeMenu from './Home/HomeMenu';
 import WeekOrgNav from './WeekOrg/WeekOrgNav';
+import Registration from './Authorization/Registration';
+import Login from './Authorization/Login';
+import { firebase } from '@react-native-firebase/auth';
+import InvisibleButton from './Home/Settings/InvisibleButton';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -25,6 +29,17 @@ const HomeStack = createNativeStackNavigator();
 export default function NavigationBar({ username, setUpdate }) {
     const theme = useTheme();
     const SettingsScreenComponent = () => <SettingsScreen setUpdate={setUpdate} />;
+    const [userIsLogged, setUserIsLogged] = React.useState(false);
+
+    React.useEffect(() => {
+        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                setUserIsLogged(true)
+            }
+        });
+
+        return unsubscribe;
+    }, []);
     return (
         <SafeAreaProvider>
             <NavigationContainer>
@@ -77,6 +92,11 @@ export default function NavigationBar({ username, setUpdate }) {
                                     <HomeStack.Screen
                                         name="Settings"
                                         component={SettingsScreenComponent}
+                                        options={({ route, navigation }) => ({
+                                            headerRight: () => (
+                                                <InvisibleButton navigation={navigation} />
+                                            ),
+                                        })}
                                     >
                                     </HomeStack.Screen>
                                     <HomeStack.Screen
@@ -112,6 +132,20 @@ export default function NavigationBar({ username, setUpdate }) {
                                             headerRight: () => (
                                                 <HeaderRightSet title={route.params.title} navigation={navigation} />
                                             ),
+                                        })}>
+                                    </HomeStack.Screen>
+                                    <HomeStack.Screen
+                                        name="Login"
+                                        component={Login}
+                                        options={({ route, navigation }) => ({
+                                            headerTitle: '',
+                                        })}>
+                                    </HomeStack.Screen>
+                                    <HomeStack.Screen
+                                        name="Registration"
+                                        component={Registration}
+                                        options={({ route, navigation }) => ({
+                                            headerTitle: '',
                                         })}>
                                     </HomeStack.Screen>
                                 </HomeStack.Navigator>

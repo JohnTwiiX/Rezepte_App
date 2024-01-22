@@ -2,20 +2,23 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Chip, TextInput, Text, useTheme } from 'react-native-paper';
 import { getTextFromStorage, saveTextStorage } from '../../modals/StorageService';
-import { useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect, useNavigation } from '@react-navigation/core';
 
 
 const themes = ['ThemeAutumn', 'ThemeWinter', 'ThemeSpring', 'ThemeSummer', 'ThemePurple']
-export default function SettingsScreen({ navigation, setUpdate }) {
+export default function SettingsScreen({ setUpdate }) {
     const [text, setText] = React.useState('');
     const [chip, setChip] = React.useState('');
     const [edit, setEdit] = React.useState(true);
+    const [createdDB, setCreatedDB] = React.useState(false);
     const theme = useTheme();
+    const navigation = useNavigation();
 
     useFocusEffect(
         React.useCallback(() => {
             loadThemeChip();
             loadName();
+            userHasDB();
             setEdit(true);
         }, []),);
 
@@ -27,6 +30,11 @@ export default function SettingsScreen({ navigation, setUpdate }) {
     const loadName = async () => {
         const name = await getTextFromStorage('@name');
         if (name) setText(name);
+    };
+
+    const userHasDB = async () => {
+        const db = await getTextFromStorage('@userWithDB');
+        if (db) setCreatedDB(true);
     };
 
     const handleTextChange = (text) => {
@@ -84,6 +92,9 @@ export default function SettingsScreen({ navigation, setUpdate }) {
                     ))}
                 </View>
             </View>
+            {createdDB &&
+                <Button style={styles.m16} onPress={() => navigation.navigate('Login')}>zum Login</Button>
+            }
             <View style={styles.buttonContainer}>
                 <Button disabled={edit} mode='outlined' onPress={saveSettings}>Speichern</Button>
             </View>
