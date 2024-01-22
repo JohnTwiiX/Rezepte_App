@@ -52,7 +52,7 @@ export async function getTextFromStorage(key) {
         const user = await getTextFromStorage('@userWithDB');
         const keys = getKeysToKeep().filter(key => key !== '@userWithDB');
         if (user && keys.includes(key)) {
-            return await getFromDatabase(key);
+            return await getFromDatabase(key, true);
         } else {
             const value = await AsyncStorage.getItem(key);
             return value

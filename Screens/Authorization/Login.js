@@ -24,7 +24,7 @@ export default function Login() {
             .signInWithEmailAndPassword(email, password)
             .then(async (userCredential) => {
                 const user = userCredential.user;
-                await saveTextStorage('@userWithDB', user);
+                await saveTextStorage('@userWithDB', user.email);
                 console.log('Anmeldung erfolgreich:', user.email);
                 navigation.navigate('Home');
             })

@@ -12,8 +12,6 @@ import { ThemeWinter } from './themes/ThemeWinter';
 import { ThemeSpring } from './themes/ThemeSpring';
 import { ThemeSummer } from './themes/ThemeSummer';
 import { ThemePurple } from './themes/ThemePurple';
-import Login from './Screens/Authorization/Login';
-import Registration from './Screens/Authorization/Registration';
 import { firebase } from '@react-native-firebase/auth';
 
 export default function App() {
@@ -42,9 +40,9 @@ export default function App() {
           console.log(nextAppState);
           setVisible(true);
         } else {
+          await saveTextStorage('@userWithDB', '')
           console.log(nextAppState);
           firebase.auth().signOut();
-          await saveTextStorage('@userWithDB', null)
         }
       }
     };

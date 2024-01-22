@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Button, TextInput, useTheme, Text } from 'react-native-paper';
-import { saveTextStorage } from '../modals/StorageService';
+import { getKeysToKeep, saveTextStorage } from '../modals/StorageService';
 import { firebase } from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/core';
+import { saveToDatabase } from '../../utils/Firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Registration() {
@@ -21,7 +23,8 @@ export default function Registration() {
             .createUserWithEmailAndPassword(email, password)
             .then(async (userCredential) => {
                 const user = userCredential.user;
-                await saveTextStorage('@userWithDB', user);
+                await saveTextStorage('@userWithDB', user.email);
+                saveAllToDatabase();
                 console.log('Registrierung erfolgreich:', user.email);
                 navigation.navigate('Home');
             })
@@ -30,6 +33,19 @@ export default function Registration() {
                 alert('Registrierung fehlgeschlagen: ' + error.message);
             });
     };
+
+    const saveAllToDatabase = async () => {
+        try {
+            const keys = getKeysToKeep();
+            const values = await AsyncStorage.multiGet(keys);
+            values.forEach(async (element) => {
+                const [doc, item] = element;
+                await saveToDatabase(doc, item);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const handleBackgroundPress = () => {
         // Minimiere das Keyboard, wenn irgendwo anders auf dem Bildschirm geklickt wird
